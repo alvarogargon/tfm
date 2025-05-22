@@ -1,0 +1,12 @@
+.error {
+  font-size: 80%;
+  color: tomato;
+}
+
+input.ng-invalid.ng-touched {
+  border-bottom: 3px solid tomato;
+}
+
+input.ng-valid.ng-touched {
+  border-bottom: 3px solid green;
+}

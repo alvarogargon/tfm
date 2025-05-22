@@ -1,1 +1,141 @@
-<p>register works!</p>
+<section class="dvh-100 rounded-4" style="background-color: #dceeff">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center dvh-100">
+      <div class="col-xl-10">
+        <div class="card" style="border-radius: 1rem">
+          <div class="row g-0">
+            <div class="d-flex align-items-center">
+              <div class="card-body p-4 p-lg-5 text-black">
+                <div class="text-center">
+                  <h2>Regístrate!</h2>
+                  <hr />
+                </div>
+
+                <form [formGroup]="registerForm" (ngSubmit)="getDataForm()">
+                  <div
+                    class="d-flex align-items-center mb-3 pb-1 justify-content-center pb-3"
+                  >
+                    <i
+                      class="fas fa-cubes fa-2x me-3"
+                      style="color: #ff6219"
+                    ></i>
+                    <span class="h1 fw-bold mb-0">Logo</span>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label" for="type"
+                      >Selecciona la forma en la que vas a actuar, si como guía
+                      o como usuario</label
+                    >
+                    <select
+                      name=""
+                      id="type"
+                      name="type"
+                      ngModel
+                      class="form-select"
+                    >
+                      <option value="laboral">Seré guía</option>
+                      <option value="personal">Seré usuario</option>
+                    </select>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Nombre</label>
+                    <input
+                      type="text"
+                      id="name"
+                      class="form-control"
+                      formControlName="name"
+                      placeholder="introduce tu nombre"
+                    />
+                    @if(checkControl('name', 'required')){
+                    <p class="error">El campo es obligatorio</p>
+                    } @if(checkControl('name', 'minlength')){
+                    <p class="error">
+                      El campo tiene que tener al menos 3 caracteres
+                    </p>
+                    }
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                      type="text"
+                      id="email"
+                      class="form-control"
+                      formControlName="email"
+                      placeholder="introduce tu email"
+                    />
+                    @if(checkControl('email', 'required')){
+                    <p class="error">Campo obligatorio</p>
+                    } @if(checkControl('email', 'pattern')){
+                    <p class="error">El email tiene que ser correcto</p>
+                    }
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="edad" class="form-label">Edad</label>
+                    <input
+                      type="number"
+                      id="edad"
+                      class="form-control"
+                      formControlName="edad"
+                      placeholder="introduce tu edad"
+                    />
+                    @if(checkControl('edad', 'required')){
+                    <p class="error">Campo obligatorio</p>
+                    } @if(checkControl('edad', 'min')){
+                    <p class="error">La edad minima es de 18 años</p>
+                    } @if(checkControl('edad', 'max')){
+                    <p class="error">La edad maxima es de 65 años</p>
+                    }
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input
+                      type="password"
+                      id="password"
+                      class="form-control"
+                      formControlName="password"
+                      placeholder="Crea una Contraseña"
+                    />
+                    @if(checkControl('password', 'required')){
+                    <p class="error">Campo Obligatorio</p>
+                    } @if(checkControl('password', 'minlength')){
+                    <p class="error">Longitud minima 8 caracteres</p>
+                    } @if(checkControl('password', 'maxlength')){
+                    <p class="error">Longitud maxima 16 caracteres</p>
+                    }
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="repitepassword" class="form-label"
+                      >Repite Contraseña</label
+                    >
+                    <input
+                      type="password"
+                      id="repitepassword"
+                      class="form-control"
+                      formControlName="repitepassword"
+                      placeholder="Repite la Contraseña"
+                    />
+                  </div>
+
+                  <div class="pt-1 mb-4">
+                    <input
+                      type="submit"
+                      value="Enviar"
+                      class="btn btn-danger"
+                      [disabled]="registerForm.invalid"
+                    />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
