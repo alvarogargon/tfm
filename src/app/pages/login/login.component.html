@@ -1,1 +1,101 @@
-<p>login works!</p>
+<section class="dvh-100 rounded-4" style="background-color: #dceeff">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center dvh-100">
+      <div class="col col-xl-10">
+        <div class="card" style="border-radius: 1rem">
+          <div class="row g-0">
+            <div class="col-md-6 col-lg-5 d-none d-md-block">
+              <img
+                src="https://picsum.photos/350/650"
+                alt="login form"
+                class="img-fluid"
+                style="border-radius: 1rem 0 0 1rem"
+              />
+            </div>
+            <div class="col-md-6 col-lg-7 d-flex align-items-center">
+              <div class="card-body p-4 p-lg-5 text-black">
+                <form>
+                  <div class="d-flex align-items-center mb-3 pb-1">
+                    <i
+                      class="fas fa-cubes fa-2x me-3"
+                      style="color: #ff6219"
+                    ></i>
+                    <span class="h1 fw-bold mb-0">Logo</span>
+                  </div>
+
+                  <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px">
+                    Inicia sesión con tu cuenta
+                  </h5>
+
+                  <form [formGroup]="loginForm" (ngSubmit)="loginData()">
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="email"></label>
+
+                      <input
+                        type="text"
+                        id="email"
+                        class="form-control form-control-lg"
+                        formControlName="email"
+                        placeholder="Introduce tu email"
+                      />
+
+                      @if(checkControl('email', 'required')) {
+                      <p class="error text-danger pt-3">
+                        Este campo es obligatorio!⬆️
+                      </p>
+                      } @if(checkControl('email', 'pattern')){
+                      <p class="error">El email tiene que ser correcto</p>
+                      }
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="password"></label>
+
+                      <input
+                        type="password"
+                        id="password"
+                        class="form-control form-control-lg"
+                        formControlName="password"
+                        placeholder="Contraseña"
+                      />
+
+                      <div class="text-danger pt-3">
+                        @if(checkControl('password', 'required')){
+                        <p class="error">Campo Obligatorio ⬆️</p>
+                        } @if(checkControl('password', 'minlength')){
+                        <p class="error">Longitud minima 8 caracteres ⬆️</p>
+                        } @if(checkControl('password', 'maxlength')){
+                        <p class="error">Longitud maxima 16 caracteres ⬆️</p>
+                        }
+                      </div>
+                    </div>
+                  </form>
+
+                  <div class="pt-1 mb-4">
+                    <input
+                      type="submit"
+                      value="Enviar"
+                      class="btn btn-danger"
+                      [disabled]="loginForm.invalid"
+                    />
+                  </div>
+
+                  <a class="small text-muted" href="#!"
+                    >¿Olvidaste la contraseña?</a
+                  >
+
+                  <p class="mb-5 pb-lg-2" style="color: #393f81">
+                    ¿Aún no tienes cuenta?
+                    <a href="" [routerLink]="['/register']"
+                      >Registrate ahora!</a
+                    >
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
