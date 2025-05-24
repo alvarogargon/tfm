@@ -13,7 +13,7 @@
 /* La imagen de fondo y la opacidad van aquí */
 .hero-overlay {
     
-  background: url('../../../../public/fondo-call.png') center/cover no-repeat;
+  background: url('../../../../public/images/fondo-call.png') center/cover no-repeat;
   opacity: 0.4; /* Ajusta transparencia aquí */
   position: absolute;
   top: 0;

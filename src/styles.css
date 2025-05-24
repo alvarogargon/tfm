@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+
+:root {
+    --color-btn-ac: #4A90E2;
+    --color-btn-des: #DCEEFF;
+    --color-black: #302F2F;
+
+}
+.btn-blue {
+    background-color: var(--color-btn-ac);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    font-weight: 500;
+    color: white;
+    text-decoration: none;
+    font-size: 1.3rem;
+
+
+
+}
+.btn-blue:hover {
+    background-color: var(--color-btn-des);
+    color: var(--color-black);
+
+}
