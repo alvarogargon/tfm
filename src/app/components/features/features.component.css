@@ -1,0 +1,43 @@
+* {
+    font-family: "Montserrat";
+}
+
+.placeholder-img {
+    background: repeating-linear-gradient(
+    45deg,
+    #ccc,
+    #ccc 10px,
+    #ddd 10px,
+    #ddd 20px
+    );
+    height: 350px;
+    border-radius: 8px;
+}
+
+.btn-tag {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    margin-right: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.btn-dark {
+    background-color: #302F2F;
+}
+
+.btn-secondary {
+    background-color: #EBEBEB;
+    border: 1px solid #EBEBEB;
+    color: #302F2F;
+}
+
+h3 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+p {
+    font-size: 1.2rem;
+    font-weight: lighter;
+}
