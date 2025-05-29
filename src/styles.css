@@ -4,8 +4,8 @@
     --color-btn-ac: #4A90E2;
     --color-btn-des: #DCEEFF;
     --color-black: #302F2F;
-
 }
+
 .btn-blue {
     background-color: var(--color-btn-ac);
     border: none;
