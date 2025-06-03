@@ -1,6 +1,16 @@
+.cards {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .wrapper {
-    font-family: "Geist Mono";
+    font-family: "Montserrat";
     align-items: center;
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 2rem 0;
 }
 
 .inputs {
@@ -21,13 +31,14 @@
 }
 
 .input {
-    padding: 0.3rem 2rem;
+    padding: 0.3rem 1.5rem;
     width: 100%;
     background-color: transparent;
     border: none;
     outline: none;
     transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-    border-bottom: 1px solid #302F2F;
+    border-bottom: 1px solid gray;
+    font-size: 0.8rem;
 }
 
 input.ng-invalid.ng-touched {
@@ -40,12 +51,13 @@ input.ng-valid.ng-touched {
 
 .label {
     position: absolute;
-    left: 2rem;
+    left: 1.5rem;
     top: 0.3rem;
     pointer-events: none;
     transform: translate(0, 0);
     transition: all 0.3s ease-in-out;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    color: gray;
 }
 
 .input:active {
@@ -81,7 +93,7 @@ input.ng-valid.ng-touched {
 
 .icon-left {
     position: absolute;
-    top: 15%;
+    top: 20%;
     transform: translateY(-25%);
 }
 
@@ -134,7 +146,7 @@ input.ng-valid.ng-touched {
 }
 
 .btn {
-    padding: 0.5rem 2rem;
+    padding: 0.5rem rem;
     margin-top: 10px;
     font-size: 0.9rem;
     width: 100%;
@@ -156,7 +168,7 @@ input.ng-valid.ng-touched {
 }
 
 .error {
-    min-height: 1.2em; /* Reserve space for one line of error text */
+    min-height: 1.2em; 
     color: #d32f2f;
     font-size: 0.6rem;
     margin: 2px 0 0 0;
@@ -164,6 +176,8 @@ input.ng-valid.ng-touched {
 }
 
 @media (max-width: 768px) {
-
+    .cards {
+        box-shadow: none;;
+    }
 }
 

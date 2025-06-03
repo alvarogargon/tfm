@@ -8,6 +8,7 @@ import "@fontsource/montserrat/400.css";
 import "@fontsource/montserrat/300.css";
 import "@fontsource/montserrat/200.css";
 import "@fontsource/geist-mono";
+import "@fontsource/geist-mono/200.css";
 import { Footer2Component } from './shared/footer2/footer2.component';
 
 @Component({

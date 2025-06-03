@@ -2,7 +2,7 @@
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center dvh-100">
       <div class="col col-xl-10">
-        <div class="card">
+        <div class="cards">
           <div class="row g-0">
             <div class="col-md-6 col-lg-5 d-none d-md-block">
               <img
@@ -14,14 +14,17 @@
             <div class="col-md-6 col-lg-7 d-flex align-items-center">
               <div class="card-body p-4 p-lg-5 text-black">
                 <div class="wrapper">
+                  <div class="text-center">
+                    <h2 class="text-start pb-4 title">INICIA SESIÓN</h2>
+                  </div>
                  <form [formGroup]="loginForm" (ngSubmit)="loginData()">
                   <div class="inputs d-flex flex-column align-items-start">
                       <div class="input-wrapper">
                           <span class="icon icon-left">
                               <svg
-                              height="20"
+                              height="12"
                               viewBox="0 0 32 32"
-                              width="20"
+                              width="12"
                               xmlns="http://www.w3.org/2000/svg"
                               >
                               <g id="Layer_3" data-name="Layer 3">
@@ -32,19 +35,19 @@
                               </svg>
                           </span>
                           <input type="text" class="input" formControlName="email" placeholder=" ">
-                          <label class="label">Email</label>
+                          <label class="label">EMAIL</label>
                       </div>
                       <p class="error">
-                          {{ checkControl('email', 'required') ? 'Este campo es obligatorio' : (checkControl('email', 'pattern') ? 'Introduce un email válido' : '\u00A0') }}
+                          {{ checkControl('email', 'required') ? 'Campo obligatorio' : (checkControl('email', 'pattern') ? 'Por favor, introduzca un correo electrónico válido' : '\u00A0') }}
                       </p>
                   </div>
                   <div class="inputs pass d-flex">
                       <div class="input-wrapper">
                           <span class="icon icon-left">
                               <svg
-                              height="20"
+                              height="12"
                               viewBox="-64 0 512 512"
-                              width="20"
+                              width="12"
                               xmlns="http://www.w3.org/2000/svg"
                               >
                               <path
@@ -56,11 +59,11 @@
                               </svg>
                           </span>
                           <input type="password" class="input" formControlName="password" placeholder=" ">
-                          <label class="label">Password</label>
+                          <label class="label">CONTRASEÑA</label>
                           <span class="icon icon-right">
                               <svg
                               viewBox="0 0 576 512"
-                              height="1em"
+                              height="12"
                               xmlns="http://www.w3.org/2000/svg"
                               >
                                   <path
@@ -70,17 +73,17 @@
                           </span>
                       </div>
                       <p class="error">
-                          {{ checkControl('password', 'required') ? 'Este campo es obligatorio' : 
+                          {{ checkControl('password', 'required') ? 'Campo obligatorio' : 
                             (checkControl('password', 'minlength') ? 'La longitud mínima es 8 caracteres' : 
                               (checkControl('password', 'maxlength') ? 'La longitud máxima es 20 caracteres' : '\u00A0')) }}
                       </p>
                   </div>
                   <div class="forgot">
-                      <span class="span">Forgot password?</span>
+                      <span class="span">¿Has olvidado tu contraseña?</span>
                   </div>
-                  <input class="button-submit" type="submit" value="Sign In" [disabled]="loginForm.invalid">
-                  <p class="p">Don't have an account? <span class="span" [routerLink]="['/register']">Sign Up</span></p>
-                  <p class="p line">Or With</p>
+                  <input class="button-submit" type="submit" value="INICIAR SESIÓN" [disabled]="loginForm.invalid">
+                  <p class="p">¿No tienes una cuenta? <span class="span" [routerLink]="['/register']">Regístrate</span></p>
+                  <p class="p line">O con</p>
                   <div class="flex-row">
                       <button class="btn google">
                         <svg
