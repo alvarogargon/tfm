@@ -34,7 +34,9 @@ export class RegisterComponent {
         Validators.minLength(8),
         Validators.maxLength(16)
       ]),
-      repitepassword: new FormControl("", []),
+      repitepassword: new FormControl("", [
+        Validators.required
+      ]),
     }, [])
   }
 

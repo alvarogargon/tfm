@@ -2,4 +2,9 @@
     width: 1200px;
     margin: auto;
     display: flex;
+    align-items: center;
+}
+
+.navbar-nav {
+    font-size: 0.9rem;
 }
