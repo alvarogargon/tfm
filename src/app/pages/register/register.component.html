@@ -77,7 +77,7 @@
                               </g>
                               </svg>
                           </span>
-                          <input type="text" class="input" formControlName="email" placeholder="">
+                          <input type="text" class="input" formControlName="email" placeholder="" autocomplete="email">
                           <label class="label">EMAIL</label>
                       </div>
                       <p class="error">
@@ -121,7 +121,7 @@
                               ></path>
                               </svg>
                           </span>
-                          <input [type]="showPassword ? 'text' : 'password'" class="input" formControlName="password" placeholder="">
+                          <input [type]="showPassword ? 'text' : 'password'" class="input" formControlName="password" placeholder="" autocomplete="current-password">
                           <label class="label">CONTRASEÑA</label>
                           @if (registerForm.get('password')?.value) {
                             <span class="icon icon-right" (click)="togglePasswordVisibility()" style="cursor: pointer;">
@@ -170,7 +170,7 @@
                               ></path>
                               </svg>
                           </span>
-                          <input [type]="showRepitePassword ? 'text' : 'password'" class="input" formControlName="repitepassword" placeholder="" [class.input-mismatch]="registerForm.hasError('passwordMismatch') && registerForm.get('repitepassword')?.touched">
+                          <input [type]="showRepitePassword ? 'text' : 'password'" class="input" formControlName="repitepassword" placeholder="" autocomplete="current-password" [class.input-mismatch]="registerForm.hasError('passwordMismatch') && registerForm.get('repitepassword')?.touched">
                           <label class="label">REPITE LA CONTRASEÑA</label>
                           @if (registerForm.get('repitepassword')?.value) {
                           <span class="icon icon-right" (click)="toggleRepitePasswordVisibility()" style="cursor: pointer;">

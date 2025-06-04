@@ -30,7 +30,7 @@
                               </g>
                               </svg>
                           </span>
-                          <input type="text" class="input" formControlName="email" placeholder="">
+                          <input type="text" class="input" formControlName="email" placeholder="" autocomplete="email">
                           <label class="label">EMAIL</label>
                       </div>
                       <p class="error">
@@ -54,7 +54,7 @@
                               ></path>
                               </svg>
                           </span>
-                          <input [type]="showPassword ? 'text' : 'password'" class="input" formControlName="password" placeholder="">
+                          <input [type]="showPassword ? 'text' : 'password'" class="input" formControlName="password" placeholder="" autocomplete="current-password">
                           <label class="label">CONTRASEÑA</label>
                           @if (loginForm.get('password')?.value) {
                             <span class="icon icon-right" (click)="togglePasswordVisibility()" style="cursor: pointer;">
