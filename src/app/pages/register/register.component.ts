@@ -74,7 +74,7 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
       repitepassword: new FormControl("", [
         Validators.required
       ]),
-    }, [])
+    }, this.passwordMatchValidator as Validators)
   }
 
   getDataForm() {
@@ -85,7 +85,11 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
   checkControl(controlName: string, errorName: string): boolean | undefined {
     return this.registerForm.get(controlName)?.hasError(errorName) && this.registerForm.get(controlName)?.touched
   }
+  
+  passwordMatchValidator(form: AbstractControl) {
+    const password = form.get('password')?.value;
+    const repitepassword = form.get('repitepassword')?.value;
+    return password === repitepassword ? null : { passwordMismatch: true };
+  }
 
 }
-
-

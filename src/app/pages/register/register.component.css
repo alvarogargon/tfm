@@ -56,8 +56,12 @@ input.ng-invalid.ng-touched {
     border-bottom: 1px solid red;
 }
 
+.input-mismatch {
+    border-bottom: 1px solid red !important;
+}
+
 input.ng-valid.ng-touched {
-  border-bottom: 1px solid green;
+    border-bottom: 1px solid green;
 }
 
 .label {

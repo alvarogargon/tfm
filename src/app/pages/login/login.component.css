@@ -46,7 +46,7 @@ input.ng-invalid.ng-touched {
 }
 
 input.ng-valid.ng-touched {
-  border-bottom: 1px solid green;
+    border-bottom: 1px solid green;
 }
 
 .label {

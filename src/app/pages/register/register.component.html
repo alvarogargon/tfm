@@ -170,8 +170,8 @@
                               ></path>
                               </svg>
                           </span>
-                          <input [type]="showRepitePassword ? 'text' : 'password'" class="input" formControlName="repitepassword" placeholder="">
-                          <label class="label">CONTRASEÑA</label>
+                          <input [type]="showRepitePassword ? 'text' : 'password'" class="input" formControlName="repitepassword" placeholder="" [class.input-mismatch]="registerForm.hasError('passwordMismatch') && registerForm.get('repitepassword')?.touched">
+                          <label class="label">REPITE LA CONTRASEÑA</label>
                           @if (registerForm.get('repitepassword')?.value) {
                           <span class="icon icon-right" (click)="toggleRepitePasswordVisibility()" style="cursor: pointer;">
                             @if (showRepitePassword) {
@@ -196,7 +196,7 @@
                           }
                       </div>
                       <p class="error">
-                          {{ checkControl('repitepassword', 'required') ? 'Campo obligatorio' : '\u00A0' }}
+                          {{ checkControl('repitepassword', 'required') ? 'Campo obligatorio' : (registerForm.hasError('passwordMismatch') && registerForm.get('repitepassword')?.touched ? 'Las contraseñas no coinciden' : '\u00A0') }}
                       </p>
                     </div>
                     <input class="button-submit" type="submit" value="REGISTRARSE" [disabled]="registerForm.invalid">
