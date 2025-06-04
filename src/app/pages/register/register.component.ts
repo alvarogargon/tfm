@@ -13,6 +13,16 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
 
   registerForm: FormGroup;
   private vantaEffect: any;
+  showPassword = false;
+  showRepitePassword = false;
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleRepitePasswordVisibility() {
+    this.showRepitePassword = !this.showRepitePassword;
+  }
 
   ngAfterViewInit() {
       this.vantaEffect = VANTA.FOG({

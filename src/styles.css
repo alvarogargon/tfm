@@ -18,12 +18,14 @@
     color: white;
     text-decoration: none;
     font-size: 1.3rem;
-
-
-
 }
+
 .btn-blue:hover {
     background-color: var(--color-btn-des);
     color: var(--color-black);
+}
 
+::selection {
+    background-color: var(--color-black); 
+    color: #fff; 
 }

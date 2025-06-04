@@ -14,6 +14,11 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
 
   loginForm: FormGroup;
   private vantaEffect: any;
+  showPassword = false;
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 
   ngAfterViewInit() {
       // this.vantaEffect = VANTA.FOG({
