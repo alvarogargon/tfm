@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { ReactiveFormsModule, AbstractControl, FormControl, FormGroup, Validators, FormsModule } from '@angular/forms';
+
+declare var VANTA: any;
 
 @Component({
   selector: 'app-register',
@@ -7,9 +9,34 @@ import { ReactiveFormsModule, AbstractControl, FormControl, FormGroup, Validator
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent {
+export class RegisterComponent implements AfterViewInit, OnDestroy {
 
   registerForm: FormGroup;
+  private vantaEffect: any;
+
+  ngAfterViewInit() {
+      this.vantaEffect = VANTA.FOG({
+        el: '#vanta-bg-register',
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        highlightColor: 0xdbedff,
+        midtoneColor: 0x3434dc,
+        lowlightColor: 0x4646a2,
+        baseColor: 0xffffff,
+        blurFactor: 0.20,
+        speed: 0.10,
+        zoom: 0.10
+      });
+  }
+
+  ngOnDestroy(): void {
+    if (this.vantaEffect) {
+      this.vantaEffect.destroy();
+    }
+  }
 
   constructor() {
     this.registerForm = new FormGroup({

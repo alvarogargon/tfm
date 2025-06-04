@@ -5,11 +5,7 @@
         <div class="cards">
           <div class="row g-0">
             <div class="col-md-6 col-lg-5 d-none d-md-block">
-              <img
-                src="https://picsum.photos/400/900"
-                alt="login form"
-                class="img-fluid"
-              />
+              <div id="vanta-bg-register" style="width:100%;height:100%; min-height:400px;"></div>
             </div>
             <div class="col-md-6 col-lg-7 d-flex align-items-center">
               <div class="card-body p-4 p-lg-5 text-black">
@@ -35,7 +31,7 @@
                               </g>
                               </svg>
                           </span>
-                          <select name="type" id="type" ngModel class="input">
+                          <select id="type" class="input" formControlName="type">
                             <option value="laboral">GUÍA</option>
                             <option value="personal">USUARIO</option>
                           </select>
@@ -150,7 +146,9 @@
                           </span>
                       </div>
                       <p class="error">
-                          {{ checkControl('password', 'required') ? 'Campo obligatorio' : '\u00A0' }}
+                          {{ checkControl('password', 'required') ? 'Campo obligatorio' : 
+                            (checkControl('password', 'minlength') ? 'La longitud mínima es 8 caracteres' : 
+                              (checkControl('password', 'maxlength') ? 'La longitud máxima es 20 caracteres' : '\u00A0')) }}
                       </p>
                   </div>
 
@@ -186,13 +184,11 @@
                           </span>
                       </div>
                       <p class="error">
-                          {{ checkControl('repitepassword', 'required') ? 'Campo obligatorio' : 
-                            (checkControl('repitepassword', 'minlength') ? 'La longitud mínima es 8 caracteres' : 
-                              (checkControl('repitepassword', 'maxlength') ? 'La longitud máxima es 20 caracteres' : '\u00A0')) }}
+                          {{ checkControl('repitepassword', 'required') ? 'Campo obligatorio' : '\u00A0' }}
                       </p>
                     </div>
+                    <input class="button-submit" type="submit" value="REGISTRARSE" [disabled]="registerForm.invalid">
                   </form>
-                  <input class="button-submit" type="submit" value="REGISTRARSE" [disabled]="registerForm.invalid">
                 </div>
               </div>
             </div>

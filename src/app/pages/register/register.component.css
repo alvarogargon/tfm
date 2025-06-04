@@ -15,7 +15,7 @@
 
 .inputs {
     position: relative;
-    margin-bottom: 3rem;
+    margin-bottom: 1.6rem;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -131,7 +131,7 @@ input.ng-valid.ng-touched {
     background-color: #302F2F;
     border: none;
     color: white;
-    font-size: 15px;
+    font-size: 0.8rem;
     font-weight: 500;
     border-radius: 10px;
     height: 50px;

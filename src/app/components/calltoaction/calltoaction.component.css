@@ -70,3 +70,48 @@
   width: 100%;
   height: 100%;
 }
+
+.btn-tag {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    margin-right: 1.5rem;
+    margin-top: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    z-index: 0;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(120deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
+        transition: left 0.4s ease;
+        z-index: -1;
+    }
+
+    &:hover::before {
+        left: 0;
+    }
+
+    &:hover {
+        transform: scale(1.05);
+    }
+
+    .btn-text {
+        position: relative;
+        z-index: 1;
+    }
+}
+
+.btn-dark {
+    background-color: var(--color-black);
+}
+
+p {
+    font-size: 1rem;
+}
