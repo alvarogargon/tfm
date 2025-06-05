@@ -67,7 +67,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     this.loginForm = new FormGroup({
       email: new FormControl('', [
         Validators.required,
-        Validators.pattern(/^\w+\@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
     ]),
       password: new FormControl("", [
         Validators.required,
