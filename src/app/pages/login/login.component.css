@@ -1,21 +1,52 @@
+.dvh-100 {
+  min-height: 70dvh;
+  height: 70dvh;
+}
+
 .cards {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.card-body {
+    padding: 6rem 7rem 1rem 7rem;
+
+    @media (max-width: 1000px) {
+        padding: 4rem 3rem;
+    }
+}
+
 .wrapper {
+    min-height: 400px;
     font-family: "Montserrat";
     align-items: center;
 }
 
 .title {
-    font-size: 1rem;
-    font-weight: 400;
-    margin: 2rem 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: white;
+    background-color: var(--color-black);
+    display: inline-block;
+    letter-spacing: -1px;
+    padding: 0.2rem 0.5rem;
+}
+
+.subtitle {
+    padding: 0 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -1.5px;
+}
+
+#vanta-bg-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .inputs {
     position: relative;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
     align-items: stretch;
