@@ -86,7 +86,7 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
     return this.registerForm.get(controlName)?.hasError(errorName) && this.registerForm.get(controlName)?.touched
   }
   
-  passwordMatchValidator(form: AbstractControl) {
+  passwordMatchValidator(form: FormGroup) {
     const password = form.get('password')?.value;
     const repitepassword = form.get('repitepassword')?.value;
     return password === repitepassword ? null : { passwordMismatch: true };

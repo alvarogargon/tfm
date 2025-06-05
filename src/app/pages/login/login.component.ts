@@ -1,6 +1,8 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, inject } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule,  Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { IUserLogin } from '../../interfaces/iuser.interface';
 
 declare var VANTA: any;
 
@@ -12,6 +14,8 @@ declare var VANTA: any;
 })
 export class LoginComponent implements AfterViewInit, OnDestroy {
 
+  authService = inject(AuthService);
+  router = inject(Router);
   loginForm: FormGroup;
   private vantaEffect: any;
   showPassword = false;
@@ -73,7 +77,16 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  loginData() {
+  async loginData() {
+    const credentials: IUserLogin = this.loginForm.value;
+    try {
+      const res = await this.authService.login(credentials);
+      localStorage.setItem('token', res.token);
+      console.log(res.message);
+      this.router.navigate(['/dashboard']);
+    } catch (err) {
+
+    }
     this.loginForm.reset();
   }
 
