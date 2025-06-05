@@ -2,16 +2,41 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.card-body {
+    padding: 6rem 7rem 1rem 7rem;
+
+    @media (max-width: 1000px) {
+        padding: 4rem 3rem;
+    }
+}
+
 .wrapper {
-    min-height: 500px;
+    min-height: 465px;
     font-family: "Montserrat";
     align-items: center;
 }
 
 .title {
-    font-size: 1rem;
-    font-weight: 400;
-    margin: 2rem 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: white;
+    background-color: var(--color-black);
+    display: inline-block;
+    letter-spacing: -1px;
+    padding: 0.2rem 0.5rem;
+}
+
+.subtitle {
+    padding: 0 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -1.5px;
+}
+
+#vanta-bg-register {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .inputs {
@@ -286,6 +311,141 @@ input.ng-valid.ng-touched {
     font-size: 0.6rem;
     margin: 2px 0 0 0;
     transition: opacity 0.2s;
+}
+
+.register-progress {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  position: relative;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.register-progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.register-progress-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  right: -50%;
+  width: 100%;
+  height: 4px;
+  background: var(--color-black);
+  z-index: 0;
+}
+
+.register-progress-step.completed:not(:last-child)::after {
+  background: #65BC95;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-black);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  z-index: 1;
+  transition: background 0.3s, color 0.3s;
+}
+
+.register-progress-step.active .step-number,
+.register-progress-step.completed .step-number {
+  background: #65BC95;
+  color: #fff;
+}
+
+.step-label {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 0.2rem;
+  text-align: center;
+}
+
+/* Collapse animation for progress bar */
+.register-progress {
+  transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s cubic-bezier(0.4,0,0.2,1);
+  overflow: hidden;
+  max-height: 80px;
+  opacity: 1;
+}
+.register-progress.collapse {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Checkmark animation */
+.register-progress-collapse {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60px;
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8);}
+  to { opacity: 1; transform: scale(1);}
+}
+
+.checkmark-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkmark {
+  width: 48px;
+  height: 48px;
+  stroke: #65BC95;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  background: #fff;
+  border-radius: 50%;
+  animation: popIn 0.5s;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.5);}
+  80% { transform: scale(1.1);}
+  100% { transform: scale(1);}
+}
+
+.checkmark-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke: #65BC95;
+  animation: strokeCircle 0.6s forwards;
+}
+
+@keyframes strokeCircle {
+  to { stroke-dashoffset: 0; }
+}
+
+.checkmark-check {
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  stroke: #65BC95;
+  animation: strokeCheck 0.3s 0.6s forwards;
+}
+
+@keyframes strokeCheck {
+  to { stroke-dashoffset: 0; }
 }
 
 @media (max-width: 768px) {

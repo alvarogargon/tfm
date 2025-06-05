@@ -22,6 +22,8 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
   showRepitePassword = false;
   rawPhoneNumber = '';
   currentStep = 1;
+  showCheck = false;
+  showProgressBar = true;
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
@@ -53,6 +55,21 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
     if (this.vantaEffect) {
       this.vantaEffect.destroy();
     }
+  }
+
+  ngOnInit() {
+    this.registerForm.statusChanges.subscribe(status => {
+      if (this.isStepValid(3)) {
+        this.showProgressBar = false;
+        this.showCheck = true;
+        setTimeout(() => {
+          this.showCheck = false;
+        }, 2000);
+      } else {
+        this.showProgressBar = true;
+        this.showCheck = false;
+      }
+    });
   }
 
   constructor() {
