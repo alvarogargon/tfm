@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { IUserLogin } from '../interfaces/iuser.interface';
+import { IUserLogin, IUserRegister } from '../interfaces/iuser.interface';
 import { lastValueFrom } from 'rxjs';
 
 interface LoginResponse {
@@ -8,6 +8,16 @@ interface LoginResponse {
   token: string;
   user: {
     userId: number;
+    email: string;
+    role: string;
+  };
+}
+
+interface RegisterResponse {
+  message: string;
+  user: {
+    userId: number;
+    username: string;
     email: string;
     role: string;
   };
@@ -22,5 +32,9 @@ export class AuthService {
 
   login(credentials: IUserLogin): Promise<LoginResponse> {
     return lastValueFrom(this.httpClient.post<LoginResponse>(`${this.endpoint}/login`, credentials));
+  }
+
+  register(credentials: IUserRegister): Promise<RegisterResponse> {
+    return lastValueFrom(this.httpClient.post<RegisterResponse>(`${this.endpoint}/register`, credentials));
   }
 }

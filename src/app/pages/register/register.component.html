@@ -13,51 +13,29 @@
                   <div class="text-center">
                     <h2 class="text-start pb-4 title">REGÍSTRATE</h2>
                   </div>
-                  <form [formGroup]="registerForm" (ngSubmit)="getDataForm()">
+                  <form [formGroup]="registerForm" (ngSubmit)="registerData()">
 
                     <div class="inputs d-flex flex-column align-items-start">
                       <div class="input-wrapper">
                           <span class="icon icon-left">
-                              <svg 
+                              <svg
                               height="12"
-                              xmlns="http://www.w3.org/2000/svg" 
-                              xmlns:xlink="http://www.w3.org/1999/xlink" 
-                              viewBox="0 0 32 32" 
-                              xml:space="preserve">
-                              <circle style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" cx="23" cy="13" r="5"/>
-                              <path style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" d="M16,25c0-3.866,3.134-7,7-7s7,3.134,7,7"/>
-                              <circle style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" cx="9" cy="13" r="5"/>
-                              <path style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" d="M2,25c0-3.866,3.134-7,7-7s7,3.134,7,7"/>
+                              viewBox="0 0 32 32"
+                              width="12"
+                              xmlns="http://www.w3.org/2000/svg"
+                              >
+                              <g id="Layer_3" data-name="Layer 3">
+                                  <path
+                                  d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z"
+                                  ></path>
+                              </g>
                               </svg>
                           </span>
-                          <select id="type" class="input" formControlName="type">
-                            <option value="" disabled selected>SELECCIONA TU ROL</option>
-                            <option value="laboral">GUÍA</option>
-                            <option value="personal">USUARIO</option>
-                          </select>
-                          <label class="label">ROL</label>
+                          <input type="text" class="input" formControlName="username" placeholder="">
+                          <label class="label">USERNAME</label>
                       </div>
                       <p class="error">
-                          {{ checkControl('type', 'required') ? 'Campo obligatorio' : '\u00A0' }}
-                      </p>
-                    </div>
-
-                    <div class="inputs d-flex flex-column align-items-start">
-                      <div class="input-wrapper">
-                          <span class="icon icon-left">
-                              <svg 
-                              fill="#000000" 
-                              height="12" 
-                              viewBox="0 0 24 24" 
-                              xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15.71,12.71a6,6,0,1,0-7.42,0,10,10,0,0,0-6.22,8.18,1,1,0,0,0,2,.22,8,8,0,0,1,15.9,0,1,1,0,0,0,1,.89h.11a1,1,0,0,0,.88-1.1A10,10,0,0,0,15.71,12.71ZM12,12a4,4,0,1,1,4-4A4,4,0,0,1,12,12Z"/>
-                              </svg>
-                          </span>
-                          <input type="text" class="input" formControlName="name" placeholder="">
-                          <label class="label">NOMBRE</label>
-                      </div>
-                      <p class="error">
-                          {{ checkControl('name', 'required') ? 'Campo obligatorio' : (checkControl('name', 'minlength') ? 'La longitud mínimas es 3 caracteres' : '\u00A0') }}
+                          {{ checkControl('username', 'required') ? 'Campo obligatorio' : (checkControl('username', 'minlength') ? 'La longitud mínimas es 5 caracteres' : '\u00A0') }}
                       </p>
                     </div>
 
@@ -85,25 +63,6 @@
                       </p>
                     </div>
 
-                    <div class="inputs d-flex flex-column align-items-start">
-                      <div class="input-wrapper">
-                          <span class="icon icon-left">
-                              <svg 
-                              height="12" 
-                              viewBox="0 0 15 15"
-                               fill="none" 
-                               xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3.5 0V5M11.5 0V5M1.5 2.5H13.5C14.0523 2.5 14.5 2.94772 14.5 3.5V13.5C14.5 14.0523 14.0523 14.5 13.5 14.5H1.5C0.947716 14.5 0.5 14.0523 0.5 13.5V3.5C0.5 2.94772 0.947715 2.5 1.5 2.5Z" stroke="#000000"/>
-                              </svg>
-                          </span>
-                          <input type="number" class="input" formControlName="edad" placeholder="">
-                          <label class="label">EDAD</label>
-                      </div>
-                      <p class="error">
-                          {{ checkControl('edad', 'required') ? 'Campo obligatorio' : (checkControl('edad', 'min') ? 'La edad mínima es de 18 años' : (checkControl('edad', 'max') ? 'La edad máxima es de 65 años' : '\u00A0')) }}
-                      </p>
-                    </div>
-                    
                     <div class="inputs d-flex">
                       <div class="input-wrapper">
                           <span class="icon icon-left">
@@ -199,6 +158,162 @@
                           {{ checkControl('repitepassword', 'required') ? 'Campo obligatorio' : (registerForm.hasError('passwordMismatch') && registerForm.get('repitepassword')?.touched ? 'Las contraseñas no coinciden' : '\u00A0') }}
                       </p>
                     </div>
+
+                    <div class="inputs d-flex flex-column align-items-start">
+                      <div class="input-wrapper">
+                          <span class="icon icon-left">
+                              <svg 
+                              fill="#000000" 
+                              height="12" 
+                              viewBox="0 0 24 24" 
+                              xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.71,12.71a6,6,0,1,0-7.42,0,10,10,0,0,0-6.22,8.18,1,1,0,0,0,2,.22,8,8,0,0,1,15.9,0,1,1,0,0,0,1,.89h.11a1,1,0,0,0,.88-1.1A10,10,0,0,0,15.71,12.71ZM12,12a4,4,0,1,1,4-4A4,4,0,0,1,12,12Z"/>
+                              </svg>
+                          </span>
+                          <input type="text" class="input" formControlName="first_name" placeholder="">
+                          <label class="label">NOMBRE</label>
+                      </div>
+                      <p class="error">
+                          {{ checkControl('first_name', 'required') ? 'Campo obligatorio' : (checkControl('first_name', 'minlength') ? 'La longitud mínimas es 3 caracteres' : '\u00A0') }}
+                      </p>
+                    </div>
+
+                    <div class="inputs d-flex flex-column align-items-start">
+                      <div class="input-wrapper">
+                          <span class="icon icon-left">
+                              <svg 
+                              fill="#000000" 
+                              height="12" 
+                              viewBox="0 0 24 24" 
+                              xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.71,12.71a6,6,0,1,0-7.42,0,10,10,0,0,0-6.22,8.18,1,1,0,0,0,2,.22,8,8,0,0,1,15.9,0,1,1,0,0,0,1,.89h.11a1,1,0,0,0,.88-1.1A10,10,0,0,0,15.71,12.71ZM12,12a4,4,0,1,1,4-4A4,4,0,0,1,12,12Z"/>
+                              </svg>
+                          </span>
+                          <input type="text" class="input" formControlName="last_name" placeholder="">
+                          <label class="label">APELLIDOS</label>
+                      </div>
+                      <p class="error">
+                          {{ checkControl('last_name', 'required') ? 'Campo obligatorio' : (checkControl('last_name', 'minlength') ? 'La longitud mínimas es 4 caracteres' : '\u00A0') }}
+                      </p>
+                    </div>
+
+                    <div class="inputs d-flex flex-column align-items-start">
+                      <div class="input-wrapper">
+                          <span class="icon icon-left">
+                              <svg 
+                              height="12" 
+                              viewBox="0 0 15 15"
+                               fill="none" 
+                               xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.5 0V5M11.5 0V5M1.5 2.5H13.5C14.0523 2.5 14.5 2.94772 14.5 3.5V13.5C14.5 14.0523 14.0523 14.5 13.5 14.5H1.5C0.947716 14.5 0.5 14.0523 0.5 13.5V3.5C0.5 2.94772 0.947715 2.5 1.5 2.5Z" stroke="#000000"/>
+                              </svg>
+                          </span>
+                          <input type="number" class="input" formControlName="age" placeholder="">
+                          <label class="label">EDAD</label>
+                      </div>
+                      <p class="error">
+                          {{ checkControl('age', 'required') ? 'Campo obligatorio' : (checkControl('age', 'min') ? 'La edad mínima es de 18 años' : (checkControl('age', 'max') ? 'La edad máxima es de 65 años' : '\u00A0')) }}
+                      </p>
+                    </div>
+
+                    <div class="inputs d-flex flex-column align-items-start">
+                      <div class="input-wrapper">
+                          <span class="icon icon-left">
+                              <svg
+                              height="12"
+                              viewBox="0 0 32 32"
+                              width="12"
+                              xmlns="http://www.w3.org/2000/svg"
+                              >
+                              <g id="Layer_3" data-name="Layer 3">
+                                  <path
+                                  d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z"
+                                  ></path>
+                              </g>
+                              </svg>
+                          </span>
+                          <input type="text" class="input" formControlName="num_tel" placeholder="" (input)="formatPhoneNumber()">
+                          <label class="label">NÚMERO DE TELÉFONO</label>
+                      </div>
+                      <p class="error">
+                          {{ checkControl('num_tel', 'required') ? 'Campo obligatorio' : (checkControl('num_tel', 'pattern') ? 'Por favor, introduzca un número de teléfono válido' : '\u00A0') }}
+                      </p>
+                    </div>
+
+                    <div class="inputs d-flex flex-column align-items-start">
+                      <div class="input-wrapper">
+                          <span class="icon icon-left">
+                              <svg 
+                              height="12"
+                              xmlns="http://www.w3.org/2000/svg" 
+                              xmlns:xlink="http://www.w3.org/1999/xlink" 
+                              viewBox="0 0 32 32" 
+                              xml:space="preserve">
+                              <circle style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" cx="23" cy="13" r="5"/>
+                              <path style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" d="M16,25c0-3.866,3.134-7,7-7s7,3.134,7,7"/>
+                              <circle style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" cx="9" cy="13" r="5"/>
+                              <path style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" d="M2,25c0-3.866,3.134-7,7-7s7,3.134,7,7"/>
+                              </svg>
+                          </span>
+                          <select class="input" formControlName="gender">
+                            <option value="" disabled selected>SELECCIONA TU GÉNERO</option>
+                            <option value="Mujer">Mujer</option>
+                            <option value="Hombre">Hombre</option>
+                            <option value="Otro">Otro</option>
+                          </select>
+                          <label class="label">GÉNERO</label>
+                      </div>
+                      <p class="error">
+                          {{ checkControl('gender', 'required') ? 'Campo obligatorio' : '\u00A0' }}
+                      </p>
+                    </div>
+
+                    <div class="inputs d-flex flex-column align-items-start">
+                      <div class="input-wrapper">
+                          <span class="icon icon-left">
+                              <svg 
+                              fill="#000000" 
+                              height="12" 
+                              viewBox="0 0 24 24" 
+                              xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.71,12.71a6,6,0,1,0-7.42,0,10,10,0,0,0-6.22,8.18,1,1,0,0,0,2,.22,8,8,0,0,1,15.9,0,1,1,0,0,0,1,.89h.11a1,1,0,0,0,.88-1.1A10,10,0,0,0,15.71,12.71ZM12,12a4,4,0,1,1,4-4A4,4,0,0,1,12,12Z"/>
+                              </svg>
+                          </span>
+                          <input type="text" class="input" formControlName="image" placeholder="">
+                          <label class="label">IMAGE</label>
+                      </div>
+                      <p class="error">
+                          {{ checkControl('image', 'required') ? 'Campo obligatorio' : (checkControl('image', 'minlength') ? 'La longitud mínima es 5 caracteres' : '\u00A0') }}
+                      </p>
+                    </div>
+
+                    <div class="inputs d-flex flex-column align-items-start">
+                      <div class="input-wrapper">
+                          <span class="icon icon-left">
+                              <svg 
+                              height="12"
+                              xmlns="http://www.w3.org/2000/svg" 
+                              xmlns:xlink="http://www.w3.org/1999/xlink" 
+                              viewBox="0 0 32 32" 
+                              xml:space="preserve">
+                              <circle style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" cx="23" cy="13" r="5"/>
+                              <path style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" d="M16,25c0-3.866,3.134-7,7-7s7,3.134,7,7"/>
+                              <circle style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" cx="9" cy="13" r="5"/>
+                              <path style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" d="M2,25c0-3.866,3.134-7,7-7s7,3.134,7,7"/>
+                              </svg>
+                          </span>
+                          <select id="type" class="input" formControlName="role">
+                            <option value="" disabled selected>SELECCIONA TU ROL</option>
+                            <option value="laboral">GUÍA</option>
+                            <option value="personal">USUARIO</option>
+                          </select>
+                          <label class="label">ROL</label>
+                      </div>
+                      <p class="error">
+                          {{ checkControl('role', 'required') ? 'Campo obligatorio' : '\u00A0' }}
+                      </p>
+                    </div>
+                    
                     <input class="button-submit" type="submit" value="REGISTRARSE" [disabled]="registerForm.invalid">
                   </form>
                 </div>

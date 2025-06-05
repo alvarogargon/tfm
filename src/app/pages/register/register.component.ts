@@ -1,5 +1,8 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, inject } from '@angular/core';
 import { ReactiveFormsModule, AbstractControl, FormControl, FormGroup, Validators, FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { IUserRegister } from '../../interfaces/iuser.interface';
 
 declare var VANTA: any;
 
@@ -11,10 +14,13 @@ declare var VANTA: any;
 })
 export class RegisterComponent implements AfterViewInit, OnDestroy {
 
+  authService = inject(AuthService);
+  router = inject(Router);
   registerForm: FormGroup;
   private vantaEffect: any;
   showPassword = false;
   showRepitePassword = false;
+  rawPhoneNumber = '';
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
@@ -50,21 +56,13 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
 
   constructor() {
     this.registerForm = new FormGroup({
-      type: new FormControl("", [
-        Validators.required
-      ]),
-      name: new FormControl("", [
+      username: new FormControl("", [
         Validators.required,
-        Validators.minLength(3)
+        Validators.minLength(5)
       ]),
       email: new FormControl("", [
         Validators.required,
-        Validators.pattern(/^\w+\@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)
-      ]),
-      edad: new FormControl(null, [
-        Validators.required,
-        Validators.min(18),
-        Validators.max(65)
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
       ]),
       password: new FormControl("", [
         Validators.required,
@@ -74,12 +72,46 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
       repitepassword: new FormControl("", [
         Validators.required
       ]),
+      first_name: new FormControl("", [
+        Validators.required,
+        Validators.minLength(3)
+      ]),
+      last_name: new FormControl("", [
+        Validators.required,
+        Validators.minLength(4)
+      ]),
+      age: new FormControl(null, [
+        Validators.required,
+        Validators.min(18),
+        Validators.max(65)
+      ]),
+      num_tel: new FormControl("", [
+        Validators.required,
+        this.phoneValidator
+      ]),
+      gender: new FormControl("", [
+        Validators.required
+      ]),
+      image: new FormControl("", [
+        Validators.required,
+        Validators.minLength(5)
+      ]),
+      role: new FormControl("", [
+        Validators.required
+      ]),
     }, this.passwordMatchValidator as Validators)
   }
 
-  getDataForm() {
-    console.log(this.registerForm.value)
-    this.registerForm.reset()
+  async registerData() {
+    const credentials: IUserRegister = { ...this.registerForm.value, num_tel: this.rawPhoneNumber };
+    try {
+      const res = await this.authService.register(credentials)
+      console.log(res.message);
+      this.router.navigate(['/dashboard'])
+    } catch (err) {
+
+    }
+    this.registerForm.reset();
   }
 
   checkControl(controlName: string, errorName: string): boolean | undefined {
@@ -90,6 +122,26 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
     const password = form.get('password')?.value;
     const repitepassword = form.get('repitepassword')?.value;
     return password === repitepassword ? null : { passwordMismatch: true };
+  }
+
+  phoneValidator(control: AbstractControl) {
+    const digits = (control.value || '').replace(/\D/g, '');
+    return /^\d{9}$/.test(digits) ? null : { pattern: true };
+  }
+
+  formatPhoneNumber() {
+    const control = this.registerForm.get('num_tel');
+    if (!control) return;
+    // Remove all non-digit characters
+    let digits = (control.value || '').replace(/\D/g, '');
+    // Keep only the first 9 digits
+    digits = digits.slice(0, 9);
+    // Store the raw number for submission
+    this.rawPhoneNumber = digits;
+    // Insert a space every 3 digits for display
+    const formatted = digits.replace(/(.{3})/g, '$1 ').trim();
+    // Set the formatted value for display
+    control.setValue(formatted, { emitEvent: false });
   }
 
 }

@@ -37,10 +37,6 @@ input[type=number]::-webkit-outer-spin-button {
     width: 100%;
 }
 
-.pass {
-    margin-bottom: 1rem;
-}
-
 .input {
     padding: 0.3rem 1.5rem;
     width: 100%;
