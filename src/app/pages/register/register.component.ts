@@ -21,6 +21,7 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
   showPassword = false;
   showRepitePassword = false;
   rawPhoneNumber = '';
+  currentStep = 1;
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
@@ -142,6 +143,30 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
     const formatted = digits.replace(/(.{3})/g, '$1 ').trim();
     // Set the formatted value for display
     control.setValue(formatted, { emitEvent: false });
+  }
+
+  nextStep() {
+    if (this.isStepValid(this.currentStep)) {
+      this.currentStep++;
+    }
+  }
+  prevStep() {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    }
+  }
+
+  // Helper to check if all controls in the current step are valid
+  isStepValid(step: number): boolean {
+    let controls: string[] = [];
+    if (step === 1) controls = ['username', 'email', 'password', 'repitepassword'];
+    if (step === 2) controls = ['first_name', 'last_name', 'age', 'num_tel'];
+    if (step === 3) controls = ['gender', 'image', 'role'];
+    const allControlsValid = controls.every(name => this.registerForm.get(name)?.valid);
+    if (step === 1) {
+      return allControlsValid && !this.registerForm.hasError('passwordMismatch');
+    }
+    return allControlsValid;
   }
 
 }
