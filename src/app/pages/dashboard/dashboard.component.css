@@ -21,6 +21,7 @@ h2, h3 {
     font-size: 3rem;
     font-weight: 700;
     margin: 0;
+    letter-spacing: -2px;
 }
 
 h2 {
@@ -28,6 +29,7 @@ h2 {
 }
 
 h3 {
+    padding: 0.3rem 0.5rem;
     background-color: var(--color-black);
     color: white;
     display: inline-block;
