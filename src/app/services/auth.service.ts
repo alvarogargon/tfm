@@ -3,24 +3,22 @@ import { inject, Injectable } from '@angular/core';
 import { IUserLogin, IUserRegister } from '../interfaces/iuser.interface';
 import { lastValueFrom } from 'rxjs';
 
+interface User {
+  userId: number;
+  userName?: string; 
+  email: string;
+  role: string;
+}
+
 interface LoginResponse {
   message: string; 
   token: string;
-  user: {
-    userId: number;
-    email: string;
-    role: string;
-  };
+  user: User;
 }
 
 interface RegisterResponse {
   message: string;
-  user: {
-    userId: number;
-    username: string;
-    email: string;
-    role: string;
-  };
+  user: User;
 }
 
 @Injectable({
@@ -29,12 +27,23 @@ interface RegisterResponse {
 export class AuthService {
   private endpoint = 'http://localhost:3000/api/auth';
   private httpClient = inject(HttpClient);
+  currentUser?: User;
 
-  login(credentials: IUserLogin): Promise<LoginResponse> {
-    return lastValueFrom(this.httpClient.post<LoginResponse>(`${this.endpoint}/login`, credentials));
+  async login(credentials: IUserLogin): Promise<LoginResponse> {
+    const res = await lastValueFrom(this.httpClient.post<LoginResponse>(`${this.endpoint}/login`, credentials));
+    this.currentUser = res.user;
+    localStorage.setItem('user', JSON.stringify(res.user));
+    return res;
   }
 
-  register(credentials: IUserRegister): Promise<RegisterResponse> {
-    return lastValueFrom(this.httpClient.post<RegisterResponse>(`${this.endpoint}/register`, credentials));
+  async register(credentials: IUserRegister): Promise<RegisterResponse> {
+    const res = await lastValueFrom(this.httpClient.post<RegisterResponse>(`${this.endpoint}/register`, credentials));
+    this.currentUser = res.user;
+    localStorage.setItem('user', JSON.stringify(res.user));
+    return res;
+  }
+
+  getCurrentUserId(): number | undefined {
+    return this.currentUser?.userId;
   }
 }

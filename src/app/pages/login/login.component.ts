@@ -90,7 +90,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     this.loginForm.reset();
   }
 
-    checkControl(controlName: string, errorName: string): boolean | undefined {
+  checkControl(controlName: string, errorName: string): boolean | undefined {
     return this.loginForm.get(controlName)?.hasError(errorName) && this.loginForm.get(controlName)?.touched
   }
 
