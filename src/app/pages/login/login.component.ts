@@ -3,6 +3,7 @@ import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule,  Validato
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { IUserLogin } from '../../interfaces/iuser.interface';
+import { toast } from 'ngx-sonner';
 
 declare var VANTA: any;
 
@@ -82,15 +83,15 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     try {
       const res = await this.authService.login(credentials);
       localStorage.setItem('token', res.token);
-      console.log(res.message);
+      toast.success(res.message);
       this.router.navigate(['/dashboard']);
-    } catch (err) {
-
+    } catch (error) {
+      toast.error((error as Error).message);
     }
     this.loginForm.reset();
   }
 
-    checkControl(controlName: string, errorName: string): boolean | undefined {
+  checkControl(controlName: string, errorName: string): boolean | undefined {
     return this.loginForm.get(controlName)?.hasError(errorName) && this.loginForm.get(controlName)?.touched
   }
 

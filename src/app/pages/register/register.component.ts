@@ -3,6 +3,7 @@ import { ReactiveFormsModule, AbstractControl, FormControl, FormGroup, Validator
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { IUserRegister } from '../../interfaces/iuser.interface';
+import { toast } from 'ngx-sonner';
 
 declare var VANTA: any;
 
@@ -124,11 +125,12 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
     const credentials: IUserRegister = { ...this.registerForm.value, num_tel: this.rawPhoneNumber };
     try {
       const res = await this.authService.register(credentials)
-      console.log(res.message);
+      toast.success(res.message);
       this.router.navigate(['/dashboard'])
-    } catch (err) {
-
+    } catch (error) {
+      toast.error((error as Error).message);
     }
+    this.currentStep = 1;
     this.registerForm.reset();
   }
 
