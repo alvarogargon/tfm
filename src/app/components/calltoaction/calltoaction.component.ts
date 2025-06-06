@@ -1,11 +1,10 @@
 import { Component, AfterViewInit, OnDestroy } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 declare var VANTA: any;
 
 @Component({
   selector: 'app-calltoaction',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './calltoaction.component.html',
   styleUrl: './calltoaction.component.css'
 })

@@ -33,6 +33,10 @@
     margin-bottom: 10rem;
 }
 
+.container3 {
+    margin-bottom: 0;
+}
+
 .vanta-bg-home {
     align-content: center;
 }
@@ -77,6 +81,7 @@ p {
 }
 
 .text {
+  margin: 30rem 0;
     max-width: 800px;
 }
 
