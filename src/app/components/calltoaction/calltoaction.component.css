@@ -10,27 +10,116 @@
   overflow: hidden;
 }
 
+.container {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin-bottom: 10rem;
+}
+
+.container2 {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin-bottom: 10rem;
+}
+
+.vanta-bg-home {
+    align-content: center;
+}
+
+.welcome {
+    text-align: center;
+}
+
+h1, h2, h3 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -2px;
+}
+
+h3 {
+    font-size: 2.4rem;
+    color: var(--color-black);
+}
+
+h2 {
+  padding-bottom: 1rem;
+}
+
+h1 {
+    padding: 0.3rem 0.5rem;
+    background-color: var(--color-black);
+    color: white;
+    display: inline-block;
+}
+
+p {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #4e8e5b;
+  padding: 3rem 0 12rem 0;;
+}
+
+.highlight2 {
+  color: #226630;
+  font-style: italic;
+}
+
+.text {
+    max-width: 800px;
+}
+
+.text2 {
+    color: silver;
+}
+
+.highlight {
+    color: white;
+    background-color: var(--color-black);
+    padding: 0 0.5rem;
+}
+
+@media screen and (max-width: 768px) {
+    h1, h2, h3 {
+        font-size: 2rem;
+    }
+    p {
+        font-size: 1.1rem;
+    }
+  
+}
+
 /* La imagen de fondo y la opacidad van aquí */
-.hero-overlay {
-    
+/* .hero-overlay { 
   background: url('../../../../public/images/fondo-call.png') center/cover no-repeat;
-  opacity: 0.4; /* Ajusta transparencia aquí */
+  opacity: 0.4; 
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   z-index: 0;
-}
+} */
 
 /* Contenido encima de la imagen */
-.hero-content {
+/* .hero-content {
   position: relative;
   z-index: 2;
   max-width: 800px;
-}
+} */
 
-.size {
+/* .size {
   max-width: 800px;
 }
 
@@ -47,7 +136,7 @@
   height: 400px;
   align-items: center;
   padding: 20px;
-    gap: 20px;
+  gap: 20px;
 
 }
 
@@ -69,9 +158,9 @@
   background: url('../../../assets/fondo-call.png') center/cover no-repeat;
   width: 100%;
   height: 100%;
-}
+} */
 
-.btn-tag {
+/* .btn-tag {
     padding: 0.5rem 1rem;
     font-size: 1rem;
     border-radius: 5px;
@@ -110,8 +199,5 @@
 
 .btn-dark {
     background-color: var(--color-black);
-}
+} */
 
-p {
-    font-size: 1rem;
-}
