@@ -34,6 +34,7 @@
 }
 
 .container3 {
+    height: 500px;
     margin-bottom: 0;
 }
 
@@ -61,10 +62,8 @@ h2 {
   padding-bottom: 1rem;
 }
 
-h1 {
-    padding: 0.3rem 0.5rem;
-    background-color: var(--color-black);
-    color: white;
+.display-4 .highlight  {
+    margin: 0 0.2rem;
     display: inline-block;
 }
 
@@ -72,7 +71,6 @@ p {
   font-size: 1.3rem;
   font-weight: 600;
   color: #4e8e5b;
-  padding: 3rem 0 12rem 0;;
 }
 
 .highlight2 {
@@ -82,7 +80,7 @@ p {
 
 .text {
   margin: 30rem 0;
-    max-width: 800px;
+  max-width: 800px;
 }
 
 .text2 {
@@ -95,12 +93,27 @@ p {
     padding: 0 0.5rem;
 }
 
+.cta-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 12rem 0;
+}
+
 @media screen and (max-width: 768px) {
     h1, h2, h3 {
         font-size: 2rem;
     }
     p {
         font-size: 1.1rem;
+    }
+
+    .container {
+      margin-bottom: 0;
+    }
+
+    .container3 {
+      height: 300px;
     }
   
 }
