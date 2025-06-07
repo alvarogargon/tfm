@@ -1,14 +1,20 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { CalendarOptions } from '@fullcalendar/core'; // useful for typechecking
+import dayGridPlugin from '@fullcalendar/daygrid';
+import { FullCalendarModule } from '@fullcalendar/angular';
+
 
 declare var VANTA: any;
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [FullCalendarModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements AfterViewInit, OnDestroy {
+
+
   
   private vantaEffect: any;
 
@@ -35,5 +41,9 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       this.vantaEffect.destroy();
     }
   }
+      calendarOptions: CalendarOptions = {
+    initialView: 'dayGridMonth',
+    plugins: [dayGridPlugin]
+  };
 
 }

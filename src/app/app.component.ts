@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { Footer2Component } from './shared/footer2/footer2.component';
 import { toast, NgxSonnerToaster } from 'ngx-sonner';
+
 import "@fontsource/montserrat/700.css";
 import "@fontsource/montserrat/500.css";
 import "@fontsource/montserrat/400.css";
