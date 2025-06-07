@@ -42,3 +42,18 @@
 .fc-event-solid {
     background-color: #4CAF50; /* Cambiar el color de los eventos */
 }
+.fc-daygrid-day-number { /* cambiar  color números*/
+    color: var(--color-black);
+}
+.fc-col-header-cell-cushion { /* cambiar  color números cabecera tabla*/
+    color: var(--color-black);
+
+}
+.fc .fc-button-primary{ /* cambiar  color números cabecera tabla*/
+    background-color: var(--color-secondary-green);
+    border: none;
+} 
+
+.fc-event-title-container { /* ccolor evento*/
+    background-color: var(--color-secondary-green);
+}
