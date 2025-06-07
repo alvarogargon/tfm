@@ -4,6 +4,10 @@
     --color-btn-ac: #4A90E2;
     --color-btn-des: #DCEEFF;
     --color-black: #302F2F;
+    --color-primary-green: #E0F7E9;
+    --color-secondary-green: #65BC95;
+    --color-primary-yellow: #FEEEA0;
+    --color-secondary-red: #F88379;
 }
 
 .btn-blue {
@@ -28,4 +32,13 @@
 ::selection {
     background-color: var(--color-black); 
     color: #fff; 
+}
+
+
+.fc-day-grid-event {
+    background-color: #f0f0f0;
+}
+ 
+.fc-event-solid {
+    background-color: #4CAF50; /* Cambiar el color de los eventos */
 }

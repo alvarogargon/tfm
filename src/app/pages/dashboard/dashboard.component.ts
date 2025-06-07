@@ -43,7 +43,11 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   }
       calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
-    plugins: [dayGridPlugin]
+    plugins: [dayGridPlugin],
+    events: [
+      { title: 'Evento 1', start: '2025-06-07', color: 'red' },
+      { title: 'Evento 2', start: '2025-06-09', color: 'blue' },
+    ],
   };
-
 }
+
