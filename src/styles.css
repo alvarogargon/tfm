@@ -47,6 +47,8 @@
 }
 .fc-col-header-cell-cushion { /* cambiar  color números cabecera tabla*/
     color: var(--color-black);
+    text-decoration: none;
+
 
 }
 .fc .fc-button-primary{ /* cambiar  color números cabecera tabla*/
@@ -56,4 +58,7 @@
 
 .fc-event-title-container { /* ccolor evento*/
     background-color: var(--color-secondary-green);
+}
+.fc-today-button {
+    background-color: var(--color-black);
 }
