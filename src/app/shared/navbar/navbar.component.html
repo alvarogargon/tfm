@@ -1,10 +1,32 @@
 <nav class="navbar navbar-expand-lg">
-    <div class="grapper gap-5 justify-content-center mx-3">
-        <a class="navbar-brand" href="#" [routerLink]="['/home']">Logo</a>
-          <div class="navbar-nav mx-auto d-flex flex-row gap-3">
-            <a class="nav-item nav-link active" href="#" [routerLink]="['/home']">Home</a>
-            <a class="nav-item nav-link" href="#" [routerLink]="['/login']">Inicio Sesión</a>
-            <a class="nav-item nav-link" href="#" [routerLink]="['/register']">Registrarse</a>
-          </div>
-    </div>
+  <div class="container-fluid d-flex align-items-center justify-content-between px-4">
+
+    @if (isDashboard() || isProfile()) {
+      <!-- Dashboard/Profile Navbar -->
+      <div class="d-flex gap-4">
+        <a class="nav-item nav-link" [routerLink]="['/dashboard']">Overview</a>
+        <a class="nav-item nav-link" [routerLink]="['/dashboard/calendar']">Calendar</a>
+      </div>
+      <a class="navbar-brand mx-auto" [routerLink]="['/home']" style="font-size:1.5rem;">
+        <span style="font-weight:bold;">LOGO</span>
+      </a>
+      <div class="d-flex gap-4 align-items-center">
+        <a class="nav-item nav-link" [routerLink]="['/dashboard/tasks']">Tasks</a>
+        <a class="nav-item nav-link" [routerLink]="['/dashboard/settings']">Settings</a>
+        <a class="profile-circle" [routerLink]="['/profile']" title="Perfil">
+          <img src="https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg" alt="Perfil" style="width:30px;height:30px;border-radius:50%;">
+        </a>
+      </div>
+    } @else {
+      <!-- Public Navbar -->
+      <a class="navbar-brand" [routerLink]="['/home']" style="font-size:1.5rem;">
+        <span style="font-weight:bold;">LOGO</span>
+      </a>
+      <div>
+        <a class="profile-circle" [routerLink]="['/login']" title="Perfil">
+          <img src="https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg" alt="Perfil" style="width:30px;height:30px;border-radius:50%;">
+        </a>
+      </div>
+    }
+  </div>
 </nav>

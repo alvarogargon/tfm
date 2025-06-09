@@ -1,0 +1,18 @@
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e3e3e3;
+}
+.card {
+  border-radius: 1rem;
+}
+.blockquote {
+  font-size: 1.2rem;
+  color: #555;
+}

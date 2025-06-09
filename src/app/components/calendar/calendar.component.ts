@@ -11,7 +11,7 @@ import { INITIAL_EVENTS, createEventId } from './../../event-utils';
 
 @Component({
   selector: 'app-calendar',
-  imports: [CommonModule, RouterOutlet, FullCalendarModule],
+  imports: [CommonModule, FullCalendarModule],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css'
 })
