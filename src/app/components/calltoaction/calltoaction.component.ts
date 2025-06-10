@@ -36,4 +36,11 @@ export class CalltoactionComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  scrollToSection() {
+    const section = document.querySelector('.container3');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
 }

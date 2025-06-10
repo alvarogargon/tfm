@@ -1,10 +1,45 @@
-.grapper {
-    width: 100%;
-    margin: auto;
-    display: flex;
-    align-items: center;
+.profile-circle img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
 }
 
 .navbar {
     font-size: 0.8rem;
+}
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        font-size: 0.65rem;
+    }
+
+    .navbar-brand span {
+        font-size: 1.2rem;
+    }
+
+    .px-4 {
+        padding-right: 0.6rem;
+        padding-left: 0.6rem;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .navbar {
+        font-size: 0.6rem;
+    }
+
+    .navbar-brand span {
+        font-size: 0.9rem;
+    }
+
+    .px-4 {
+        padding-right: 0.4rem;
+        padding-left: 0.4rem;
+    }
+
+    .profile-circle img {
+        width: 20px;
+        height: 20px;
+    }
+
 }

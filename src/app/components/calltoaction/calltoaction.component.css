@@ -23,6 +23,11 @@
 }
 
 .container2 {
+    height: 500px;
+    margin-bottom: 0;
+}
+
+.container3 {
     width: 100%;
     max-width: none;
     margin: 0;
@@ -33,17 +38,8 @@
     margin-bottom: 10rem;
 }
 
-.container3 {
-    height: 500px;
-    margin-bottom: 0;
-}
-
 .vanta-bg-home {
     align-content: center;
-}
-
-.welcome {
-    text-align: center;
 }
 
 h1, h2, h3 {
@@ -53,29 +49,19 @@ h1, h2, h3 {
     letter-spacing: -2px;
 }
 
-h3 {
-    font-size: 2.4rem;
-    color: var(--color-black);
-}
-
 h2 {
   padding-bottom: 1rem;
 }
 
-.display-4 .highlight  {
-    margin: 0 0.2rem;
-    display: inline-block;
+h3 {
+    font-size: 2.4rem;
+    color: var(--color-black);
 }
 
 p {
   font-size: 1.3rem;
   font-weight: 600;
   color: #4e8e5b;
-}
-
-.highlight2 {
-  color: #226630;
-  font-style: italic;
 }
 
 .text {
@@ -91,6 +77,16 @@ p {
     color: white;
     background-color: var(--color-black);
     padding: 0 0.5rem;
+}
+
+.display-4 .highlight {
+    margin: 0 0.2rem;
+    display: inline-block;
+}
+
+.highlight2 {
+  color: #226630;
+  font-style: italic;
 }
 
 .cta-center {
@@ -112,10 +108,9 @@ p {
       margin-bottom: 0;
     }
 
-    .container3 {
+    .container2 {
       height: 300px;
     }
-  
 }
 
 /* La imagen de fondo y la opacidad van aquí */

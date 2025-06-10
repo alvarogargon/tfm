@@ -16,3 +16,22 @@
   font-size: 1.2rem;
   color: #555;
 }
+
+@media screen and (max-width: 875px) {
+  .blockquote {
+    font-size: 1rem;
+  }
+  
+  .card {
+    margin: 0.5rem;
+  }
+  
+  .profile-container {
+    padding: 1rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+  
+}
