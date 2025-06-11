@@ -1,31 +1,100 @@
 .profile-container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
 }
+
 .profile-avatar {
-  width: 80px;
-  height: 80px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+  width: 250px;
+  height: 250px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #e3e3e3;
 }
+
 .card {
   border-radius: 1rem;
 }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.stats .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+}
+
+.card-title {
+  font-size: 1rem;
+}
+
+@media (max-width: 900px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
+
 .blockquote {
   font-size: 1.2rem;
   color: #555;
+  margin-bottom: 4rem;
 }
 
-@media screen and (max-width: 875px) {
+.recent-activity {
+  margin-bottom: 4rem;
+}
+
+.button {
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  width: 100%;
+  max-width: 250px;
+  margin: 20px 0 10px 0;
+  background-color: #302f2f;
+  border: none;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 10px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+@media screen and (max-width: 1200px) {
+  .profile-avatar {
+    width: 200px;
+    height: 200px;
+  }
+
+  .button {
+    max-width: 200px;
+  }
+
   .blockquote {
     font-size: 1rem;
   }
-  
+
   .card {
-    margin: 0.5rem;
+    margin: 0.2rem;
   }
-  
+
   .profile-container {
     padding: 1rem;
   }
@@ -33,5 +102,53 @@
   .card-title {
     font-size: 1rem;
   }
-  
+}
+
+@media screen and (max-width: 1000px) {
+  .card-title {
+    font-size: 0.8rem;
+  }
+
+  .card-body span {
+    font-size: 1.5rem;
+  }
+
+  .profile-avatar {
+    display: inline;
+    width: 150px;
+    height: 150px;
+  }
+
+  .button {
+    max-width: 150px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .profile-container {
+    padding: 0.2rem;
+  }
+
+  .button {
+    max-width: 300px;
+  }
+
+  .highlights {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .badge {
+    margin: 0 0.2rem;
+  }
+
+  .card-title {
+    font-size: 0.95rem;
+  }
+  .stats .card-body {
+    padding: 0.8rem;
+  }
+  .blockquote {
+    font-size: 0.9rem;
+  }
 }

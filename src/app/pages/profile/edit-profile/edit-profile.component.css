@@ -1,0 +1,171 @@
+.modal-body {
+    max-width: 500px;
+}
+
+.inputs {
+    position: relative;
+    margin: 2.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input {
+    padding: 0.3rem 1.5rem;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    border-bottom: 1px solid gray;
+    font-size: 0.8rem;
+}
+
+input.ng-invalid.ng-touched {
+    border-bottom: 1px solid red;
+}
+
+.input-mismatch {
+    border-bottom: 1px solid red !important;
+}
+
+input.ng-valid.ng-touched {
+    border-bottom: 1px solid green;
+}
+
+.label {
+    position: absolute;
+    left: 1.5rem;
+    top: 0.3rem;
+    pointer-events: none;
+    transform: translate(0, 0);
+    transition: all 0.3s ease-in-out;
+    font-size: 0.8rem;
+    color: gray;
+}
+
+.input:active {
+    transform: scale(0.98);
+}
+
+.input:focus {
+   border-bottom: 1px solid #302F2F;
+}
+
+.input:not(:placeholder-shown) {
+    border-bottom: 1px solid #302F2F;
+}
+
+.input:focus + .label,
+.input:not(:placeholder-shown) + .label {
+    transform: translate(0px, -25px);
+    font-size: 0.7rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.icon {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+}
+
+.icon-right {
+    right: 0.5rem;
+    position: absolute;
+    top: 45%;
+}
+
+.icon-left {
+    position: absolute;
+    top: 20%;
+    transform: translateY(-25%);
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.button-submit, .button-close {
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    width: 100%;
+    margin: 20px 0 10px 0;
+    background-color: #302F2F;
+    border: none;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 10px;
+    height: 40px;
+    cursor: pointer;
+    margin: 0 2rem;
+}
+
+.button-close {
+    background-color: #7a7a7a;
+}
+
+.button-submit:active, .button-close:active {
+    transform: scale(0.98);
+}
+
+/* Remove modal and dialog styles, add panel styles */
+.edit-profile-panel {
+  background: #faf9f7;
+  border: 1px solid #e3e3e3;
+  border-radius: 10px;
+  padding: 1.5rem 1rem 1rem 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.edit-profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.edit-profile-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+}
+
+.edit-profile-body {
+  padding: 0;
+}
+
+.edit-profile-footer {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #888;
+  padding: 0 0.5rem;
+}
+
+.btn-close:after {
+  content: "×";
+  font-size: 1.5rem;
+}
+
+.button-submit, .button-close {
+  flex: 1 1 0;
+  margin: 0;
+}

@@ -1,101 +1,111 @@
 <section class="profile-container py-5">
-    <div class="profile-header d-flex align-items-center gap-4 mb-4">
-        <img src="https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg" alt="Profile" class="profile-avatar" />
-        <div>
-        <h2 class="mb-1">Nombre de Usuario</h2>
-        <p class="text-muted mb-0">usuario&#64;email.com</p>
-        <button class="btn btn-outline-primary btn-sm mt-2">Editar Perfil</button>
-        </div>
-    </div>
-
+  <div class="container">
     <div class="row g-4">
-        <!-- Habit/Routine Stats -->
-        <div class="col-md-4">
-        <div class="card text-center shadow-sm">
-            <div class="card-body">
-            <h5 class="card-title mb-2">Rutinas activas</h5>
-            <span class="display-6 fw-bold text-primary">4</span>
-            </div>
-        </div>
-        </div>
-        <div class="col-md-4">
-        <div class="card text-center shadow-sm">
-            <div class="card-body">
-            <h5 class="card-title mb-2">Hábitos completados</h5>
-            <span class="display-6 fw-bold text-success">23</span>
-            </div>
-        </div>
-        </div>
-        <div class="col-md-4">
-        <div class="card text-center shadow-sm">
-            <div class="card-body">
-            <h5 class="card-title mb-2">Racha actual</h5>
-            <span class="display-6 fw-bold text-warning">7 días</span>
-            </div>
-        </div>
-        </div>
-    </div>
 
-    <!-- Motivational Quote -->
-    <div class="mt-5 text-center">
-        <blockquote class="blockquote">
-        <p class="mb-0">"El progreso no es lineal, pero cada paso cuenta."</p>
-        <footer class="blockquote-footer pt-3">Recuerda celebrar tus logros</footer>
+      <!-- Left Sidebar -->
+      <div class="col-md-4 col-lg-3 mb-4 sidebar">
+        <div class="profile">
+          <img src="https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg" alt="Profile" class="profile-avatar mb-3">
+          @if (!showEditForm) {
+          <h2 class="mb-1">Nombre de Usuario</h2>
+          <p class="text-muted mb-0">usuario&#64;email.com</p>
+          <button class="button btn-sm mb-3" (click)="showEditForm = true">Editar Perfil</button>
+          }
+          <!-- Edit Profile Form -->
+          @if(showEditForm) {
+            <app-edit-profile (close)="showEditForm = false"></app-edit-profile>
+          } @else {
+          <div class="mb-3">
+            <span class="badge bg-purple">PRO</span>
+          </div>
+          <div>
+            <h6 class="text-muted mb-1">Highlights</h6>
+            <ul class="list-unstyled mb-0 highlights">
+              <li><span class="badge bg-secondary">Productividad</span></li>
+              <li><span class="badge bg-secondary">Videojuegos</span></li>
+              <li><span class="badge bg-secondary">Jardinería</span></li>
+              <li><span class="badge bg-secondary">Lectura</span></li>
+              <li><span class="badge bg-secondary">Música</span></li>
+            </ul>
+          </div>
+          }
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-md-8 col-lg-9 main-content">
+
+        <!-- Stats -->
+        <div class="stats">
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h5 class="card-title mb-2">Rutinas activas</h5>
+              <span class="display-6 fw-bold text-primary">4</span>
+            </div>
+          </div>
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h5 class="card-title mb-2">Hábitos completados</h5>
+              <span class="display-6 fw-bold text-success">23</span>
+            </div>
+          </div>
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h5 class="card-title mb-2">Racha actual</h5>
+              <span class="display-6 fw-bold text-warning">7 días</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Motivational Quote -->
+        <blockquote class="blockquote text-center">
+          <p class="mb-0">"El progreso no es lineal, pero cada paso cuenta."</p>
+          <footer class="blockquote-footer pt-3">Recuerda celebrar tus logros</footer>
         </blockquote>
-    </div>
+      
+        <!-- Recent Activity -->
+        <div class="recent-activity">
+          <h4>Actividad reciente</h4>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">✔️ Completaste la rutina "Mañana productiva"</li>
+            <li class="list-group-item">✔️ Nuevo hábito añadido: "Leer 10 minutos"</li>
+            <li class="list-group-item">✔️ Racha de 7 días alcanzada</li>
+          </ul>
+        </div>
 
-    <!-- Recent Activity / Timeline -->
-    <div class="mt-5">
-        <h4>Actividad reciente</h4>
-        <ul class="list-group list-group-flush">
-        <li class="list-group-item">✔️ Completaste la rutina "Mañana productiva"</li>
-        <li class="list-group-item">✔️ Nuevo hábito añadido: "Leer 10 minutos"</li>
-        <li class="list-group-item">✔️ Racha de 7 días alcanzada</li>
-        </ul>
+        <!-- Routines -->
+        <div>
+          <h4>Rutinas</h4>
+          <div class="card shadow-sm mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Rutina de Mañana</h5>
+              <p class="card-text">Incluye meditación, ejercicio y planificación del día.</p>
+              <button class="button">Ver Detalles</button>
+            </div>
+          </div>
+          <div class="card shadow-sm mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Tarde productiva</h5>
+              <p class="card-text">Música y tareas enfocadas.</p>
+              <button class="button">Ver Detalles</button>
+            </div>
+          </div>
+          <div class="card shadow-sm mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Mañana creativa</h5>
+              <p class="card-text">Fotografía y cocina.</p>
+              <button class="button">Ver Detalles</button>
+            </div>
+          </div>
+          <div class="card shadow-sm mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Rutina de ejercicio</h5>
+              <p class="card-text">Entrenamiento y relajación.</p>
+              <button class="button">Ver Detalles</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <!-- Interests -->
-    <div class="mt-5">
-        <h4>Intereses</h4>
-        <div class="d-flex flex-wrap gap-2">
-            <span class="badge bg-secondary">Productividad</span>
-            <span class="badge bg-secondary">Videojuegos</span>
-            <span class="badge bg-secondary">Jardinería</span>
-            <span class="badge bg-secondary">Lectura</span>
-            <span class="badge bg-secondary">Música</span>
-        </div>
-    </div>
-
-    <!-- Routines -->
-    <div class="mt-5">
-        <h4>Rutinas</h4>
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Rutina de Mañana</h5>
-                <p class="card-text">Incluye meditación, ejercicio y planificación del día.</p>
-                <button class="btn btn-primary btn-sm">Ver Detalles</button>
-            </div>
-        </div>
-        <div class="card shadow-sm mt-3">
-            <div class="card-body">
-                <h5 class="card-title">Tarde productiva</h5>
-                <p class="card-text">Música y tareas enfocadas.</p>
-                <button class="btn btn-primary btn-sm">Ver Detalles</button>
-            </div>
-        </div>
-        <div class="card shadow-sm mt-3">
-            <div class="card-body">
-                <h5 class="card-title">Mañana creativa</h5>
-                <p class="card-text">Fotografía y cocina.</p>
-                <button class="btn btn-primary btn-sm">Ver Detalles</button>
-            </div>
-        </div>
-        <div class="card shadow-sm mt-3">
-            <div class="card-body">
-                <h5 class="card-title">Rutina de ejercicio</h5>
-                <p class="card-text">Entrenamiento y relajación.</p>
-                <button class="btn btn-primary btn-sm">Ver Detalles</button>
-            </div>
-        </div>
-    </div>
+  </div>
 </section>
