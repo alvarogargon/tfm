@@ -61,6 +61,10 @@
     color: var(--color-black);
 }
 
+.feature {
+    margin-bottom: 25rem;
+}
+
 .highlight {
     display: inline-block;
     color: white;

@@ -10,6 +10,7 @@ import "@fontsource/montserrat/400.css";
 import "@fontsource/montserrat/300.css";
 import "@fontsource/montserrat/200.css";
 
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, NavbarComponent, Footer2Component, NgxSonnerToaster],

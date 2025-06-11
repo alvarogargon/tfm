@@ -1,11 +1,12 @@
 import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AnimateOnScrollDirective } from '../../shared/scroll-animation.directive';
 
 declare var VANTA: any;
 
 @Component({
   selector: 'app-features',
-  imports: [RouterLink],
+  imports: [RouterLink, AnimateOnScrollDirective],
   templateUrl: './features.component.html',
   styleUrl: './features.component.css'
 })
