@@ -1,12 +1,13 @@
 import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { AnimateOnScrollDirective } from '../../shared/scroll-animation.directive';
 
 declare var VANTA: any;
 
 @Component({
   selector: 'app-calltoaction',
-  imports: [],
+  imports: [AnimateOnScrollDirective],
   templateUrl: './calltoaction.component.html',
-  styleUrl: './calltoaction.component.css'
+  styleUrl: './calltoaction.component.css',
 })
 export class CalltoactionComponent implements AfterViewInit, OnDestroy {
 
