@@ -60,4 +60,8 @@ export class AuthService {
   getCurrentUserId(): number | undefined {
     return this.currentUser?.userId;
   }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
 }
