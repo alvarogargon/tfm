@@ -98,7 +98,7 @@ input.ng-valid.ng-touched {
     transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
     width: 100%;
     margin: 20px 0 10px 0;
-    background-color: #302F2F;
+    background-color: var(--primary-color);
     border: none;
     color: white;
     font-size: 0.75rem;
@@ -110,16 +110,15 @@ input.ng-valid.ng-touched {
 }
 
 .button-close {
-    background-color: #7a7a7a;
+    background-color: var(--secondary-color);
 }
 
 .button-submit:active, .button-close:active {
     transform: scale(0.98);
 }
 
-/* Remove modal and dialog styles, add panel styles */
 .edit-profile-panel {
-  background: #faf9f7;
+  background: var(--background-color);
   border: 1px solid #e3e3e3;
   border-radius: 10px;
   padding: 1.5rem 1rem 1rem 1rem;
@@ -148,21 +147,6 @@ input.ng-valid.ng-touched {
   display: flex;
   gap: 1rem;
   margin-top: 1.5rem;
-}
-
-.btn-close {
-  background: none;
-  border: none;
-  font-size: 1.3rem;
-  line-height: 1;
-  cursor: pointer;
-  color: #888;
-  padding: 0 0.5rem;
-}
-
-.btn-close:after {
-  content: "×";
-  font-size: 1.5rem;
 }
 
 .button-submit, .button-close {

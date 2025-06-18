@@ -17,6 +17,7 @@
 
 .card {
   border-radius: 1rem;
+  background-color: var(--background-color);
 }
 
 .stats {
@@ -50,7 +51,7 @@
 
 .blockquote {
   font-size: 1.2rem;
-  color: #555;
+  color: var(--accent-color);
   margin-bottom: 4rem;
 }
 
@@ -63,7 +64,7 @@
   width: 100%;
   max-width: 250px;
   margin: 20px 0 10px 0;
-  background-color: #302f2f;
+  background-color: var(--primary-color);
   border: none;
   color: white;
   font-size: 0.8rem;
