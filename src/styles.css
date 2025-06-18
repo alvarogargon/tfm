@@ -8,6 +8,12 @@
     --color-secondary-green: #65BC95;
     --color-primary-yellow: #FEEEA0;
     --color-secondary-red: #F88379;
+
+    /* USER THEME PALETTE */
+    --primary-color: #4682B4;
+    --secondary-color: #708090;
+    --accent-color: #FFD700;
+    --background-color: #F5F5F5;
 }
 
 .btn-blue {

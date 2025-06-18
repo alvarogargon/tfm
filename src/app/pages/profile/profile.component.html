@@ -5,10 +5,10 @@
       <!-- Left Sidebar -->
       <div class="col-md-4 col-lg-3 mb-4 sidebar">
         <div class="profile">
-          <img src="https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg" alt="Profile" class="profile-avatar mb-3">
+          <img [src]="user?.image || 'https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg'" alt="Profile" class="profile-avatar mb-3">
           @if (!showEditForm) {
-          <h2 class="mb-1">Nombre de Usuario</h2>
-          <p class="text-muted mb-0">usuario&#64;email.com</p>
+          <h2 class="mb-1">{{ user?.username || 'Nombre de Usuario' }}</h2>
+          <p class="text-muted mb-0">{{ user?.email || 'usuario&#64;email.com' }}</p>
           <button class="button btn-sm mb-3" (click)="showEditForm = true">Editar Perfil</button>
           }
           <!-- Edit Profile Form -->
