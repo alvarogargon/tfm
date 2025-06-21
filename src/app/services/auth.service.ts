@@ -5,13 +5,13 @@ import { lastValueFrom } from 'rxjs';
 
 interface User {
   userId: number;
-  userName?: string; 
+  userName?: string;
   email: string;
   role: string;
 }
 
 interface LoginResponse {
-  message: string; 
+  message: string;
   token: string;
   user: User;
 }
@@ -41,7 +41,7 @@ export class AuthService {
       }
       throw new Error('Error al iniciar sesión.');
     }
-  } 
+  }
 
   async register(credentials: IUserRegister): Promise<RegisterResponse> {
     try {
@@ -53,8 +53,14 @@ export class AuthService {
       if (error.status === 409) {
         throw new Error('El email introducido ya está registrado.');
       }
-      throw new Error('Error en el registro.')
+      throw new Error('Error en el registro.');
     }
+  }
+
+  logout(): void {
+    this.currentUser = undefined;
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 
   getCurrentUserId(): number | undefined {
