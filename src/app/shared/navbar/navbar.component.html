@@ -13,7 +13,7 @@
         <a class="nav-item nav-link" [routerLink]="['/dashboard/tasks']">Tasks</a>
         <a class="nav-item nav-link" [routerLink]="['/dashboard/settings']">Settings</a>
         <a class="profile-circle" title="Perfil" (click)="toggleMenu($event)">
-          <img [src]="user?.image || 'https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg'" alt="Perfil">
+          <img [src]="'http://localhost:3000' + user?.image || 'https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg'" alt="Perfil">
           @if (showMenu) {
             <div class="dropdown-menu" (click)="$event.stopPropagation()">
 
