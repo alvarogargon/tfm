@@ -15,6 +15,91 @@
   border: 3px solid #e3e3e3;
 }
 
+.profile-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.editBtn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 35px;
+  height: 35px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.123);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s, opacity 0.2s;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.profile-avatar-wrapper:hover .editBtn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.editBtn::before {
+  content: "";
+  width: 200%;
+  height: 200%;
+  background-color: var(--accent-color);
+  position: absolute;
+  z-index: 1;
+  transform: scale(0);
+  transition: all 0.3s;
+  border-radius: 50%;
+  filter: blur(10px);
+}
+
+.editBtn:hover::before {
+  transform: scale(1);
+}
+
+.editBtn:hover {
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.336);
+}
+
+.editBtn svg {
+  height: 17px;
+  fill: white;
+  z-index: 3;
+  transition: all 0.2s;
+  transform-origin: bottom;
+}
+
+.editBtn:hover svg {
+  transform: rotate(-15deg) translateX(5px);
+}
+
+.editBtn::after {
+  content: "";
+  width: 25px;
+  height: 1.5px;
+  position: absolute;
+  bottom: 6px;
+  left: -5px;
+  background-color: white;
+  border-radius: 2px;
+  z-index: 2;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease-out;
+}
+
+.editBtn:hover::after {
+  transform: scaleX(1);
+  left: 0px;
+  transform-origin: right;
+}
+
 .card {
   border-radius: 1rem;
   background-color: var(--background-color);

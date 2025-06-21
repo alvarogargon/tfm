@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { IUserLogin, IUserRegister } from '../interfaces/iuser.interface';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Subject } from 'rxjs';
 
 interface User {
   userId: number;
@@ -28,12 +28,16 @@ export class AuthService {
   private endpoint = 'http://localhost:3000/api/auth';
   private httpClient = inject(HttpClient);
   currentUser?: User;
+  private loginStatusSubject = new Subject<void>();
+  loginStatus$ = this.loginStatusSubject.asObservable();
 
   async login(credentials: IUserLogin): Promise<LoginResponse> {
     try {
       const res = await lastValueFrom(this.httpClient.post<LoginResponse>(`${this.endpoint}/login`, credentials));
       this.currentUser = res.user;
       localStorage.setItem('user', JSON.stringify(res.user));
+      localStorage.setItem('token', res.token); 
+      this.loginStatusSubject.next();
       return res;
     } catch (error: any) {
       if (error.status === 401) {

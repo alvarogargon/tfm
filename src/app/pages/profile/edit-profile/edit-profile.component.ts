@@ -2,6 +2,7 @@ import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IUser } from '../../../interfaces/iuser.interface';
 import { UserService } from '../../../services/user.service';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-edit-profile',
@@ -20,8 +21,8 @@ export class EditProfileComponent {
       this.user = await this.userService.getProfile();
       if (this.user) {
         this.editProfileForm.patchValue({
-          username: this.user.username,
-          first_name: this.user.firstName
+          first_name: this.user.firstName,
+          last_name: this.user.lastName
         });
       }
       if (this.user?.colorPalette) {
@@ -34,8 +35,8 @@ export class EditProfileComponent {
 
   constructor(private fb: FormBuilder) {
     this.editProfileForm = this.fb.group({
-      username: [this.user?.username || 'Nombre de usuario'],
-      first_name: [this.user?.firstName || 'Nombre']
+      first_name: [this.user?.firstName || 'Nombre'],
+      last_name: [this.user?.lastName || 'Apellidos']
     });
   }
 
@@ -50,4 +51,25 @@ export class EditProfileComponent {
     if (palette.accent) root.style.setProperty('--accent-color', palette.accent);
     if (palette.background) root.style.setProperty('--background-color', palette.background);
   }
+
+  async onSubmit() {
+    if (this.editProfileForm.invalid) return;
+
+    const formValue = this.editProfileForm.value;
+
+    const payload: any = {
+      first_name: formValue.first_name,
+      last_name: formValue.last_name
+    };
+
+    try {
+      const updatedUser = await this.userService.updateProfile(payload);
+      this.user = updatedUser;
+      this.closeModal();
+      toast.success('Profile updated successfully!');
+    } catch (error) {
+      toast.error('Error updating profile.')
+    }
+  }
+  
 }
