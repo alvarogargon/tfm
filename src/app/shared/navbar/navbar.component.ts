@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { IUser } from '../../interfaces/iuser.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -16,8 +17,16 @@ export class NavbarComponent {
   userService = inject(UserService);
   user?: IUser;
   showMenu = false;
+  private loginSub?: Subscription;
 
   async ngOnInit() {
+    await this.loadProfile();
+    this.loginSub = this.auth.loginStatus$.subscribe(() => {
+      this.loadProfile();
+    });
+  }
+
+  async loadProfile() {
     try {
       this.user = await this.userService.getProfile();
       if (this.user?.colorPalette) {
@@ -26,6 +35,10 @@ export class NavbarComponent {
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
+  }
+
+  ngOnDestroy() {
+    this.loginSub?.unsubscribe();
   }
 
   isLoggedIn(): boolean {
