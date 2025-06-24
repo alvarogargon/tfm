@@ -21,7 +21,7 @@ import { IGuideUser } from '../../interfaces/iguide-user.interface';
   selector: 'app-profile',
   standalone: true,
   imports: [
-    RouterModule, // Add RouterModule here
+    RouterModule,
     EditProfileComponent,
     AddInterestModalComponent,
     AddGoalModalComponent,
@@ -58,19 +58,20 @@ export class ProfileComponent {
 
   async loadProfileData() {
     try {
-      const user = await this.userService.getProfile();
+      const [user, interests, goals, routines] = await Promise.all([
+        this.userService.getProfile(),
+        this.userService.getInterests(),
+        this.goalService.getGoals(),
+        this.routineService.getRoutines(),
+      ]);
+
       this.user.set(user);
       if (user?.colorPalette) {
         this.setThemeColors(user.colorPalette);
       }
 
-      const interests = await this.userService.getInterests();
       this.interests.set(interests);
-
-      const goals = await this.goalService.getGoals();
       this.goals.set(goals);
-
-      const routines = await this.routineService.getRoutines();
       this.routines.set(routines);
 
       if (user?.role === 'guide') {
