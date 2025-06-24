@@ -18,23 +18,26 @@ export interface IUserRegister {
   role: string;
 }
 
-// For user objects returned by the API (response)
+
+// src/app/interfaces/iuser.interface.ts
 export interface IUser {
-  userId: number;
+  user_id: number;
   username: string;
   email: string;
   firstName: string;
   lastName: string;
   age: number;
-  numTel: number | string;
-  gender: string;
-  image: string;
-  availability: string;
-  role: string;
-  colorPalette: {
+  numTel: string | number;
+  gender: 'Hombre' | 'Mujer' | 'Otro';
+  image?: string;
+  role: 'user' | 'guide';
+  availability?: string;
+  colorPalette?: {
+    primary?: string;
+    secondary?: string;
     accent?: string;
-    primary: string;
-    secondary: string;
     background?: string;
-  }
+  };
+  created_at?: string;
+  updated_at?: string;
 }

@@ -33,22 +33,21 @@ export class UserService {
     }
   }
 
-  async updateProfile(data: Partial<IUser>): Promise<IUser> {
+  async updateProfile(formData: FormData): Promise<IUser> {
     const token = localStorage.getItem('token');
     if (!token) throw new Error('No se encontró el token. Por favor, inicia sesión.');
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
+      'Authorization': `Bearer ${token}`
     });
 
     try {
       const res = await lastValueFrom(
         this.httpClient.put<{ message: string, profile: IUser }>(
           `${this.endpoint}/profile`,
-          data,
+          formData,
           { headers }
-        ) 
+        )
       );
       return res.profile;
     } catch (error: any) {
@@ -59,27 +58,6 @@ export class UserService {
       } else {
         throw new Error('Error al actualizar el perfil de usuario.');
       }
-    }
-  }
-
-  async updateProfileImage(formData: FormData): Promise<IUser> {
-    const token = localStorage.getItem('token');
-    if (!token) throw new Error('No se encontró el token. Por favor, inicia sesión.');
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    try {
-      const res = await lastValueFrom(this.httpClient.put<{ message: string, profile: IUser }>(
-          `${this.endpoint}/profile`,
-          formData,
-          { headers }
-        )
-      );
-      return res.profile;
-    } catch (error: any) {
-      throw new Error('Error al actualizar la imagen de perfil.');
     }
   }
 
