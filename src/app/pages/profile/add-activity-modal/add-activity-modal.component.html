@@ -1,0 +1,39 @@
+<div class="modal">
+  <div class="modal-content">
+    <h3>Añadir Actividad</h3>
+    <form [formGroup]="activityForm" (ngSubmit)="onSubmit()">
+      <div class="input-wrapper">
+        <input type="text" class="input" formControlName="title" placeholder="Título de la actividad">
+        <label class="label">Título</label>
+      </div>
+      <div class="input-wrapper">
+        <textarea class="input" formControlName="description" placeholder="Descripción"></textarea>
+        <label class="label">Descripción</label>
+      </div>
+      <div class="input-wrapper">
+        <input type="datetime-local" class="input" formControlName="datetime_start">
+        <label class="label">Fecha y Hora de Inicio</label>
+      </div>
+      <div class="input-wrapper">
+        <input type="datetime-local" class="input" formControlName="datetime_end">
+        <label class="label">Fecha y Hora de Fin</label>
+      </div>
+      <div class="input-wrapper">
+        <input type="text" class="input" formControlName="day_of_week" placeholder="Día de la semana">
+        <label class="label">Día de la Semana</label>
+      </div>
+      <div class="input-wrapper">
+        <input type="text" class="input" formControlName="location" placeholder="Ubicación">
+        <label class="label">Ubicación</label>
+      </div>
+      <div class="input-wrapper">
+        <input type="text" class="input" formControlName="icon" placeholder="Ícono">
+        <label class="label">Ícono</label>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="button-submit">Guardar</button>
+        <button type="button" class="button-close" (click)="close.emit()">Cerrar</button>
+      </div>
+    </form>
+  </div>
+</div>

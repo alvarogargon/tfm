@@ -1,0 +1,24 @@
+<section class="container py-5">
+  <h2>Ajustes</h2>
+  <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()">
+    <div class="input-wrapper">
+      <input type="text" class="input" formControlName="availability" placeholder="Disponibilidad">
+      <label class="label">Disponibilidad (ej. Lunes a Viernes, 09:00-13:00)</label>
+    </div>
+    <div class="input-wrapper">
+      <input type="color" class="input" formControlName="primary_color">
+      <label class="label">Color Primario</label>
+    </div>
+    <div class="input-wrapper">
+      <input type="color" class="input" formControlName="secondary_color">
+      <label class="label">Color Secundario</label>
+    </div>
+    <div class="input-wrapper">
+      <input type="color" class="input" formControlName="accent_color">
+      <label class="label">Color de Acento</label>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="button-submit">Guardar</button>
+    </div>
+  </form>
+</section>
