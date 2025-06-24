@@ -21,7 +21,7 @@ import { IGuideUser } from '../../interfaces/iguide-user.interface';
   selector: 'app-profile',
   standalone: true,
   imports: [
-    RouterModule, // Add RouterModule here
+    RouterModule,
     EditProfileComponent,
     AddInterestModalComponent,
     AddGoalModalComponent,
@@ -58,19 +58,20 @@ export class ProfileComponent {
 
   async loadProfileData() {
     try {
-      const user = await this.userService.getProfile();
+      const [user, interests, goals, routines] = await Promise.all([
+        this.userService.getProfile(),
+        this.userService.getInterests(),
+        this.goalService.getGoals(),
+        this.routineService.getRoutines(),
+      ]);
+
       this.user.set(user);
       if (user?.colorPalette) {
         this.setThemeColors(user.colorPalette);
       }
 
-      const interests = await this.userService.getInterests();
       this.interests.set(interests);
-
-      const goals = await this.goalService.getGoals();
       this.goals.set(goals);
-
-      const routines = await this.routineService.getRoutines();
       this.routines.set(routines);
 
       if (user?.role === 'guide') {
@@ -84,27 +85,30 @@ export class ProfileComponent {
   }
 
   onAvatarClick() {
+    // Abrir el selector de archivos al hacer clic en el botón
     this.fileInput.nativeElement.click();
   }
 
   async onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
-      const file = input.files[0];
-      await this.uploadProfileImage(file);
-    }
-  }
+      const formData = new FormData();
+      formData.append('image', input.files[0]);
 
-  async uploadProfileImage(file: File) {
-    const formData = new FormData();
-    formData.append('image', file);
-    try {
-      const updatedUser = await this.userService.updateProfileImage(formData);
-      this.user.set(updatedUser);
-      toast.success('Imagen de perfil actualizada con éxito.');
-    } catch (error) {
-      console.error('Error al actualizar imagen de perfil:', error);
-      toast.error('Error al actualizar la imagen de perfil.');
+      try {
+        const updatedUser = await this.userService.updateProfile(formData);
+        this.user.set(updatedUser);
+        if (updatedUser.colorPalette) {
+          this.setThemeColors(updatedUser.colorPalette);
+        }
+        toast.success('Imagen de perfil actualizada con éxito.');
+      } catch (error) {
+        console.error('Error al actualizar la imagen de perfil:', error);
+        toast.error('Error al actualizar la imagen de perfil.');
+      }
+
+      // Limpiar el input después de la carga
+      input.value = '';
     }
   }
 
@@ -153,10 +157,10 @@ export class ProfileComponent {
 
   setThemeColors(palette: any) {
     const root = document.documentElement;
-    if (palette.primary) root.style.setProperty('--primary-color', palette.primary);
-    if (palette.secondary) root.style.setProperty('--secondary-color', palette.secondary);
-    if (palette.accent) root.style.setProperty('--accent-color', palette.accent);
-    if (palette.background) root.style.setProperty('--background-color', palette.background);
+    if (palette?.primary) root.style.setProperty('--primary-color', palette.primary);
+    if (palette?.secondary) root.style.setProperty('--secondary-color', palette.secondary);
+    if (palette?.accent) root.style.setProperty('--accent-color', palette.accent);
+    if (palette?.background) root.style.setProperty('--background-color', palette.background);
   }
 
   onModalClosed() {
@@ -165,6 +169,7 @@ export class ProfileComponent {
     this.showEditGoalModal.set(false);
     this.showAddRoutineModal.set(false);
     this.showAddGuideUserModal.set(false);
+    this.showEditForm.set(false);
     this.loadProfileData();
   }
 }
