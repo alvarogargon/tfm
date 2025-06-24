@@ -1,21 +1,28 @@
-.edit-profile-panel {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: var(--background-color, #ffffff); /* Fondo personalizado */
-  border-radius: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo fijo para el overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.edit-profile-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+.modal-content {
+  background-color: var(--background-color, #ffffff); /* Fondo personalizado */
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .input-wrapper {
   position: relative;
-  width: 100%;
+  margin-bottom: 1.5rem;
 }
 
 .input {
@@ -32,6 +39,11 @@
 .input:focus {
   outline: none;
   border-color: var(--accent-color, #007bff);
+}
+
+textarea.input {
+  height: 100px;
+  resize: vertical;
 }
 
 .label {
@@ -52,21 +64,6 @@
   color: var(--primary-color, #666666);
 }
 
-.form-control-static {
-  padding: 0.75rem;
-  background-color: var(--background-color, #f8f9fa); /* Fondo personalizado */
-  border-radius: 0.5rem;
-  font-weight: bold;
-}
-
-.text-success {
-  color: var(--primary-color, #28a745);
-}
-
-.text-primary {
-  color: var(--secondary-color, #007bff);
-}
-
 .error-text {
   color: #dc3545;
   font-size: 0.8rem;
@@ -74,7 +71,7 @@
   display: block;
 }
 
-.edit-profile-footer {
+.modal-footer {
   display: flex;
   gap: 1rem;
   justify-content: flex-end;

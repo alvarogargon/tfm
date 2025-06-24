@@ -6,16 +6,19 @@ import { AddGoalModalComponent } from './add-goal-modal/add-goal-modal.component
 import { EditGoalModalComponent } from './edit-goal-modal/edit-goal-modal.component';
 import { AddRoutineModalComponent } from './add-routine-modal/add-routine-modal.component';
 import { AddGuideUserModalComponent } from './add-guide-user-modal/add-guide-user-modal.component';
+import { AddCategoryModalComponent } from './add-category-modal/add-category-modal.component';
 import { IUser } from '../../interfaces/iuser.interface';
 import { UserService } from '../../services/user.service';
 import { RoutineService } from '../../services/routine.service';
 import { GoalService } from '../../services/goal.service';
 import { GuideUserService } from '../../services/guide-user.service';
+import { CategoryService } from '../../services/category.service';
 import { toast } from 'ngx-sonner';
 import { IProfileInterest } from '../../interfaces/iprofile-interest.interface';
 import { IProfileGoal } from '../../interfaces/iprofile-goal.interface';
 import { IRoutine } from '../../interfaces/iroutine.interface';
 import { IGuideUser } from '../../interfaces/iguide-user.interface';
+import { ICategory } from '../../interfaces/icategory.interface';
 
 @Component({
   selector: 'app-profile',
@@ -27,7 +30,8 @@ import { IGuideUser } from '../../interfaces/iguide-user.interface';
     AddGoalModalComponent,
     EditGoalModalComponent,
     AddRoutineModalComponent,
-    AddGuideUserModalComponent
+    AddGuideUserModalComponent,
+    AddCategoryModalComponent
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
@@ -39,17 +43,20 @@ export class ProfileComponent {
   showEditGoalModal = signal(false);
   showAddRoutineModal = signal(false);
   showAddGuideUserModal = signal(false);
+  showAddCategoryModal = signal(false);
   selectedGoal = signal<IProfileGoal | null>(null);
   user = signal<IUser | undefined>(undefined);
   interests = signal<IProfileInterest[]>([]);
   goals = signal<IProfileGoal[]>([]);
   routines = signal<IRoutine[]>([]);
   guideUserRelations = signal<IGuideUser[]>([]);
+  categories = signal<ICategory[]>([]);
   completedGoalsCount = computed(() => this.goals().filter(g => g.status === 'completed').length);
   userService = inject(UserService);
   routineService = inject(RoutineService);
   goalService = inject(GoalService);
   guideUserService = inject(GuideUserService);
+  categoryService = inject(CategoryService);
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   async ngOnInit() {
@@ -58,11 +65,12 @@ export class ProfileComponent {
 
   async loadProfileData() {
     try {
-      const [user, interests, goals, routines] = await Promise.all([
+      const [user, interests, goals, routines, categories] = await Promise.all([
         this.userService.getProfile(),
         this.userService.getInterests(),
         this.goalService.getGoals(),
         this.routineService.getRoutines(),
+        this.categoryService.getCategories()
       ]);
 
       this.user.set(user);
@@ -73,6 +81,7 @@ export class ProfileComponent {
       this.interests.set(interests);
       this.goals.set(goals);
       this.routines.set(routines);
+      this.categories.set(categories);
 
       if (user?.role === 'guide') {
         const relations = await this.guideUserService.getGuideUserRelations();
@@ -85,7 +94,6 @@ export class ProfileComponent {
   }
 
   onAvatarClick() {
-    // Abrir el selector de archivos al hacer clic en el botón
     this.fileInput.nativeElement.click();
   }
 
@@ -107,7 +115,6 @@ export class ProfileComponent {
         toast.error('Error al actualizar la imagen de perfil.');
       }
 
-      // Limpiar el input después de la carga
       input.value = '';
     }
   }
@@ -131,6 +138,10 @@ export class ProfileComponent {
 
   openAddGuideUserModal() {
     this.showAddGuideUserModal.set(true);
+  }
+
+  openAddCategoryModal() {
+    this.showAddCategoryModal.set(true);
   }
 
   async deleteGoal(goalId: number) {
@@ -169,7 +180,7 @@ export class ProfileComponent {
     this.showEditGoalModal.set(false);
     this.showAddRoutineModal.set(false);
     this.showAddGuideUserModal.set(false);
-    this.showEditForm.set(false);
+    this.showAddCategoryModal.set(false);
     this.loadProfileData();
   }
 }
