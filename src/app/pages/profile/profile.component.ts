@@ -1,5 +1,11 @@
-import { Component, ElementRef, inject, ViewChild, signal } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, signal, computed } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { AddInterestModalComponent } from './add-interest-modal/add-interest-modal.component';
+import { AddGoalModalComponent } from './add-goal-modal/add-goal-modal.component';
+import { EditGoalModalComponent } from './edit-goal-modal/edit-goal-modal.component';
+import { AddRoutineModalComponent } from './add-routine-modal/add-routine-modal.component';
+import { AddGuideUserModalComponent } from './add-guide-user-modal/add-guide-user-modal.component';
 import { IUser } from '../../interfaces/iuser.interface';
 import { UserService } from '../../services/user.service';
 import { RoutineService } from '../../services/routine.service';
@@ -13,12 +19,21 @@ import { IGuideUser } from '../../interfaces/iguide-user.interface';
 
 @Component({
   selector: 'app-profile',
-  imports: [EditProfileComponent],
+  standalone: true,
+  imports: [
+    RouterModule, // Add RouterModule here
+    EditProfileComponent,
+    AddInterestModalComponent,
+    AddGoalModalComponent,
+    EditGoalModalComponent,
+    AddRoutineModalComponent,
+    AddGuideUserModalComponent
+  ],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css'
+  styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent {
-  showEditForm = false;
+  showEditForm = signal(false);
   showAddInterestModal = signal(false);
   showAddGoalModal = signal(false);
   showEditGoalModal = signal(false);
@@ -30,6 +45,7 @@ export class ProfileComponent {
   goals = signal<IProfileGoal[]>([]);
   routines = signal<IRoutine[]>([]);
   guideUserRelations = signal<IGuideUser[]>([]);
+  completedGoalsCount = computed(() => this.goals().filter(g => g.status === 'completed').length);
   userService = inject(UserService);
   routineService = inject(RoutineService);
   goalService = inject(GoalService);
@@ -62,7 +78,7 @@ export class ProfileComponent {
         this.guideUserRelations.set(relations);
       }
     } catch (error) {
-      console.error('Error loading profile data:', error);
+      console.error('Error al cargar datos del perfil:', error);
       toast.error('Error al cargar los datos del perfil.');
     }
   }
@@ -85,9 +101,9 @@ export class ProfileComponent {
     try {
       const updatedUser = await this.userService.updateProfileImage(formData);
       this.user.set(updatedUser);
-      toast.success('Imagen de perfil actualizada.');
+      toast.success('Imagen de perfil actualizada con éxito.');
     } catch (error) {
-      console.error('Error uploading profile image:', error);
+      console.error('Error al actualizar imagen de perfil:', error);
       toast.error('Error al actualizar la imagen de perfil.');
     }
   }
@@ -117,9 +133,9 @@ export class ProfileComponent {
     try {
       await this.goalService.deleteGoal(goalId);
       this.goals.update(goals => goals.filter(g => g.goal_id !== goalId));
-      toast.success('Objetivo eliminado.');
+      toast.success('Objetivo eliminado con éxito.');
     } catch (error) {
-      console.error('Error deleting goal:', error);
+      console.error('Error al eliminar objetivo:', error);
       toast.error('Error al eliminar el objetivo.');
     }
   }
@@ -128,9 +144,9 @@ export class ProfileComponent {
     try {
       await this.guideUserService.deleteGuideUserRelation(guideUserId);
       this.guideUserRelations.update(relations => relations.filter(r => r.guide_user_id !== guideUserId));
-      toast.success('Relación eliminada.');
+      toast.success('Relación eliminada con éxito.');
     } catch (error) {
-      console.error('Error deleting guide-user relation:', error);
+      console.error('Error al eliminar relación guía-usuario:', error);
       toast.error('Error al eliminar la relación.');
     }
   }
@@ -141,5 +157,14 @@ export class ProfileComponent {
     if (palette.secondary) root.style.setProperty('--secondary-color', palette.secondary);
     if (palette.accent) root.style.setProperty('--accent-color', palette.accent);
     if (palette.background) root.style.setProperty('--background-color', palette.background);
+  }
+
+  onModalClosed() {
+    this.showAddInterestModal.set(false);
+    this.showAddGoalModal.set(false);
+    this.showEditGoalModal.set(false);
+    this.showAddRoutineModal.set(false);
+    this.showAddGuideUserModal.set(false);
+    this.loadProfileData();
   }
 }

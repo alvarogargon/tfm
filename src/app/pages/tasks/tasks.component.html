@@ -1,1 +1,15 @@
-<p>tasks works!</p>
+<section class="container py-5">
+  <h2>Tareas</h2>
+  @for (goal of goals; track goal.goal_id) {
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ goal.name }}</h5>
+        <p class="card-text">{{ goal.description }}</p>
+        <p class="card-text">Progreso: {{ goal.progress }}%</p>
+        <button class="button" (click)="updateProgress(goal)">Actualizar Progreso</button>
+      </div>
+    </div>
+  } @empty {
+    <p>No hay tareas registradas.</p>
+  }
+</section>

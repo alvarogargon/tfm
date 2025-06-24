@@ -1,1 +1,39 @@
-<p>add-routine-modal works!</p>
+<div class="modal">
+  <div class="modal-content">
+    <h3>Añadir Rutina</h3>
+    <form [formGroup]="routineForm" (ngSubmit)="onSubmit()">
+      <div class="input-wrapper">
+        <input type="text" class="input" formControlName="name" placeholder="Nombre de la rutina">
+        <label class="label">Nombre</label>
+      </div>
+      <div class="input-wrapper">
+        <textarea class="input" formControlName="description" placeholder="Descripción"></textarea>
+        <label class="label">Descripción</label>
+      </div>
+      <div class="input-wrapper">
+        <input type="checkbox" formControlName="is_template">
+        <label class="label">¿Es plantilla?</label>
+      </div>
+      <div class="input-wrapper">
+        <select class="input" formControlName="daily_routine">
+          <option value="Daily">Diaria</option>
+          <option value="Weekly">Semanal</option>
+          <option value="Monthly">Mensual</option>
+        </select>
+        <label class="label">Frecuencia</label>
+      </div>
+      <div class="input-wrapper">
+        <input type="time" class="input" formControlName="start_time">
+        <label class="label">Hora de Inicio</label>
+      </div>
+      <div class="input-wrapper">
+        <input type="time" class="input" formControlName="end_time">
+        <label class="label">Hora de Fin</label>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="button-submit">Guardar</button>
+        <button type="button" class="button-close" (click)="close.emit()">Cerrar</button>
+      </div>
+    </form>
+  </div>
+</div>

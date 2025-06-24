@@ -1,11 +1,50 @@
-<section class="profile-container py-5">
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><section class="profile-container py-5">
   <div class="container">
     <div class="row g-4">
       <!-- Left Sidebar -->
       <div class="col-md-4 col-lg-3 mb-4 sidebar">
         <div class="profile">
           <div class="profile-avatar-wrapper position-relative">
-            <img [src]="user?.image ? 'http://localhost:3000' + user.image : 'https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg'" 
+            <img [src]="user()?.image ? 'http://localhost:3000' + user()?.image : 'https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg'" 
                  alt="Profile" 
                  class="profile-avatar mb-3"
                  (click)="onAvatarClick()"
@@ -21,17 +60,17 @@
               </svg>
             </button>
           </div>
-          @if (!showEditForm) {
-            <h2 class="mb-1">{{ user?.username || 'Nombre de Usuario' }}</h2>
-            <p class="text-muted mb-0">{{ user?.email || 'usuario@email.com' }}</p>
-            <button class="button btn-sm mb-3" (click)="showEditForm = true">Editar Perfil</button>
+          @if (!showEditForm()) {
+            <h2 class="mb-1">{{ user()?.username || 'Nombre de Usuario' }}</h2>
+            <p class="text-muted mb-0">{{ user()?.email || 'usuario@email.com' }}</p>
+            <button class="button btn-sm mb-3" (click)="showEditForm.set(true)">Editar Perfil</button>
             <div class="mb-3">
-              <span class="badge bg-purple">{{ user?.role === 'guide' ? 'Guía' : 'Usuario' }}</span>
+              <span class="badge bg-purple">{{ user()?.role === 'guide' ? 'Guía' : 'Usuario' }}</span>
             </div>
             <div>
               <h6 class="text-muted mb-1">Intereses</h6>
               <ul class="list-unstyled mb-0 highlights">
-                @for (interest of interests; track interest.interest_id) {
+                @for (interest of interests(); track interest.interest_id) {
                   <li><span class="badge bg-secondary">{{ interest.interest_name }}</span></li>
                 } @empty {
                   <li>No hay intereses registrados.</li>
@@ -40,7 +79,10 @@
               <button class="button btn-sm mt-2" (click)="openAddInterestModal()">Añadir Interés</button>
             </div>
           } @else {
-            <app-edit-profile (close)="showEditForm = false"></app-edit-profile>
+            <app-edit-profile (close)="showEditForm.set(false)"></app-edit-profile>
+          }
+          @if (showAddInterestModal()) {
+            <app-add-interest-modal (close)="onModalClosed()"></app-add-interest-modal>
           }
         </div>
       </div>
@@ -52,13 +94,13 @@
           <div class="card shadow-sm">
             <div class="card-body text-center">
               <h5 class="card-title mb-2">Rutinas activas</h5>
-              <span class="display-6 fw-bold text-primary">{{ routines.length }}</span>
+              <span class="display-6 fw-bold text-primary">{{ routines().length }}</span>
             </div>
           </div>
           <div class="card shadow-sm">
             <div class="card-body text-center">
               <h5 class="card-title mb-2">Objetivos completados</h5>
-              <span class="display-6 fw-bold text-success">{{ goals.filter(g => g.status === 'completed').length }}</span>
+              <span class="display-6 fw-bold text-success">{{ completedGoalsCount() }}</span>
             </div>
           </div>
           <div class="card shadow-sm">
@@ -72,7 +114,7 @@
         <!-- Goals -->
         <div class="mb-4">
           <h4>Objetivos</h4>
-          @for (goal of goals; track goal.goal_id) {
+          @for (goal of goals(); track goal.goal_id) {
             <div class="card shadow-sm mb-3">
               <div class="card-body">
                 <h5 class="card-title">{{ goal.name }}</h5>
@@ -87,12 +129,18 @@
             <p>No hay objetivos registrados.</p>
           }
           <button class="button" (click)="openAddGoalModal()">Añadir Objetivo</button>
+          @if (showAddGoalModal()) {
+            <app-add-goal-modal (close)="onModalClosed()"></app-add-goal-modal>
+          }
+          @if (showEditGoalModal() && selectedGoal()) {
+            <app-edit-goal-modal [goal]="selectedGoal()!" (close)="onModalClosed()"></app-edit-goal-modal>
+          }
         </div>
 
         <!-- Routines -->
         <div>
           <h4>Rutinas</h4>
-          @for (routine of routines; track routine.routine_id) {
+          @for (routine of routines(); track routine.routine_id) {
             <div class="card shadow-sm mb-3">
               <div class="card-body">
                 <h5 class="card-title">{{ routine.name }}</h5>
@@ -104,13 +152,16 @@
             <p>No hay rutinas registradas.</p>
           }
           <button class="button" (click)="openAddRoutineModal()">Añadir Rutina</button>
+          @if (showAddRoutineModal()) {
+            <app-add-routine-modal (close)="onModalClosed()"></app-add-routine-modal>
+          }
         </div>
 
         <!-- Guide-User Relationships (for guides) -->
-        @if (user?.role === 'guide') {
+        @if (user()?.role === 'guide') {
           <div>
             <h4>Usuarios Asignados</h4>
-            @for (relation of guideUserRelations; track relation.guide_user_id) {
+            @for (relation of guideUserRelations(); track relation.guide_user_id) {
               <div class="card shadow-sm mb-3">
                 <div class="card-body">
                   <h5 class="card-title">Usuario ID: {{ relation.user_id }}</h5>
@@ -121,6 +172,9 @@
               <p>No hay usuarios asignados.</p>
             }
             <button class="button" (click)="openAddGuideUserModal()">Asignar Usuario</button>
+            @if (showAddGuideUserModal()) {
+              <app-add-guide-user-modal (close)="onModalClosed()"></app-add-guide-user-modal>
+            }
           </div>
         }
       </div>

@@ -1,1 +1,26 @@
-<p>routine-detail works!</p>
+<section class="container py-5">
+  @if (routine) {
+    <h2>{{ routine.name }}</h2>
+    <p>{{ routine.description }}</p>
+    <h4>Actividades</h4>
+    @for (activity of activities; track activity.activity_id) {
+      <div class="card shadow-sm mb-3">
+        <div class="card-body">
+          <h5 class="card-title">{{ activity.title }}</h5>
+          <p class="card-text">{{ activity.description }}</p>
+          <p class="card-text">Inicio: {{ activity.datetime_start }}</p>
+          <p class="card-text">Fin: {{ activity.datetime_end }}</p>
+          <button class="button" (click)="deleteActivity(activity.activity_id)">Eliminar</button>
+        </div>
+      </div>
+    } @empty {
+      <p>No hay actividades para esta rutina.</p>
+    }
+    <button class="button" (click)="openAddActivityModal()">Añadir Actividad</button>
+    @if (showAddActivityModal) {
+      <app-add-activity-modal [routineId]="routine.routine_id" (close)="onActivityAdded()"></app-add-activity-modal>
+    }
+  } @else {
+    <p>Cargando rutina...</p>
+  }
+</section>

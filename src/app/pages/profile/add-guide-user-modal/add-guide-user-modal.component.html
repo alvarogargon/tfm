@@ -1,1 +1,15 @@
-<p>add-guide-user-modal works!</p>
+<div class="modal">
+  <div class="modal-content">
+    <h3>Asignar Usuario a Guía</h3>
+    <form [formGroup]="guideUserForm" (ngSubmit)="onSubmit()">
+      <div class="input-wrapper">
+        <input type="number" class="input" formControlName="user_id" placeholder="ID del usuario">
+        <label class="label">ID del Usuario</label>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="button-submit">Guardar</button>
+        <button type="button" class="button-close" (click)="close.emit()">Cerrar</button>
+      </div>
+    </form>
+  </div>
+</div>
