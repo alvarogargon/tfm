@@ -53,7 +53,6 @@
   border-radius: 0.5rem;
   cursor: pointer;
   transition: background-color 0.2s;
-  /* Estos estilos son para botones con texto, los dejamos como estaban */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -64,16 +63,15 @@
   background-color: var(--accent-color, #0056b3);
 }
 
-/* ---- NUEVOS ESTILOS AÑADIDOS ---- */
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem; /* Espacio antes de la lista de elementos */
+  margin-bottom: 1rem;
 }
 
 .section-header h4 {
-  margin: 0; /* Quitamos el margen por defecto del h4 para un alineado perfecto */
+  margin: 0;
 }
 
 .icon-button {
@@ -82,7 +80,7 @@
   border: none;
   width: 36px;
   height: 36px;
-  border-radius: 50%; /* Hacemos el botón circular */
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -100,7 +98,6 @@
   height: 16px;
   fill: currentColor;
 }
-/* ---- FIN DE NUEVOS ESTILOS ---- */
 
 .btn-sm {
   padding: 0.5rem 1rem;
@@ -137,4 +134,47 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+/* Nuevos estilos para la barra de progreso y estado */
+.progress-container {
+  background-color: #e9ecef;
+  border-radius: 0.25rem;
+  height: 20px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  background-color: var(--primary-color, #007bff);
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+}
+
+.status-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.status-label {
+  font-weight: 500;
+}
+
+.status-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .button-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

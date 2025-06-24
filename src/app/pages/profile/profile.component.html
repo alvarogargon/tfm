@@ -36,13 +36,12 @@
                 <li>No hay intereses registrados.</li>
               }
             </ul>
-
             @if (user()?.role === 'guide') {
               <div class="section-header mt-3">
-                 <h6 class="text-muted mb-0">Categorías</h6>
-                 <button class="icon-button" (click)="openAddCategoryModal()" aria-label="Añadir Categoría">
-                   <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                 </button>
+                <h6 class="text-muted mb-0">Categorías</h6>
+                <button class="icon-button" (click)="openAddCategoryModal()" aria-label="Añadir Categoría">
+                  <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                </button>
               </div>
               <ul class="list-unstyled mb-0 highlights">
                 @for (category of categories(); track category.categoryId) {
@@ -68,16 +67,31 @@
 
       <div class="col-md-8 col-lg-9 main-content">
         <div class="stats">
-          <div class="card shadow-sm"><div class="card-body text-center"><h5 class="card-title mb-2">Rutinas activas</h5><span class="display-6 fw-bold text-primary">{{ routines().length }}</span></div></div>
-          <div class="card shadow-sm"><div class="card-body text-center"><h5 class="card-title mb-2">Objetivos completados</h5><span class="display-6 fw-bold text-success">{{ completedGoalsCount() }}</span></div></div>
-          <div class="card shadow-sm"><div class="card-body text-center"><h5 class="card-title mb-2">Racha actual</h5><span class="display-6 fw-bold text-warning">7 días</span></div></div>
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h5 class="card-title mb-2">Rutinas activas</h5>
+              <span class="display-6 fw-bold text-primary">{{ routines().length }}</span>
+            </div>
+          </div>
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h5 class="card-title mb-2">Objetivos completados</h5>
+              <span class="display-6 fw-bold text-success">{{ completedGoalsCount() }}</span>
+            </div>
+          </div>
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h5 class="card-title mb-2">Racha actual</h5>
+              <span class="display-6 fw-bold text-warning">7 días</span>
+            </div>
+          </div>
         </div>
 
         <div class="mb-4">
           <div class="section-header">
             <h4>Objetivos</h4>
             <button class="icon-button" (click)="openAddGoalModal()" aria-label="Añadir Objetivo">
-                <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+              <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
             </button>
           </div>
           @for (goal of goals(); track goal.goal_id) {
@@ -85,24 +99,60 @@
               <div class="card-body">
                 <h5 class="card-title">{{ goal.name }}</h5>
                 <p class="card-text">{{ goal.description }}</p>
-                <p class="card-text">Progreso: {{ goal.progress }}%</p>
-                <p class="card-text">Estado: {{ goal.status }}</p>
-                <button class="button" (click)="openEditGoalModal(goal)">Editar</button>
-                <button class="button" (click)="deleteGoal(goal.goal_id)">Eliminar</button>
+                <div class="progress-container" role="progressbar" [attr.aria-valuenow]="goal.progress" aria-valuemin="0" aria-valuemax="100" [attr.aria-label]="'Progreso del objetivo ' + goal.name + ': ' + goal.progress + '%'">
+                  <div class="progress-bar" [style.width]="goal.progress + '%'"></div>
+                </div>
+                <div class="status-container">
+                  <span class="status-label">Estado:</span>
+                  @switch (goal.status) {
+                    @case ('active') {
+                      <svg class="status-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Objetivo Activo">
+                        <path d="M12 2a10 10 0 0 0-7.35 16.83l1.41-1.41A8 8 0 1 1 12 20a8 8 0 0 1-5.66-2.34l-1.41 1.41A10 10 0 1 0 12 2z" stroke="#007bff" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                      <span>Activo</span>
+                    }
+                    @case ('completed') {
+                      <svg class="status-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Objetivo Completado">
+                        <path d="M20 6L9 17l-5-5" stroke="#28a745" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>Completado</span>
+                    }
+                    @case ('paused') {
+                      <svg class="status-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Objetivo Pausado">
+                        <path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="#ffc107"/>
+                      </svg>
+                      <span>Pausado</span>
+                    }
+                    @case ('cancelled') {
+                      <svg class="status-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Objetivo Cancelado">
+                        <path d="M6 6l12 12M18 6L6 18" stroke="#dc3545" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                      <span>Cancelado</span>
+                    }
+                  }
+                </div>
+                <div class="button-group">
+                  <button class="button" (click)="openEditGoalModal(goal)">Editar</button>
+                  <button class="button" (click)="deleteGoal(goal.goal_id)">Eliminar</button>
+                </div>
               </div>
             </div>
           } @empty {
             <p>No hay objetivos registrados.</p>
           }
-          @if (showAddGoalModal()) { <app-add-goal-modal (close)="onModalClosed()"></app-add-goal-modal> }
-          @if (showEditGoalModal() && selectedGoal()) { <app-edit-goal-modal [goal]="selectedGoal()!" (close)="onModalClosed()"></app-edit-goal-modal> }
+          @if (showAddGoalModal()) {
+            <app-add-goal-modal (close)="onModalClosed()"></app-add-goal-modal>
+          }
+          @if (showEditGoalModal() && selectedGoal()) {
+            <app-edit-goal-modal [goal]="selectedGoal()!" (close)="onModalClosed()"></app-edit-goal-modal>
+          }
         </div>
 
         <div>
           <div class="section-header">
             <h4>Rutinas</h4>
             <button class="icon-button" (click)="openAddRoutineModal()" aria-label="Añadir Rutina">
-                <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+              <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
             </button>
           </div>
           @for (routine of routines(); track routine.routine_id) {
@@ -116,7 +166,9 @@
           } @empty {
             <p>No hay rutinas registradas.</p>
           }
-          @if (showAddRoutineModal()) { <app-add-routine-modal (close)="onModalClosed()"></app-add-routine-modal> }
+          @if (showAddRoutineModal()) {
+            <app-add-routine-modal (close)="onModalClosed()"></app-add-routine-modal>
+          }
         </div>
 
         @if (user()?.role === 'guide') {
@@ -124,7 +176,7 @@
             <div class="section-header">
               <h4>Usuarios Asignados</h4>
               <button class="icon-button" (click)="openAddGuideUserModal()" aria-label="Asignar Usuario">
-                  <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
               </button>
             </div>
             @for (relation of guideUserRelations(); track relation.guide_user_id) {
@@ -137,10 +189,12 @@
             } @empty {
               <p>No hay usuarios asignados.</p>
             }
-            @if (showAddGuideUserModal()) { <app-add-guide-user-modal (close)="onModalClosed()"></app-add-guide-user-modal> }
+            @if (showAddGuideUserModal()) {
+              <app-add-guide-user-modal (close)="onModalClosed()"></app-add-guide-user-modal>
+            }
           </div>
-        }
-      </div>
+        } 
+      </div> 
     </div>
-  </div>
+  </div> 
 </section>
