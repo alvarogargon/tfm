@@ -3,12 +3,52 @@
     <div id="vanta-bg-dashboard" style="width:100%;height:100%;min-height:400px;">
       <div class="welcome">
         <h2>Bienvenido de vuelta.</h2>
-        <h3>Tus rutinas de un vistazo.</h3>
+        <h3>Tu progreso en un vistazo.</h3>
       </div>
     </div>
   </div>
 </section>
 
 <section class="container-xl pt-5">
-  <app-calendar></app-calendar>
+  <div class="stats">
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        <h5 class="card-title mb-2">Objetivos Completados</h5>
+        <span class="display-6 fw-bold text-success" aria-label="Número de objetivos completados">{{ completedGoalsCount() }}</span>
+      </div>
+    </div>
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        <h5 class="card-title mb-2">Rutinas Activas</h5>
+        <span class="display-6 fw-bold text-primary" aria-label="Número de rutinas activas">{{ activeRoutinesCount() }}</span>
+      </div>
+    </div>
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        <h5 class="card-title mb-2">Horas Semanales</h5>
+        <div class="progress-container" role="progressbar" [attr.aria-valuenow]="weeklyActivityHours()" aria-valuemin="0" aria-valuemax="168" [attr.aria-label]="'Horas de actividades semanales: ' + weeklyActivityHours() + ' de 168'">
+          <div class="progress-bar" [style.width]="(weeklyActivityHours() / 168 * 100) + '%'"></div>
+        </div>
+        <span class="text-muted mt-2">{{ weeklyActivityHours() }} horas esta semana</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <h4>Progreso de Objetivos</h4>
+    <div class="card shadow-sm">
+      <div class="card-body">
+        @for (goal of goals(); track goal.goal_id) {
+          <div class="goal-progress mb-3">
+            <h6 class="mb-1">{{ goal.name }}</h6>
+            <div class="progress-container" role="progressbar" [attr.aria-valuenow]="goal.progress" aria-valuemin="0" aria-valuemax="100" [attr.aria-label]="'Progreso del objetivo ' + goal.name + ': ' + goal.progress + '%'">
+              <div class="progress-bar" [style.width]="goal.progress + '%'"></div>
+            </div>
+          </div>
+        } @empty {
+          <p>No hay objetivos registrados.</p>
+        }
+      </div>
+    </div>
+  </div>
 </section>
