@@ -1,17 +1,23 @@
 .profile-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.profile {
+  background-color: var(--background-color, #ffffff);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .profile-avatar {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 250px;
-  height: 250px;
+  width: 100%;
+  max-width: 150px;
+  height: auto;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #e3e3e3;
 }
 
 .profile-avatar-wrapper {
@@ -21,41 +27,159 @@
 
 .editBtn {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 35px;
-  height: 35px;
-  border-radius: 10px;
+  bottom: 0;
+  right: 0;
+  background-color: var(--primary-color, #007bff);
+  color: white;
   border: none;
-  background-color: var(--primary-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.123);
   cursor: pointer;
 }
 
 .editBtn:hover {
-  background-color: var(--accent-color);
+  background-color: var(--accent-color, #0056b3);
 }
 
-.editBtn svg {
-  height: 17px;
-  fill: white;
+.button {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-.card {
-  border-radius: 1rem;
-  background-color: var(--background-color);
+.button:hover {
+  background-color: var(--accent-color, #0056b3);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section-header h4 {
+  margin: 0;
+}
+
+.icon-button {
+  background-color: var(--primary-color, #4682B4);
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.icon-button:hover {
+  background-color: var(--accent-color, #FFD700);
+  transform: scale(1.1);
+}
+
+.icon-button svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.badge {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
-.stats .card {
+.card {
+  background-color: var(--background-color, #ffffff);
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.main-content {
   display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.progress-container {
+  background-color: #e9ecef;
+  border-radius: 0.25rem;
+  height: 20px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  background-color: var(--primary-color, #007bff);
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+}
+
+.status-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.status-label {
+  font-weight: 500;
+}
+
+.status-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.form-select {
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .button-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
