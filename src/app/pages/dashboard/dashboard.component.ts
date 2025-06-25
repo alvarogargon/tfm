@@ -50,8 +50,8 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
 
   async loadDashboardData() {
     try {
-      const goals = await this.goalService.getGoals();
-      const routines = await this.routineService.getRoutines();
+      const goals = await this.goalService.getGoals(null); // Pasar null para usuario autenticado
+      const routines = await this.routineService.getRoutines(null); // Pasar null para usuario autenticado
       const activities = await this.activityService.getActivities();
 
       this.goals.set(goals);

@@ -55,6 +55,10 @@ export class EditProfileComponent implements OnInit {
         if (this.user.colorPalette) {
           this.setThemeColors(this.user.colorPalette);
         }
+        // Deshabilitar el campo availability para usuarios no guías
+        if (this.user.role !== 'guide') {
+          this.editProfileForm.get('availability')?.disable();
+        }
       }
     } catch (error) {
       console.error('Error al cargar el perfil:', error);

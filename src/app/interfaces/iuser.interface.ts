@@ -27,17 +27,10 @@ export interface IUser {
   firstName: string;
   lastName: string;
   age: number;
-  numTel: string | number;
+  numTel: string;
   gender: 'Hombre' | 'Mujer' | 'Otro';
-  image?: string;
+  image: string | null;
   role: 'user' | 'guide';
-  availability?: string;
-  colorPalette?: {
-    primary?: string;
-    secondary?: string;
-    accent?: string;
-    background?: string;
-  };
-  created_at?: string;
-  updated_at?: string;
+  colorPalette: { primary: string; secondary: string; accent: string; background: string } | null;
+  availability?: string | null;
 }
