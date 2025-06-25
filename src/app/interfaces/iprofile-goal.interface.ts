@@ -3,7 +3,7 @@ export interface IProfileGoal {
   profile_id: number;
   name: string;
   goal_type: string | null;
-  description: string;
+  description: string | null;
   target_hours_weekly: number | null;
   status: 'active' | 'completed' | 'paused' | 'cancelled';
   progress: number;

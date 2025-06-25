@@ -72,19 +72,22 @@ export class ProfileComponent {
     try {
       const user = await this.userService.getProfile();
       this.user.set(user);
-      if (user?.colorPalette) {
+      if (!user || !user.user_id) {
+        throw new Error('No se pudo obtener el perfil del usuario.');
+      }
+      if (user.colorPalette) {
         this.setThemeColors(user.colorPalette);
       }
 
-      if (user?.role === 'guide') {
+      if (user.role === 'guide') {
         const relations = await this.guideUserService.getGuideUserRelations();
         this.guideUserRelations.set(relations);
         if (relations.length > 0) {
-          this.selectedUserId.set(relations[0].user_id); // Seleccionar el primer usuario por defecto
+          this.selectedUserId.set(relations[0].user_id);
           await this.loadUserData(relations[0].user_id);
         }
       } else {
-        await this.loadUserData(user.user_id);
+        await this.loadUserData(null); // Non-guide users fetch their own data
       }
 
       const categories = await this.categoryService.getCategories();
@@ -95,12 +98,12 @@ export class ProfileComponent {
     }
   }
 
-  async loadUserData(userId: number) {
+  async loadUserData(userId: number | null) {
     try {
       const [interests, goals, routines] = await Promise.all([
-        this.userService.getInterestsByUserId(userId),
-        this.goalService.getGoalsByUserId(userId),
-        this.routineService.getRoutinesByUserId(userId)
+        this.userService.getInterests(userId),
+        this.goalService.getGoals(userId),
+        this.routineService.getRoutines(userId)
       ]);
       this.interests.set(interests);
       this.goals.set(goals);
@@ -186,7 +189,7 @@ export class ProfileComponent {
       this.guideUserRelations.update(relations => relations.filter(r => r.guide_user_id !== guideUserId));
       if (this.selectedUserId() === this.guideUserRelations().find(r => r.guide_user_id === guideUserId)?.user_id) {
         this.selectedUserId.set(this.guideUserRelations()[0]?.user_id || null);
-        await this.loadUserData(this.selectedUserId() || this.user()!.user_id);
+        await this.loadUserData(this.selectedUserId());
       }
       toast.success('Relación eliminada con éxito.');
     } catch (error) {
@@ -210,6 +213,7 @@ export class ProfileComponent {
     this.showAddRoutineModal.set(false);
     this.showAddGuideUserModal.set(false);
     this.showAddCategoryModal.set(false);
-    this.loadUserData(this.selectedUserId() || this.user()!.user_id);
+    const userId = this.user()?.role === 'guide' ? this.selectedUserId() : null;
+    this.loadUserData(userId);
   }
 }
