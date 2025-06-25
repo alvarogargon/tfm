@@ -27,12 +27,23 @@
               <div class="section-header mt-3">
                 <h6 class="text-muted mb-0">Intereses</h6>
                 <button class="icon-button" (click)="openAddInterestModal()" aria-label="Añadir Interés">
-                  <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                  <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
                 </button>
               </div>
               <ul class="list-unstyled mb-0 highlights">
                 @for (interest of interests(); track interest.interest_id) {
-                  <li><span class="badge bg-secondary">{{ interest.interest_name }}</span></li>
+                  <li>
+                    <span class="badge bg-secondary me-1" [attr.aria-label]="'Interés: ' + interest.interest_name">{{ interest.interest_name }}</span>
+                    <span class="badge"
+                          [ngClass]="{
+                            'bg-success': interest.priority === 'low',
+                            'bg-warning': interest.priority === 'medium',
+                            'bg-danger': interest.priority === 'high'
+                          }"
+                          [attr.aria-label]="'Prioridad: ' + interest.priority">
+                      {{ interest.priority | titlecase }}
+                    </span>
+                  </li>
                 } @empty {
                   <li>No hay intereses registrados.</li>
                 }
@@ -113,7 +124,18 @@
             </div>
             <ul class="list-unstyled mb-0 highlights">
               @for (interest of interests(); track interest.interest_id) {
-                <li><span class="badge bg-secondary">{{ interest.interest_name }}</span></li>
+                <li>
+                  <span class="badge bg-secondary me-1" [attr.aria-label]="'Interés: ' + interest.interest_name">{{ interest.interest_name }}</span>
+                  <span class="badge"
+                        [ngClass]="{
+                          'bg-success': interest.priority === 'low',
+                          'bg-warning': interest.priority === 'medium',
+                          'bg-danger': interest.priority === 'high'
+                        }"
+                        [attr.aria-label]="'Prioridad: ' + interest.priority">
+                    {{ interest.priority | titlecase }}
+                  </span>
+                </li>
               } @empty {
                 <li>No hay intereses registrados.</li>
               }
