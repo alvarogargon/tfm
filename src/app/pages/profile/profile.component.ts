@@ -19,11 +19,15 @@ import { IProfileGoal } from '../../interfaces/iprofile-goal.interface';
 import { IRoutine } from '../../interfaces/iroutine.interface';
 import { IGuideUser } from '../../interfaces/iguide-user.interface';
 import { ICategory } from '../../interfaces/icategory.interface';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [
+    CommonModule,
+    FormsModule,
     RouterModule,
     EditProfileComponent,
     AddInterestModalComponent,
@@ -51,6 +55,7 @@ export class ProfileComponent {
   routines = signal<IRoutine[]>([]);
   guideUserRelations = signal<IGuideUser[]>([]);
   categories = signal<ICategory[]>([]);
+  selectedUserId = signal<number | null>(null);
   completedGoalsCount = computed(() => this.goals().filter(g => g.status === 'completed').length);
   userService = inject(UserService);
   routineService = inject(RoutineService);
@@ -65,31 +70,51 @@ export class ProfileComponent {
 
   async loadProfileData() {
     try {
-      const [user, interests, goals, routines, categories] = await Promise.all([
-        this.userService.getProfile(),
-        this.userService.getInterests(),
-        this.goalService.getGoals(),
-        this.routineService.getRoutines(),
-        this.categoryService.getCategories()
-      ]);
-
+      const user = await this.userService.getProfile();
       this.user.set(user);
       if (user?.colorPalette) {
         this.setThemeColors(user.colorPalette);
       }
 
-      this.interests.set(interests);
-      this.goals.set(goals);
-      this.routines.set(routines);
-      this.categories.set(categories);
-
       if (user?.role === 'guide') {
         const relations = await this.guideUserService.getGuideUserRelations();
         this.guideUserRelations.set(relations);
+        if (relations.length > 0) {
+          this.selectedUserId.set(relations[0].user_id); // Seleccionar el primer usuario por defecto
+          await this.loadUserData(relations[0].user_id);
+        }
+      } else {
+        await this.loadUserData(user.user_id);
       }
+
+      const categories = await this.categoryService.getCategories();
+      this.categories.set(categories);
     } catch (error) {
       console.error('Error al cargar datos del perfil:', error);
       toast.error('Error al cargar los datos del perfil.');
+    }
+  }
+
+  async loadUserData(userId: number) {
+    try {
+      const [interests, goals, routines] = await Promise.all([
+        this.userService.getInterestsByUserId(userId),
+        this.goalService.getGoalsByUserId(userId),
+        this.routineService.getRoutinesByUserId(userId)
+      ]);
+      this.interests.set(interests);
+      this.goals.set(goals);
+      this.routines.set(routines);
+    } catch (error) {
+      console.error('Error al cargar datos del usuario:', error);
+      toast.error('Error al cargar los datos del usuario.');
+    }
+  }
+
+  async onUserSelected() {
+    const userId = this.selectedUserId();
+    if (userId) {
+      await this.loadUserData(userId);
     }
   }
 
@@ -159,6 +184,10 @@ export class ProfileComponent {
     try {
       await this.guideUserService.deleteGuideUserRelation(guideUserId);
       this.guideUserRelations.update(relations => relations.filter(r => r.guide_user_id !== guideUserId));
+      if (this.selectedUserId() === this.guideUserRelations().find(r => r.guide_user_id === guideUserId)?.user_id) {
+        this.selectedUserId.set(this.guideUserRelations()[0]?.user_id || null);
+        await this.loadUserData(this.selectedUserId() || this.user()!.user_id);
+      }
       toast.success('Relación eliminada con éxito.');
     } catch (error) {
       console.error('Error al eliminar relación guía-usuario:', error);
@@ -181,6 +210,6 @@ export class ProfileComponent {
     this.showAddRoutineModal.set(false);
     this.showAddGuideUserModal.set(false);
     this.showAddCategoryModal.set(false);
-    this.loadProfileData();
+    this.loadUserData(this.selectedUserId() || this.user()!.user_id);
   }
 }
