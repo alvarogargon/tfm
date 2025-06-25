@@ -1,67 +1,79 @@
-import { Component, signal, ChangeDetectorRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions, EventApi } from '@fullcalendar/core';
+import { Component, inject } from '@angular/core';
+import { CalendarOptions, EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import listPlugin from '@fullcalendar/list';
 import { RoutineService } from '../../services/routine.service';
-import { ActivityService } from '../../services/activity.service';
-import { toast } from 'ngx-sonner';
+import { IRoutine } from '../../interfaces/iroutine.interface';
 import { IActivity } from '../../interfaces/iactivity.interface';
+import { toast } from 'ngx-sonner';
+import { CommonModule } from '@angular/common';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @Component({
   selector: 'app-calendar',
-  imports: [CommonModule, FullCalendarModule],
-  templateUrl: './calendar.component.html',
-  styleUrl: './calendar.component.css',
   standalone: true,
+  imports: [CommonModule, FullCalendarModule],
+  template: `
+    <full-calendar [options]="calendarOptions"></full-calendar>
+  `,
+  styleUrls: ['./calendar.component.css']
 })
 export class CalendarComponent {
-  calendarVisible = signal(true);
-  calendarOptions = signal<CalendarOptions>({
-    plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
+  private routineService = inject(RoutineService);
+
+  calendarOptions: CalendarOptions = {
+    plugins: [dayGridPlugin, timeGridPlugin],
+    initialView: 'dayGridMonth',
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
-    initialView: 'dayGridMonth',
-    weekends: true,
-    dayMaxEvents: true,
-    events: []
-  });
-  currentEvents = signal<EventApi[]>([]);
-  routineService = inject(RoutineService);
-  activityService = inject(ActivityService);
+    events: [],
+    eventClick: this.handleEventClick.bind(this)
+  };
 
-  constructor(private changeDetector: ChangeDetectorRef) {
-    this.loadEvents();
+  async ngOnInit() {
+    await this.loadRoutines();
   }
 
-  async loadEvents() {
+  async loadRoutines() {
     try {
-      const activities = await this.activityService.getActivities();
-      const events = activities.map(activity => ({
-        id: String(activity.activity_id),
-        title: activity.title,
-        start: activity.datetime_start,
-        end: activity.datetime_end,
-        allDay: !activity.start_time,
-        extendedProps: { routine_id: activity.routine_id }
-      }));
-      this.calendarOptions.update(options => ({
-        ...options,
-        events
-      }));
+      const routines = await this.routineService.getRoutines();
+      const events = this.transformRoutinesToEvents(routines);
+      this.calendarOptions = { ...this.calendarOptions, events };
     } catch (error) {
-      console.error('Error loading events:', error);
-      toast.error('Error al cargar eventos.');
+      console.error('Error al cargar rutinas:', error);
+      toast.error('Error al cargar las rutinas en el calendario.');
     }
   }
 
-  handleEvents(events: EventApi[]) {
-    this.currentEvents.set(events);
-    this.changeDetector.detectChanges();
+  private transformRoutinesToEvents(routines: IRoutine[]): EventInput[] {
+    const events: EventInput[] = [];
+    
+    routines.forEach(routine => {
+      routine.activities.forEach(activity => {
+        // Solo incluir eventos con fechas válidas
+        if (activity.datetime_start) {
+          events.push({
+            id: activity.activity_id.toString(),
+            title: activity.title,
+            start: activity.datetime_start, // Aseguramos que es string y no null
+            end: activity.datetime_end || undefined, // Convertimos null a undefined
+            allDay: !activity.start_time, // Si no hay hora específica, es un evento de todo el día
+            extendedProps: {
+              routine_id: activity.routine_id
+            }
+          });
+        }
+      });
+    });
+
+    return events;
+  }
+
+  handleEventClick(arg: any) {
+    toast.info(`Evento clicado: ${arg.event.title}`);
+    // Aquí puedes añadir navegación o lógica adicional
   }
 }
