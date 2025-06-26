@@ -1,92 +1,38 @@
-<div class="modal-overlay">
+<div class="modal">
   <div class="modal-content">
-    <h2>Editar Rutina</h2>
-    <form (ngSubmit)="onSubmit()" class="modal-form">
-      <div class="form-group">
-        <label for="name">Nombre</label>
-        <input
-          type="text"
-          id="name"
-          [(ngModel)]="routineData().name"
-          name="name"
-          required
-          aria-label="Nombre de la rutina"
-        />
+    <h3>Editar Rutina</h3>
+    <form [formGroup]="routineForm" (ngSubmit)="onSubmit()">
+      <div class="input-wrapper">
+        <input type="text" class="input" formControlName="name" placeholder="Nombre de la rutina">
+        <label class="label">Nombre</label>
       </div>
-      <div class="form-group">
-        <label for="description">Descripción</label>
-        <textarea
-          id="description"
-          [(ngModel)]="routineData().description"
-          name="description"
-          aria-label="Descripción de la rutina"
-        ></textarea>
+      <div class="input-wrapper">
+        <textarea class="input" formControlName="description" placeholder="Descripción"></textarea>
+        <label class="label">Descripción</label>
       </div>
-      <div class="form-group">
-        <label for="is_template">Plantilla</label>
-        <input
-          type="checkbox"
-          id="is_template"
-          [(ngModel)]="routineData().is_template"
-          name="is_template"
-          aria-label="¿Es una plantilla?"
-        />
+      <div class="input-wrapper">
+        <input type="checkbox" class="input" formControlName="is_template">
+        <label class="label">Plantilla</label>
       </div>
-      <div class="form-group">
-        <label for="start_time">Hora de inicio</label>
-        <input
-          type="datetime-local"
-          id="start_time"
-          [(ngModel)]="routineData().start_time"
-          name="start_time"
-          aria-label="Hora de inicio"
-        />
+      <div class="input-wrapper">
+        <input type="datetime-local" class="input" formControlName="start_time" placeholder="Hora de inicio">
+        <label class="label">Hora de Inicio</label>
       </div>
-      <div class="form-group">
-        <label for="end_time">Hora de fin</label>
-        <input
-          type="datetime-local"
-          id="end_time"
-          [(ngModel)]="routineData().end_time"
-          name="end_time"
-          aria-label="Hora de fin"
-        />
+      <div class="input-wrapper">
+        <input type="datetime-local" class="input" formControlName="end_time" placeholder="Hora de fin">
+        <label class="label">Hora de Fin</label>
       </div>
-      <div class="form-group">
-        <label for="daily_routine">Frecuencia</label>
-        <select
-          id="daily_routine"
-          [(ngModel)]="routineData().daily_routine"
-          name="daily_routine"
-          required
-          aria-label="Frecuencia de la rutina"
-        >
+      <div class="input-wrapper">
+        <select class="input" formControlName="daily_routine">
           <option value="Daily">Diaria</option>
           <option value="Weekly">Semanal</option>
           <option value="Monthly">Mensual</option>
         </select>
+        <label class="label">Frecuencia</label>
       </div>
-      @if (guideUserRelations.length > 0) {
-        <div class="form-group">
-          <label for="targetUserId">Usuario</label>
-          <select
-            id="targetUserId"
-            [(ngModel)]="selectedUserId"
-            name="targetUserId"
-            required
-            aria-label="Seleccionar usuario"
-          >
-            @for (relation of guideUserRelations; track relation.guide_user_id) {
-              <option [ngValue]="relation.user_id">
-                {{ relation.guide_user_id === 0 ? 'Mi Perfil' : relation.user?.username }} (ID: {{ relation.user_id }})
-              </option>
-            }
-          </select>
-        </div>
-      }
-      <div class="button-group">
-        <button type="submit" class="button" aria-label="Guardar cambios">Guardar</button>
-        <button type="button" class="button" (click)="onCancel()" aria-label="Cancelar">Cancelar</button>
+      <div class="modal-footer">
+        <button type="submit" class="button-submit" aria-label="Guardar cambios">Guardar</button>
+        <button type="button" class="button-close" (click)="onCancel()" aria-label="Cancelar">Cerrar</button>
       </div>
     </form>
   </div>

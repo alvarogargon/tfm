@@ -1,6 +1,6 @@
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, OnInit } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { RoutineService } from '../../../services/routine.service';
 import { IRoutine, IRoutinePayload } from '../../../interfaces/iroutine.interface';
 import { toast } from 'ngx-sonner';
@@ -9,23 +9,29 @@ import { IGuideUser } from '../../../interfaces/iguide-user.interface';
 @Component({
   selector: 'app-edit-routine-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './edit-routine-modal.component.html',
   styleUrls: ['./edit-routine-modal.component.css']
 })
-export class EditRoutineModalComponent {
+export class EditRoutineModalComponent implements OnInit {
   @Input() routine!: IRoutine;
   @Input() guideUserRelations: IGuideUser[] = [];
+  @Input() selectedUserId!: number | null;
   @Output() close = new EventEmitter<void>();
   routineService = inject(RoutineService);
+  formBuilder = inject(FormBuilder);
 
-  routineData = signal<IRoutinePayload>({ targetUserId: 0, name: '' });
-  selectedUserId = signal<number | null>(null);
+  routineForm: FormGroup = this.formBuilder.group({
+    name: ['', Validators.required],
+    description: [''],
+    is_template: [false],
+    start_time: [''],
+    end_time: [''],
+    daily_routine: ['Daily', Validators.required]
+  });
 
   ngOnInit() {
-    // Precargar los datos de la rutina
-    this.routineData.set({
-      targetUserId: this.routine.user_id,
+    this.routineForm.patchValue({
       name: this.routine.name,
       description: this.routine.description,
       is_template: this.routine.is_template,
@@ -33,15 +39,20 @@ export class EditRoutineModalComponent {
       end_time: this.routine.end_time,
       daily_routine: this.routine.daily_routine
     });
-    this.selectedUserId.set(this.routine.user_id);
   }
 
   async onSubmit() {
+    if (this.routineForm.invalid) {
+      toast.error('Por favor, completa todos los campos requeridos.');
+      return;
+    }
+
     try {
-      const updatedRoutine = await this.routineService.updateRoutine(this.routine.routine_id, {
-        ...this.routineData(),
-        targetUserId: this.selectedUserId()!
-      });
+      const routineData: IRoutinePayload = {
+        targetUserId: this.selectedUserId ?? this.routine.user_id,
+        ...this.routineForm.value
+      };
+      const updatedRoutine = await this.routineService.updateRoutine(this.routine.routine_id, routineData);
       toast.success('Rutina actualizada con éxito.');
       this.close.emit();
     } catch (error) {
