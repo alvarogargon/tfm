@@ -29,9 +29,16 @@ export class GuideUserService {
         user: {
           user_id: relation.user.user_id,
           username: relation.user.username,
+          email: undefined, // Compatible con opcional
           firstName: relation.user.first_name,
           lastName: relation.user.last_name,
-          role: relation.user.role
+          age: undefined, // Compatible con opcional
+          numTel: undefined, // Compatible con opcional
+          gender: undefined, // Compatible con opcional
+          image: null,
+          role: relation.user.role,
+          colorPalette: null,
+          availability: null
         }
       }));
     } catch (error) {
@@ -62,9 +69,16 @@ export class GuideUserService {
         user: {
           user_id: res.relation.user.user_id,
           username: res.relation.user.username,
+          email: undefined, // Compatible con opcional
           firstName: res.relation.user.first_name,
           lastName: res.relation.user.last_name,
-          role: res.relation.user.role
+          age: undefined, // Compatible con opcional
+          numTel: undefined, // Compatible con opcional
+          gender: undefined, // Compatible con opcional
+          image: null,
+          role: res.relation.user.role,
+          colorPalette: null,
+          availability: null
         }
       };
     } catch (error) {

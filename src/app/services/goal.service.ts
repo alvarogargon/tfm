@@ -19,7 +19,7 @@ export class GoalService {
       'Authorization': `Bearer ${token}`
     });
 
-    const url = userId ? `${this.endpoint}?userId=${userId}` : this.endpoint;
+    const url = userId ? `${this.endpoint}/${userId}` : this.endpoint;
 
     try {
       const res = await lastValueFrom(this.httpClient.get<{ message: string, goals: any[] }>(url, { headers }));

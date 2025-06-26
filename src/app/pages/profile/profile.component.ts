@@ -81,11 +81,31 @@ export class ProfileComponent {
 
       if (user.role === 'guide') {
         const relations = await this.guideUserService.getGuideUserRelations();
-        this.guideUserRelations.set(relations);
-        if (relations.length > 0) {
-          this.selectedUserId.set(relations[0].user_id);
-          await this.loadUserData(relations[0].user_id);
-        }
+        console.log('guideUserRelations:', relations); // Depuración
+        // Add the guide's own profile to the relations
+        const guideRelation: IGuideUser = {
+          guide_user_id: 0, // Use 0 for the guide's own profile
+          guide_id: user.user_id,
+          user_id: user.user_id,
+          created_at: new Date().toISOString(),
+          user: {
+            user_id: user.user_id,
+            username: user.username,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            age: user.age,
+            numTel: user.numTel,
+            gender: user.gender,
+            image: user.image,
+            role: user.role,
+            colorPalette: user.colorPalette,
+            availability: user.availability
+          }
+        };
+        this.guideUserRelations.set([guideRelation, ...relations]);
+        this.selectedUserId.set(user.user_id); // Default to guide's own profile
+        await this.loadUserData(user.user_id);
       } else {
         await this.loadUserData(null); // Non-guide users fetch their own data
       }
@@ -116,9 +136,13 @@ export class ProfileComponent {
 
   async onUserSelected() {
     const userId = this.selectedUserId();
-    if (userId) {
-      await this.loadUserData(userId);
+    console.log('selectedUserId:', userId, typeof userId); // Depuración
+    if (userId === null || userId === undefined) {
+      console.error('selectedUserId es null o undefined:', userId);
+      toast.error('Por favor, selecciona un usuario válido.');
+      return;
     }
+    await this.loadUserData(userId);
   }
 
   onAvatarClick() {
