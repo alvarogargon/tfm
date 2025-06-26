@@ -82,7 +82,7 @@ export class UserService {
       'Authorization': `Bearer ${token}`
     });
 
-    const url = userId ? `${this.endpoint}/interests?userId=${userId}` : `${this.endpoint}/interests`;
+    const url = userId ? `${this.endpoint}/interests/${userId}` : `${this.endpoint}/interests`;
 
     try {
       const res = await lastValueFrom(this.httpClient.get<{ message: string, interests: any[] }>(url, { headers }));

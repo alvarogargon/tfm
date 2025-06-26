@@ -23,14 +23,14 @@ export interface IUserRegister {
 export interface IUser {
   user_id: number;
   username: string;
-  email: string;
+  email?: string; // Ahora opcional
   firstName: string;
   lastName: string;
-  age: number;
-  numTel: string;
-  gender: 'Hombre' | 'Mujer' | 'Otro';
+  age?: number; // Ahora opcional
+  numTel?: string; // Ahora opcional
+  gender?: 'Hombre' | 'Mujer' | 'Otro'; // Ahora opcional
   image: string | null;
   role: 'user' | 'guide';
-  colorPalette: { primary: string; secondary: string; accent: string; background: string } | null;
-  availability?: string | null;
+  colorPalette: any | null;
+  availability: string | null;
 }

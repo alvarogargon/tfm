@@ -85,9 +85,11 @@
               <h4>Seleccionar Usuario</h4>
             </div>
             <select class="form-select" [(ngModel)]="selectedUserId" (change)="onUserSelected()" aria-label="Seleccionar usuario asignado">
-              <option [value]="null" disabled>Selecciona un usuario</option>
+              <option [ngValue]="null" disabled>Selecciona un usuario</option>
               @for (relation of guideUserRelations(); track relation.guide_user_id) {
-                <option [value]="relation.user_id">{{ relation.user?.username }} (ID: {{ relation.user_id }})</option>
+                <option [ngValue]="relation.user_id">
+                  {{ relation.guide_user_id === 0 ? 'Mi Perfil' : relation.user?.username }} (ID: {{ relation.user_id }})
+                </option>
               }
             </select>
           </div>
@@ -119,7 +121,7 @@
             <div class="section-header">
               <h4>Intereses del Usuario</h4>
               <button class="icon-button" (click)="openAddInterestModal()" aria-label="Añadir Interés">
-                <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c-17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
               </button>
             </div>
             <ul class="list-unstyled mb-0 highlights">
@@ -236,12 +238,14 @@
               </button>
             </div>
             @for (relation of guideUserRelations(); track relation.guide_user_id) {
-              <div class="card shadow-sm mb-3">
-                <div class="card-body">
-                  <h5 class="card-title">{{ relation.user?.username }} (ID: {{ relation.user_id }})</h5>
-                  <button class="button" (click)="deleteGuideUserRelation(relation.guide_user_id)">Eliminar Relación</button>
+              @if (relation.guide_user_id !== 0) {
+                <div class="card shadow-sm mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ relation.user?.username }} (ID: {{ relation.user_id }})</h5>
+                    <button class="button" (click)="deleteGuideUserRelation(relation.guide_user_id)">Eliminar Relación</button>
+                  </div>
                 </div>
-              </div>
+              }
             } @empty {
               <p>No hay usuarios asignados.</p>
             }
