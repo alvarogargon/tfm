@@ -7,7 +7,18 @@
     height: 350px;
     border-radius: 8px;
 }
+.feature-1 {
+    background: url('../../../../public/images/image.png') center/cover no-repeat;
 
+}
+.feature-2 {
+    background: url('../../../../public/images/image2.png') center/cover no-repeat;
+
+}
+.feature-3 {
+    background: url('../../../../public/images/image3.png') center/cover no-repeat;
+
+}
 .btn-shine {
     display: inline-block;
     color: #fff;
@@ -27,6 +38,9 @@
     color: white;
     background-color: var(--color-black);
     padding: 0 0.5rem;
+}
+.margin {
+    margin-top:  10rem;
 }
 
 h3 {
