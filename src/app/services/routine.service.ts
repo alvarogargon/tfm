@@ -19,7 +19,8 @@ export class RoutineService {
       'Authorization': `Bearer ${token}`
     });
 
-    const url = userId ? `${this.endpoint}?userId=${userId}` : this.endpoint;
+    // Usa el endpoint /api/routines/user/:userId si userId está definido, si no, usa /api/routines
+    const url = userId ? `${this.endpoint}/user/${userId}` : this.endpoint;
 
     try {
       const res = await lastValueFrom(this.httpClient.get<{ message: string, routines: any[] }>(url, { headers }));

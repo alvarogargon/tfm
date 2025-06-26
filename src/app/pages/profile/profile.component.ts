@@ -81,10 +81,9 @@ export class ProfileComponent {
 
       if (user.role === 'guide') {
         const relations = await this.guideUserService.getGuideUserRelations();
-        console.log('guideUserRelations:', relations); // Depuración
-        // Add the guide's own profile to the relations
+        console.log('guideUserRelations:', relations);
         const guideRelation: IGuideUser = {
-          guide_user_id: 0, // Use 0 for the guide's own profile
+          guide_user_id: 0,
           guide_id: user.user_id,
           user_id: user.user_id,
           created_at: new Date().toISOString(),
@@ -104,10 +103,10 @@ export class ProfileComponent {
           }
         };
         this.guideUserRelations.set([guideRelation, ...relations]);
-        this.selectedUserId.set(user.user_id); // Default to guide's own profile
+        this.selectedUserId.set(user.user_id);
         await this.loadUserData(user.user_id);
       } else {
-        await this.loadUserData(null); // Non-guide users fetch their own data
+        await this.loadUserData(null);
       }
 
       const categories = await this.categoryService.getCategories();
@@ -120,6 +119,7 @@ export class ProfileComponent {
 
   async loadUserData(userId: number | null) {
     try {
+      console.log('Cargando datos para userId:', userId); // Depuración
       const [interests, goals, routines] = await Promise.all([
         this.userService.getInterests(userId),
         this.goalService.getGoals(userId),
@@ -128,6 +128,7 @@ export class ProfileComponent {
       this.interests.set(interests);
       this.goals.set(goals);
       this.routines.set(routines);
+      console.log('Rutinas cargadas:', routines); // Depuración
     } catch (error) {
       console.error('Error al cargar datos del usuario:', error);
       toast.error('Error al cargar los datos del usuario.');
@@ -230,7 +231,7 @@ export class ProfileComponent {
     if (palette?.background) root.style.setProperty('--background-color', palette.background);
   }
 
-  onModalClosed() {
+  async onModalClosed() {
     this.showAddInterestModal.set(false);
     this.showAddGoalModal.set(false);
     this.showEditGoalModal.set(false);
@@ -238,6 +239,6 @@ export class ProfileComponent {
     this.showAddGuideUserModal.set(false);
     this.showAddCategoryModal.set(false);
     const userId = this.user()?.role === 'guide' ? this.selectedUserId() : null;
-    this.loadUserData(userId);
+    await this.loadUserData(userId);
   }
 }
