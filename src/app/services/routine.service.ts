@@ -43,6 +43,30 @@ export class RoutineService {
     }
   }
 
+async getRoutineById(id: number): Promise<IRoutine> {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No token found. Please log in.');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    try {
+      const res = await lastValueFrom(this.httpClient.get<{ message: string, routine: IRoutine }>(`${this.endpoint}/${id}`, { headers }));
+      return res.routine;
+    } catch (error: any) {
+      console.error('Error al obtener rutina:', error);
+      if (error.status === 404) {
+        toast.error('Rutina no encontrada o no autorizada.');
+      } else if (error.status === 400) {
+        toast.error('El ID de la rutina debe ser un número entero.');
+      } else {
+        toast.error('Error al obtener la rutina.');
+      }
+      throw new Error('Error fetching routine.');
+    }
+  }
+
   async createRoutine(routineData: IRoutinePayload): Promise<IRoutine> {
     const token = localStorage.getItem('token');
     if (!token) throw new Error('No token found. Please log in.');

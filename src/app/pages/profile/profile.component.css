@@ -128,6 +128,16 @@
   border: none;
   border-radius: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.activity-count {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-weight: 500;
 }
 
 .main-content {
@@ -226,5 +236,11 @@
 
   .routine-status-container {
     align-items: flex-start;
+  }
+
+  .activity-count {
+    position: static;
+    margin-top: 0.5rem;
+    text-align: right;
   }
 }

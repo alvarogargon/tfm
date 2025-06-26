@@ -1,0 +1,10 @@
+<div class="modal">
+  <div class="modal-content">
+    <h3>Eliminar Actividad</h3>
+    <p>¿Estás seguro de que deseas eliminar la actividad "{{ activity.title }}"?</p>
+    <div class="modal-footer">
+      <button class="button-submit" (click)="onDelete()">Eliminar</button>
+      <button class="button-close" (click)="close.emit()">Cancelar</button>
+    </div>
+  </div>
+</div>
