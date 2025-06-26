@@ -22,6 +22,7 @@ import { IGuideUser } from '../../interfaces/iguide-user.interface';
 import { ICategory } from '../../interfaces/icategory.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DateFormatPipe } from '../../pipes/date-format.pipe';
 
 @Component({
   selector: 'app-profile',
@@ -37,7 +38,8 @@ import { FormsModule } from '@angular/forms';
     AddRoutineModalComponent,
     EditRoutineModalComponent,
     AddGuideUserModalComponent,
-    AddCategoryModalComponent
+    AddCategoryModalComponent,
+    DateFormatPipe
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
@@ -61,6 +63,7 @@ export class ProfileComponent {
   categories = signal<ICategory[]>([]);
   selectedUserId = signal<number | null>(null);
   completedGoalsCount = computed(() => this.goals().filter(g => g.status === 'completed').length);
+  activeRoutinesCount = computed(() => this.routines().filter(r => !this.isExpired(r.end_time)).length);
   userService = inject(UserService);
   routineService = inject(RoutineService);
   goalService = inject(GoalService);
@@ -261,5 +264,28 @@ export class ProfileComponent {
     this.showAddCategoryModal.set(false);
     const userId = this.user()?.role === 'guide' ? this.selectedUserId() : null;
     await this.loadUserData(userId);
+  }
+
+  isExpired(endTime: string | null): boolean {
+    if (!endTime) return false;
+    const endDate = new Date(endTime);
+    const currentDate = new Date('2025-06-26T00:00:00Z');
+    return endDate.getTime() < currentDate.getTime();
+  }
+
+  isWarning(endTime: string | null): boolean {
+    if (!endTime) return false;
+    const endDate = new Date(endTime);
+    const currentDate = new Date('2025-06-26T00:00:00Z');
+    const diffDays = Math.ceil((endDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+    return diffDays <= 3 && diffDays > 1;
+  }
+
+  isDanger(endTime: string | null): boolean {
+    if (!endTime) return false;
+    const endDate = new Date(endTime);
+    const currentDate = new Date('2025-06-26T00:00:00Z');
+    const diffDays = Math.ceil((endDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+    return diffDays <= 1 && diffDays >= 0;
   }
 }

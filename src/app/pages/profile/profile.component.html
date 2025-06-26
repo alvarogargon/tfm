@@ -35,11 +35,9 @@
                   <li>
                     <span class="badge bg-secondary me-1" [attr.aria-label]="'Interés: ' + interest.interest_name">{{ interest.interest_name }}</span>
                     <span class="badge"
-                          [ngClass]="{
-                            'bg-success': interest.priority === 'low',
-                            'bg-warning': interest.priority === 'medium',
-                            'bg-danger': interest.priority === 'high'
-                          }"
+                          [class.bg-success]="interest.priority === 'low'"
+                          [class.bg-warning]="interest.priority === 'medium'"
+                          [class.bg-danger]="interest.priority === 'high'"
                           [attr.aria-label]="'Prioridad: ' + interest.priority">
                       {{ interest.priority | titlecase }}
                     </span>
@@ -99,7 +97,7 @@
           <div class="card shadow-sm">
             <div class="card-body text-center">
               <h5 class="card-title mb-2">Rutinas activas</h5>
-              <span class="display-6 fw-bold text-primary">{{ routines().length }}</span>
+              <span class="display-6 fw-bold text-primary">{{ activeRoutinesCount() }}</span>
             </div>
           </div>
           <div class="card shadow-sm">
@@ -129,11 +127,9 @@
                 <li>
                   <span class="badge bg-secondary me-1" [attr.aria-label]="'Interés: ' + interest.interest_name">{{ interest.interest_name }}</span>
                   <span class="badge"
-                        [ngClass]="{
-                          'bg-success': interest.priority === 'low',
-                          'bg-warning': interest.priority === 'medium',
-                          'bg-danger': interest.priority === 'high'
-                        }"
+                        [class.bg-success]="interest.priority === 'low'"
+                        [class.bg-warning]="interest.priority === 'medium'"
+                        [class.bg-danger]="interest.priority === 'high'"
                         [attr.aria-label]="'Prioridad: ' + interest.priority">
                     {{ interest.priority | titlecase }}
                   </span>
@@ -216,7 +212,36 @@
           @for (routine of routines(); track routine.routine_id) {
             <div class="card shadow-sm mb-3">
               <div class="card-body">
-                <h5 class="card-title">{{ routine.name }}</h5>
+                <div class="routine-header">
+                  <h5 class="card-title">{{ routine.name }}</h5>
+                  <div class="routine-status-container">
+                    <span class="routine-status">{{ routine.daily_routine | titlecase }}</span>
+                    @if (routine.end_time) {
+                      <div class="routine-end-time-container">
+                        @if (isExpired(routine.end_time)) {
+                          <span class="routine-end-time">
+                            <span class="status-emoji" aria-label="Vencido: Fecha de fin pasada">❌</span>
+                            {{ routine.end_time | dateFormat }}
+                          </span>
+                        } @else if (isDanger(routine.end_time)) {
+                          <span class="routine-end-time">
+                            <span class="status-emoji" aria-label="Peligro: Fecha de fin muy próxima">🔥</span>
+                            {{ routine.end_time | dateFormat }}
+                          </span>
+                        } @else if (isWarning(routine.end_time)) {
+                          <span class="routine-end-time">
+                            <span class="status-emoji" aria-label="Advertencia: Fecha de fin próxima">⏰</span>
+                            {{ routine.end_time | dateFormat }}
+                          </span>
+                        } @else {
+                          <span class="routine-end-time">
+                            {{ routine.end_time | dateFormat }}
+                          </span>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
                 <p class="card-text">{{ routine.description || 'Sin descripción' }}</p>
                 <div class="button-group">
                   <button class="button" [routerLink]="['/routines', routine.routine_id]" aria-label="Ver detalles de la rutina">Ver Detalles</button>
@@ -232,7 +257,7 @@
             <app-add-routine-modal [selectedUserId]="selectedUserId()" [guideUserRelations]="guideUserRelations()" (close)="onModalClosed()"></app-add-routine-modal>
           }
           @if (showEditRoutineModal() && selectedRoutine()) {
-            <app-edit-routine-modal [routine]="selectedRoutine()!" [guideUserRelations]="guideUserRelations()" (close)="onModalClosed()"></app-edit-routine-modal>
+            <app-edit-routine-modal [routine]="selectedRoutine()!" [guideUserRelations]="guideUserRelations()" [selectedUserId]="selectedUserId()" (close)="onModalClosed()"></app-edit-routine-modal>
           }
         </div>
 
