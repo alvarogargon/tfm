@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
-import { IRoutine } from '../interfaces/iroutine.interface';
+import { IRoutine, IRoutinePayload } from '../interfaces/iroutine.interface';
 import { toast } from 'ngx-sonner';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class RoutineService {
       'Authorization': `Bearer ${token}`
     });
 
-    const url = userId ? `${this.endpoint}?userId=${userId}` : this.endpoint;
+    const url = userId ? `${this.endpoint}/user/${userId}` : this.endpoint;
 
     try {
       const res = await lastValueFrom(this.httpClient.get<{ message: string, routines: any[] }>(url, { headers }));
@@ -43,7 +43,7 @@ export class RoutineService {
     }
   }
 
-  async createRoutine(routineData: Partial<IRoutine>): Promise<IRoutine> {
+  async createRoutine(routineData: IRoutinePayload): Promise<IRoutine> {
     const token = localStorage.getItem('token');
     if (!token) throw new Error('No token found. Please log in.');
 
@@ -71,6 +71,62 @@ export class RoutineService {
       console.error('Error al crear rutina:', error);
       toast.error('Error al crear la rutina.');
       throw new Error('Error creating routine.');
+    }
+  }
+
+  async updateRoutine(routineId: number, routineData: IRoutinePayload): Promise<IRoutine> {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No token found. Please log in.');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    try {
+      const res = await lastValueFrom(this.httpClient.put<{ message: string, routine: any }>(
+        `${this.endpoint}/${routineId}`,
+        routineData,
+        { headers }
+      ));
+      return {
+        routine_id: res.routine.routine_id,
+        user_id: res.routine.user_id,
+        name: res.routine.name,
+        description: res.routine.description,
+        is_template: res.routine.is_template,
+        created_at: res.routine.created_at,
+        updated_at: res.routine.updated_at,
+        start_time: res.routine.start_time,
+        end_time: res.routine.end_time,
+        daily_routine: res.routine.daily_routine,
+        activities: res.routine.activities || []
+      };
+    } catch (error) {
+      console.error('Error al actualizar rutina:', error);
+      toast.error('Error al actualizar la rutina.');
+      throw new Error('Error updating routine.');
+    }
+  }
+
+  async deleteRoutine(routineId: number): Promise<number> {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No token found. Please log in.');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    try {
+      const res = await lastValueFrom(this.httpClient.delete<{ message: string, routine_id: number }>(
+        `${this.endpoint}/${routineId}`,
+        { headers }
+      ));
+      return res.routine_id;
+    } catch (error) {
+      console.error('Error al eliminar rutina:', error);
+      toast.error('Error al eliminar la rutina.');
+      throw new Error('Error deleting routine.');
     }
   }
 }

@@ -5,6 +5,7 @@ import { AddInterestModalComponent } from './add-interest-modal/add-interest-mod
 import { AddGoalModalComponent } from './add-goal-modal/add-goal-modal.component';
 import { EditGoalModalComponent } from './edit-goal-modal/edit-goal-modal.component';
 import { AddRoutineModalComponent } from './add-routine-modal/add-routine-modal.component';
+import { EditRoutineModalComponent } from './edit-routine-modal/edit-routine-modal.component';
 import { AddGuideUserModalComponent } from './add-guide-user-modal/add-guide-user-modal.component';
 import { AddCategoryModalComponent } from './add-category-modal/add-category-modal.component';
 import { IUser } from '../../interfaces/iuser.interface';
@@ -21,6 +22,7 @@ import { IGuideUser } from '../../interfaces/iguide-user.interface';
 import { ICategory } from '../../interfaces/icategory.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DateFormatPipe } from '../../pipes/date-format.pipe';
 
 @Component({
   selector: 'app-profile',
@@ -34,8 +36,10 @@ import { FormsModule } from '@angular/forms';
     AddGoalModalComponent,
     EditGoalModalComponent,
     AddRoutineModalComponent,
+    EditRoutineModalComponent,
     AddGuideUserModalComponent,
-    AddCategoryModalComponent
+    AddCategoryModalComponent,
+    DateFormatPipe
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
@@ -46,9 +50,11 @@ export class ProfileComponent {
   showAddGoalModal = signal(false);
   showEditGoalModal = signal(false);
   showAddRoutineModal = signal(false);
+  showEditRoutineModal = signal(false);
   showAddGuideUserModal = signal(false);
   showAddCategoryModal = signal(false);
   selectedGoal = signal<IProfileGoal | null>(null);
+  selectedRoutine = signal<IRoutine | null>(null);
   user = signal<IUser | undefined>(undefined);
   interests = signal<IProfileInterest[]>([]);
   goals = signal<IProfileGoal[]>([]);
@@ -57,6 +63,7 @@ export class ProfileComponent {
   categories = signal<ICategory[]>([]);
   selectedUserId = signal<number | null>(null);
   completedGoalsCount = computed(() => this.goals().filter(g => g.status === 'completed').length);
+  activeRoutinesCount = computed(() => this.routines().filter(r => !this.isExpired(r.end_time)).length);
   userService = inject(UserService);
   routineService = inject(RoutineService);
   goalService = inject(GoalService);
@@ -81,10 +88,9 @@ export class ProfileComponent {
 
       if (user.role === 'guide') {
         const relations = await this.guideUserService.getGuideUserRelations();
-        console.log('guideUserRelations:', relations); // Depuración
-        // Add the guide's own profile to the relations
+        console.log('guideUserRelations:', relations);
         const guideRelation: IGuideUser = {
-          guide_user_id: 0, // Use 0 for the guide's own profile
+          guide_user_id: 0,
           guide_id: user.user_id,
           user_id: user.user_id,
           created_at: new Date().toISOString(),
@@ -104,10 +110,10 @@ export class ProfileComponent {
           }
         };
         this.guideUserRelations.set([guideRelation, ...relations]);
-        this.selectedUserId.set(user.user_id); // Default to guide's own profile
+        this.selectedUserId.set(user.user_id);
         await this.loadUserData(user.user_id);
       } else {
-        await this.loadUserData(null); // Non-guide users fetch their own data
+        await this.loadUserData(null);
       }
 
       const categories = await this.categoryService.getCategories();
@@ -120,6 +126,7 @@ export class ProfileComponent {
 
   async loadUserData(userId: number | null) {
     try {
+      console.log('Cargando datos para userId:', userId);
       const [interests, goals, routines] = await Promise.all([
         this.userService.getInterests(userId),
         this.goalService.getGoals(userId),
@@ -128,6 +135,7 @@ export class ProfileComponent {
       this.interests.set(interests);
       this.goals.set(goals);
       this.routines.set(routines);
+      console.log('Rutinas cargadas:', routines);
     } catch (error) {
       console.error('Error al cargar datos del usuario:', error);
       toast.error('Error al cargar los datos del usuario.');
@@ -136,7 +144,7 @@ export class ProfileComponent {
 
   async onUserSelected() {
     const userId = this.selectedUserId();
-    console.log('selectedUserId:', userId, typeof userId); // Depuración
+    console.log('selectedUserId:', userId, typeof userId);
     if (userId === null || userId === undefined) {
       console.error('selectedUserId es null o undefined:', userId);
       toast.error('Por favor, selecciona un usuario válido.');
@@ -188,6 +196,22 @@ export class ProfileComponent {
     this.showAddRoutineModal.set(true);
   }
 
+  openEditRoutineModal(routine: IRoutine) {
+    this.selectedRoutine.set(routine);
+    this.showEditRoutineModal.set(true);
+  }
+
+  async deleteRoutine(routineId: number) {
+    try {
+      await this.routineService.deleteRoutine(routineId);
+      this.routines.update(routines => routines.filter(r => r.routine_id !== routineId));
+      toast.success('Rutina eliminada con éxito.');
+    } catch (error) {
+      console.error('Error al eliminar rutina:', error);
+      toast.error('Error al eliminar la rutina.');
+    }
+  }
+
   openAddGuideUserModal() {
     this.showAddGuideUserModal.set(true);
   }
@@ -230,14 +254,38 @@ export class ProfileComponent {
     if (palette?.background) root.style.setProperty('--background-color', palette.background);
   }
 
-  onModalClosed() {
+  async onModalClosed() {
     this.showAddInterestModal.set(false);
     this.showAddGoalModal.set(false);
     this.showEditGoalModal.set(false);
     this.showAddRoutineModal.set(false);
+    this.showEditRoutineModal.set(false);
     this.showAddGuideUserModal.set(false);
     this.showAddCategoryModal.set(false);
     const userId = this.user()?.role === 'guide' ? this.selectedUserId() : null;
-    this.loadUserData(userId);
+    await this.loadUserData(userId);
+  }
+
+  isExpired(endTime: string | null): boolean {
+    if (!endTime) return false;
+    const endDate = new Date(endTime);
+    const currentDate = new Date('2025-06-26T00:00:00Z');
+    return endDate.getTime() < currentDate.getTime();
+  }
+
+  isWarning(endTime: string | null): boolean {
+    if (!endTime) return false;
+    const endDate = new Date(endTime);
+    const currentDate = new Date('2025-06-26T00:00:00Z');
+    const diffDays = Math.ceil((endDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+    return diffDays <= 3 && diffDays > 1;
+  }
+
+  isDanger(endTime: string | null): boolean {
+    if (!endTime) return false;
+    const endDate = new Date(endTime);
+    const currentDate = new Date('2025-06-26T00:00:00Z');
+    const diffDays = Math.ceil((endDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+    return diffDays <= 1 && diffDays >= 0;
   }
 }
