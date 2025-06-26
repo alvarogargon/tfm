@@ -39,7 +39,7 @@ export class CalendarComponent {
 
   async loadRoutines() {
     try {
-      const routines = await this.routineService.getRoutines();
+      const routines = await this.routineService.getRoutines(null); // Pasar null para usuario autenticado
       const events = this.transformRoutinesToEvents(routines);
       this.calendarOptions = { ...this.calendarOptions, events };
     } catch (error) {
@@ -58,9 +58,9 @@ export class CalendarComponent {
           events.push({
             id: activity.activity_id.toString(),
             title: activity.title,
-            start: activity.datetime_start, // Aseguramos que es string y no null
-            end: activity.datetime_end || undefined, // Convertimos null a undefined
-            allDay: !activity.start_time, // Si no hay hora específica, es un evento de todo el día
+            start: activity.datetime_start,
+            end: activity.datetime_end || undefined,
+            allDay: !activity.start_time,
             extendedProps: {
               routine_id: activity.routine_id
             }
@@ -74,6 +74,5 @@ export class CalendarComponent {
 
   handleEventClick(arg: any) {
     toast.info(`Evento clicado: ${arg.event.title}`);
-    // Aquí puedes añadir navegación o lógica adicional
   }
 }

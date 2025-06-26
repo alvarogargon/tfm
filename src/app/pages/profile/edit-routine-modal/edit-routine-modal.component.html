@@ -1,6 +1,6 @@
 <div class="modal">
   <div class="modal-content">
-    <h3>Añadir Rutina</h3>
+    <h3>Editar Rutina</h3>
     <form [formGroup]="routineForm" (ngSubmit)="onSubmit()">
       <div class="input-wrapper">
         <input type="text" class="input" formControlName="name" placeholder="Nombre de la rutina">
@@ -30,20 +30,8 @@
         </select>
         <label class="label">Frecuencia</label>
       </div>
-      @if (guideUserRelations.length > 0) {
-        <div class="input-wrapper">
-          <select class="input" formControlName="targetUserId">
-            @for (relation of guideUserRelations; track relation.guide_user_id) {
-              <option [ngValue]="relation.user_id">
-                {{ relation.guide_user_id === 0 ? 'Mi Perfil' : relation.user?.username }} (ID: {{ relation.user_id }})
-              </option>
-            }
-          </select>
-          <label class="label">Usuario</label>
-        </div>
-      }
       <div class="modal-footer">
-        <button type="submit" class="button-submit" aria-label="Crear rutina">Crear</button>
+        <button type="submit" class="button-submit" aria-label="Guardar cambios">Guardar</button>
         <button type="button" class="button-close" (click)="onCancel()" aria-label="Cancelar">Cerrar</button>
       </div>
     </form>

@@ -35,11 +35,9 @@
                   <li>
                     <span class="badge bg-secondary me-1" [attr.aria-label]="'Interés: ' + interest.interest_name">{{ interest.interest_name }}</span>
                     <span class="badge"
-                          [ngClass]="{
-                            'bg-success': interest.priority === 'low',
-                            'bg-warning': interest.priority === 'medium',
-                            'bg-danger': interest.priority === 'high'
-                          }"
+                          [class.bg-success]="interest.priority === 'low'"
+                          [class.bg-warning]="interest.priority === 'medium'"
+                          [class.bg-danger]="interest.priority === 'high'"
                           [attr.aria-label]="'Prioridad: ' + interest.priority">
                       {{ interest.priority | titlecase }}
                     </span>
@@ -85,9 +83,11 @@
               <h4>Seleccionar Usuario</h4>
             </div>
             <select class="form-select" [(ngModel)]="selectedUserId" (change)="onUserSelected()" aria-label="Seleccionar usuario asignado">
-              <option [value]="null" disabled>Selecciona un usuario</option>
+              <option [ngValue]="null" disabled>Selecciona un usuario</option>
               @for (relation of guideUserRelations(); track relation.guide_user_id) {
-                <option [value]="relation.user_id">{{ relation.user?.username }} (ID: {{ relation.user_id }})</option>
+                <option [ngValue]="relation.user_id">
+                  {{ relation.guide_user_id === 0 ? 'Mi Perfil' : relation.user?.username }} (ID: {{ relation.user_id }})
+                </option>
               }
             </select>
           </div>
@@ -97,7 +97,7 @@
           <div class="card shadow-sm">
             <div class="card-body text-center">
               <h5 class="card-title mb-2">Rutinas activas</h5>
-              <span class="display-6 fw-bold text-primary">{{ routines().length }}</span>
+              <span class="display-6 fw-bold text-primary">{{ activeRoutinesCount() }}</span>
             </div>
           </div>
           <div class="card shadow-sm">
@@ -119,7 +119,7 @@
             <div class="section-header">
               <h4>Intereses del Usuario</h4>
               <button class="icon-button" (click)="openAddInterestModal()" aria-label="Añadir Interés">
-                <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c-17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
               </button>
             </div>
             <ul class="list-unstyled mb-0 highlights">
@@ -127,11 +127,9 @@
                 <li>
                   <span class="badge bg-secondary me-1" [attr.aria-label]="'Interés: ' + interest.interest_name">{{ interest.interest_name }}</span>
                   <span class="badge"
-                        [ngClass]="{
-                          'bg-success': interest.priority === 'low',
-                          'bg-warning': interest.priority === 'medium',
-                          'bg-danger': interest.priority === 'high'
-                        }"
+                        [class.bg-success]="interest.priority === 'low'"
+                        [class.bg-warning]="interest.priority === 'medium'"
+                        [class.bg-danger]="interest.priority === 'high'"
                         [attr.aria-label]="'Prioridad: ' + interest.priority">
                     {{ interest.priority | titlecase }}
                   </span>
@@ -214,16 +212,52 @@
           @for (routine of routines(); track routine.routine_id) {
             <div class="card shadow-sm mb-3">
               <div class="card-body">
-                <h5 class="card-title">{{ routine.name }}</h5>
+                <div class="routine-header">
+                  <h5 class="card-title">{{ routine.name }}</h5>
+                  <div class="routine-status-container">
+                    <span class="routine-status">{{ routine.daily_routine | titlecase }}</span>
+                    @if (routine.end_time) {
+                      <div class="routine-end-time-container">
+                        @if (isExpired(routine.end_time)) {
+                          <span class="routine-end-time">
+                            <span class="status-emoji" aria-label="Vencido: Fecha de fin pasada">❌</span>
+                            {{ routine.end_time | dateFormat }}
+                          </span>
+                        } @else if (isDanger(routine.end_time)) {
+                          <span class="routine-end-time">
+                            <span class="status-emoji" aria-label="Peligro: Fecha de fin muy próxima">🔥</span>
+                            {{ routine.end_time | dateFormat }}
+                          </span>
+                        } @else if (isWarning(routine.end_time)) {
+                          <span class="routine-end-time">
+                            <span class="status-emoji" aria-label="Advertencia: Fecha de fin próxima">⏰</span>
+                            {{ routine.end_time | dateFormat }}
+                          </span>
+                        } @else {
+                          <span class="routine-end-time">
+                            {{ routine.end_time | dateFormat }}
+                          </span>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
                 <p class="card-text">{{ routine.description || 'Sin descripción' }}</p>
-                <button class="button" [routerLink]="['/routines', routine.routine_id]">Ver Detalles</button>
+                <div class="button-group">
+                  <button class="button" [routerLink]="['/routines', routine.routine_id]" aria-label="Ver detalles de la rutina">Ver Detalles</button>
+                  <button class="button" (click)="openEditRoutineModal(routine)" aria-label="Editar rutina">Editar</button>
+                  <button class="button" (click)="deleteRoutine(routine.routine_id)" aria-label="Eliminar rutina">Eliminar</button>
+                </div>
               </div>
             </div>
           } @empty {
             <p>No hay rutinas registradas.</p>
           }
           @if (showAddRoutineModal()) {
-            <app-add-routine-modal (close)="onModalClosed()"></app-add-routine-modal>
+            <app-add-routine-modal [selectedUserId]="selectedUserId()" [guideUserRelations]="guideUserRelations()" (close)="onModalClosed()"></app-add-routine-modal>
+          }
+          @if (showEditRoutineModal() && selectedRoutine()) {
+            <app-edit-routine-modal [routine]="selectedRoutine()!" [guideUserRelations]="guideUserRelations()" [selectedUserId]="selectedUserId()" (close)="onModalClosed()"></app-edit-routine-modal>
           }
         </div>
 
@@ -236,12 +270,14 @@
               </button>
             </div>
             @for (relation of guideUserRelations(); track relation.guide_user_id) {
-              <div class="card shadow-sm mb-3">
-                <div class="card-body">
-                  <h5 class="card-title">{{ relation.user?.username }} (ID: {{ relation.user_id }})</h5>
-                  <button class="button" (click)="deleteGuideUserRelation(relation.guide_user_id)">Eliminar Relación</button>
+              @if (relation.guide_user_id !== 0) {
+                <div class="card shadow-sm mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ relation.user?.username }} (ID: {{ relation.user_id }})</h5>
+                    <button class="button" (click)="deleteGuideUserRelation(relation.guide_user_id)">Eliminar Relación</button>
+                  </div>
                 </div>
-              </div>
+              }
             } @empty {
               <p>No hay usuarios asignados.</p>
             }

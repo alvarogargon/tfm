@@ -166,6 +166,42 @@
   height: 20px;
 }
 
+.routine-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.routine-status-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.routine-status {
+  font-size: 0.9rem;
+  color: var(--primary-color, #007bff);
+  font-weight: 500;
+}
+
+.routine-end-time-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.routine-end-time {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.status-emoji {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
 .button-group {
   display: flex;
   gap: 0.5rem;
@@ -181,5 +217,14 @@
   .button-group {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .routine-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .routine-status-container {
+    align-items: flex-start;
   }
 }
