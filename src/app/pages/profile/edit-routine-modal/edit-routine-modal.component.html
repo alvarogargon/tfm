@@ -1,6 +1,6 @@
 <div class="modal-overlay">
   <div class="modal-content">
-    <h2>Añadir Rutina</h2>
+    <h2>Editar Rutina</h2>
     <form (ngSubmit)="onSubmit()" class="modal-form">
       <div class="form-group">
         <label for="name">Nombre</label>
@@ -71,7 +71,7 @@
           <label for="targetUserId">Usuario</label>
           <select
             id="targetUserId"
-            [(ngModel)]="localSelectedUserId"
+            [(ngModel)]="selectedUserId"
             name="targetUserId"
             required
             aria-label="Seleccionar usuario"
@@ -85,7 +85,7 @@
         </div>
       }
       <div class="button-group">
-        <button type="submit" class="button" aria-label="Crear rutina">Crear</button>
+        <button type="submit" class="button" aria-label="Guardar cambios">Guardar</button>
         <button type="button" class="button" (click)="onCancel()" aria-label="Cancelar">Cancelar</button>
       </div>
     </form>

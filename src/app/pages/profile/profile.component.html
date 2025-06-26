@@ -218,14 +218,21 @@
               <div class="card-body">
                 <h5 class="card-title">{{ routine.name }}</h5>
                 <p class="card-text">{{ routine.description || 'Sin descripción' }}</p>
-                <button class="button" [routerLink]="['/routines', routine.routine_id]">Ver Detalles</button>
+                <div class="button-group">
+                  <button class="button" [routerLink]="['/routines', routine.routine_id]" aria-label="Ver detalles de la rutina">Ver Detalles</button>
+                  <button class="button" (click)="openEditRoutineModal(routine)" aria-label="Editar rutina">Editar</button>
+                  <button class="button" (click)="deleteRoutine(routine.routine_id)" aria-label="Eliminar rutina">Eliminar</button>
+                </div>
               </div>
             </div>
           } @empty {
             <p>No hay rutinas registradas.</p>
           }
           @if (showAddRoutineModal()) {
-            <app-add-routine-modal (close)="onModalClosed()"></app-add-routine-modal>
+            <app-add-routine-modal [selectedUserId]="selectedUserId()" [guideUserRelations]="guideUserRelations()" (close)="onModalClosed()"></app-add-routine-modal>
+          }
+          @if (showEditRoutineModal() && selectedRoutine()) {
+            <app-edit-routine-modal [routine]="selectedRoutine()!" [guideUserRelations]="guideUserRelations()" (close)="onModalClosed()"></app-edit-routine-modal>
           }
         </div>
 

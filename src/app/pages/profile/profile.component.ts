@@ -5,6 +5,7 @@ import { AddInterestModalComponent } from './add-interest-modal/add-interest-mod
 import { AddGoalModalComponent } from './add-goal-modal/add-goal-modal.component';
 import { EditGoalModalComponent } from './edit-goal-modal/edit-goal-modal.component';
 import { AddRoutineModalComponent } from './add-routine-modal/add-routine-modal.component';
+import { EditRoutineModalComponent } from './edit-routine-modal/edit-routine-modal.component';
 import { AddGuideUserModalComponent } from './add-guide-user-modal/add-guide-user-modal.component';
 import { AddCategoryModalComponent } from './add-category-modal/add-category-modal.component';
 import { IUser } from '../../interfaces/iuser.interface';
@@ -34,6 +35,7 @@ import { FormsModule } from '@angular/forms';
     AddGoalModalComponent,
     EditGoalModalComponent,
     AddRoutineModalComponent,
+    EditRoutineModalComponent,
     AddGuideUserModalComponent,
     AddCategoryModalComponent
   ],
@@ -46,9 +48,11 @@ export class ProfileComponent {
   showAddGoalModal = signal(false);
   showEditGoalModal = signal(false);
   showAddRoutineModal = signal(false);
+  showEditRoutineModal = signal(false);
   showAddGuideUserModal = signal(false);
   showAddCategoryModal = signal(false);
   selectedGoal = signal<IProfileGoal | null>(null);
+  selectedRoutine = signal<IRoutine | null>(null);
   user = signal<IUser | undefined>(undefined);
   interests = signal<IProfileInterest[]>([]);
   goals = signal<IProfileGoal[]>([]);
@@ -119,7 +123,7 @@ export class ProfileComponent {
 
   async loadUserData(userId: number | null) {
     try {
-      console.log('Cargando datos para userId:', userId); // Depuración
+      console.log('Cargando datos para userId:', userId);
       const [interests, goals, routines] = await Promise.all([
         this.userService.getInterests(userId),
         this.goalService.getGoals(userId),
@@ -128,7 +132,7 @@ export class ProfileComponent {
       this.interests.set(interests);
       this.goals.set(goals);
       this.routines.set(routines);
-      console.log('Rutinas cargadas:', routines); // Depuración
+      console.log('Rutinas cargadas:', routines);
     } catch (error) {
       console.error('Error al cargar datos del usuario:', error);
       toast.error('Error al cargar los datos del usuario.');
@@ -137,7 +141,7 @@ export class ProfileComponent {
 
   async onUserSelected() {
     const userId = this.selectedUserId();
-    console.log('selectedUserId:', userId, typeof userId); // Depuración
+    console.log('selectedUserId:', userId, typeof userId);
     if (userId === null || userId === undefined) {
       console.error('selectedUserId es null o undefined:', userId);
       toast.error('Por favor, selecciona un usuario válido.');
@@ -189,6 +193,22 @@ export class ProfileComponent {
     this.showAddRoutineModal.set(true);
   }
 
+  openEditRoutineModal(routine: IRoutine) {
+    this.selectedRoutine.set(routine);
+    this.showEditRoutineModal.set(true);
+  }
+
+  async deleteRoutine(routineId: number) {
+    try {
+      await this.routineService.deleteRoutine(routineId);
+      this.routines.update(routines => routines.filter(r => r.routine_id !== routineId));
+      toast.success('Rutina eliminada con éxito.');
+    } catch (error) {
+      console.error('Error al eliminar rutina:', error);
+      toast.error('Error al eliminar la rutina.');
+    }
+  }
+
   openAddGuideUserModal() {
     this.showAddGuideUserModal.set(true);
   }
@@ -236,6 +256,7 @@ export class ProfileComponent {
     this.showAddGoalModal.set(false);
     this.showEditGoalModal.set(false);
     this.showAddRoutineModal.set(false);
+    this.showEditRoutineModal.set(false);
     this.showAddGuideUserModal.set(false);
     this.showAddCategoryModal.set(false);
     const userId = this.user()?.role === 'guide' ? this.selectedUserId() : null;

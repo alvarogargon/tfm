@@ -11,3 +11,13 @@ export interface IRoutine {
   daily_routine: 'Daily' | 'Weekly' | 'Monthly';
   activities: any[];
 }
+
+export interface IRoutinePayload {
+  targetUserId: number;
+  name: string;
+  description?: string | null;
+  is_template?: boolean;
+  start_time?: string | null;
+  end_time?: string | null;
+  daily_routine?: 'Daily' | 'Weekly' | 'Monthly';
+}

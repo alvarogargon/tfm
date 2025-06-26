@@ -1,43 +1,49 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RoutineService } from '../../../services/routine.service';
+import { IRoutinePayload } from '../../../interfaces/iroutine.interface';
 import { toast } from 'ngx-sonner';
+import { IGuideUser } from '../../../interfaces/iguide-user.interface';
 
 @Component({
   selector: 'app-add-routine-modal',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './add-routine-modal.component.html',
   styleUrls: ['./add-routine-modal.component.css']
 })
 export class AddRoutineModalComponent {
+  @Input() guideUserRelations: IGuideUser[] = [];
+  @Input() selectedUserId: number | null = null;
   @Output() close = new EventEmitter<void>();
-  routineForm: FormGroup;
   routineService = inject(RoutineService);
 
-  constructor(private fb: FormBuilder) {
-    this.routineForm = this.fb.group({
-      name: ['', Validators.required],
-      description: [''],
-      is_template: [false],
-      daily_routine: ['Daily', Validators.required],
-      start_time: [''],
-      end_time: ['']
-    });
+  routineData = signal<IRoutinePayload>({ targetUserId: 0, name: '' });
+  localSelectedUserId = signal<number | null>(null);
+
+  ngOnInit() {
+    if (this.selectedUserId) {
+      this.localSelectedUserId.set(this.selectedUserId);
+      this.routineData.set({ ...this.routineData(), targetUserId: this.selectedUserId });
+    }
   }
 
   async onSubmit() {
-    if (this.routineForm.invalid) {
-      toast.error('Por favor, completa todos los campos requeridos.');
-      return;
-    }
     try {
-      await this.routineService.createRoutine(this.routineForm.value);
+      const newRoutine = await this.routineService.createRoutine({
+        ...this.routineData(),
+        targetUserId: this.localSelectedUserId()!
+      });
       toast.success('Rutina creada con éxito.');
       this.close.emit();
     } catch (error) {
-      console.error('Error al crear rutina:', error);
+      console.error('Error al crear la rutina:', error);
       toast.error('Error al crear la rutina.');
     }
+  }
+
+  onCancel() {
+    this.close.emit();
   }
 }
