@@ -17,8 +17,10 @@ export class DeleteActivityModalComponent {
   activityService = inject(ActivityService);
 
   async onDelete() {
+    console.log('Iniciando eliminación de actividad:', this.activity.activity_id); // Añadido para depuración
     try {
       await this.activityService.deleteActivity(this.activity.activity_id);
+      console.log('Actividad eliminada con éxito:', this.activity.activity_id); // Añadido para depuración
       toast.success('Actividad eliminada con éxito.');
       this.close.emit();
     } catch (error) {

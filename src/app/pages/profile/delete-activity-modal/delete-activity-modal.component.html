@@ -1,10 +1,10 @@
 <div class="modal">
   <div class="modal-content">
     <h3>Eliminar Actividad</h3>
-    <p>¿Estás seguro de que deseas eliminar la actividad "{{ activity.title }}"?</p>
+    <p>¿Estás seguro de que deseas eliminar la actividad "{{ activity.title || 'Sin título' }}"?</p>
     <div class="modal-footer">
-      <button class="button-submit" (click)="onDelete()">Eliminar</button>
-      <button class="button-close" (click)="close.emit()">Cancelar</button>
+      <button class="button-submit" (click)="onDelete()" aria-label="Confirmar eliminación">Eliminar</button>
+      <button class="button-close" (click)="close.emit()" aria-label="Cancelar eliminación">Cancelar</button>
     </div>
   </div>
 </div>
