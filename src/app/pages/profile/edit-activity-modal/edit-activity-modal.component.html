@@ -13,23 +13,14 @@
       <div class="input-wrapper">
         <select class="input" formControlName="category_id">
           <option [ngValue]="null" disabled>Selecciona una categoría</option>
-          @for (category of categories(); track category.categoryId) {
-            <option [ngValue]="category.categoryId">{{ category.name }}</option>
+          @for (category of categories(); track category.category_id) {
+            <option [ngValue]="category.category_id">{{ category.name }}</option>
           }
         </select>
         <label class="label">Categoría</label>
-      </div>
-      <div class="input-wrapper">
-        <input type="text" class="input" formControlName="day_of_week" placeholder="Día de la semana (ej. Monday)">
-        <label class="label">Día de la Semana</label>
-      </div>
-      <div class="input-wrapper">
-        <input type="time" class="input" formControlName="start_time">
-        <label class="label">Hora de Inicio</label>
-      </div>
-      <div class="input-wrapper">
-        <input type="time" class="input" formControlName="end_time">
-        <label class="label">Hora de Fin</label>
+        @if (activityForm.get('category_id')?.invalid && activityForm.get('category_id')?.touched) {
+          <span class="error-text">La categoría es obligatoria</span>
+        }
       </div>
       <div class="input-wrapper">
         <input type="datetime-local" class="input" formControlName="datetime_start">
@@ -48,7 +39,7 @@
         <label class="label">Ícono</label>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="button-submit">Guardar</button>
+        <button type="submit" class="button-submit" [disabled]="activityForm.invalid">Guardar</button>
         <button type="button" class="button-close" (click)="close.emit()">Cerrar</button>
       </div>
     </form>

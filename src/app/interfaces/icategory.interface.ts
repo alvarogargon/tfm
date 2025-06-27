@@ -1,9 +1,9 @@
 export interface ICategory {
-  categoryId: number;
-  userId: number | null;
+  category_id: number;
+  user_id: number | null;
   name: string;
   color: string | null;
   icon: string | null;
   description: string | null;
-  createdAt: string;
+  created_at: string;
 }

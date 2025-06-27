@@ -55,7 +55,7 @@
                 </button>
               </div>
               <ul class="list-unstyled mb-0 highlights">
-                @for (category of categories(); track category.categoryId) {
+                @for (category of categories(); track category.category_id) {
                   <li>
                     <span class="badge" [style.backgroundColor]="category.color || '#6c757d'">{{ category.name }}</span>
                   </li>

@@ -28,51 +28,69 @@ export class EditActivityModalComponent {
       description: [''],
       datetime_start: ['', Validators.required],
       datetime_end: ['', Validators.required],
-      day_of_week: [''],
-      start_time: [''],
-      end_time: [''],
       location: [''],
       icon: [''],
-      category_id: [null],
+      category_id: [null, Validators.required],
       routine_id: [0, Validators.required]
+    });
+
+    // Escuchar cambios en category_id para depuración
+    this.activityForm.get('category_id')?.valueChanges.subscribe(value => {
+      console.log('category_id seleccionado:', value);
     });
   }
 
   async ngOnInit() {
     try {
+      const token = localStorage.getItem('token');
+      console.log('Token encontrado:', token ? 'Sí' : 'No');
+      if (!token) {
+        toast.error('No se encontró el token de autenticación. Por favor, inicia sesión.');
+        return;
+      }
       const categories = await this.categoryService.getCategories();
+      console.log('Categorías cargadas:', categories);
       this.categories.set(categories);
       this.activityForm.patchValue({
-        title: this.activity.title,
-        description: this.activity.description,
-        datetime_start: this.activity.datetime_start,
-        datetime_end: this.activity.datetime_end,
-        day_of_week: this.activity.day_of_week,
-        start_time: this.activity.start_time,
-        end_time: this.activity.end_time,
-        location: this.activity.location,
-        icon: this.activity.icon,
-        category_id: this.activity.category_id,
-        routine_id: this.activity.routine_id
+        ...this.activity,
+        routine_id: this.activity.routine_id,
+        category_id: this.activity.category_id || null,
+        day_of_week: null,
+        start_time: null,
+        end_time: null
       });
-    } catch (error) {
+      if (categories.length === 0) {
+        toast.warning('No hay categorías disponibles. Por favor, crea una categoría primero.');
+      }
+    } catch (error: any) {
       console.error('Error al cargar categorías:', error);
-      toast.error('Error al cargar las categorías.');
+      toast.error(error.message || 'Error al cargar las categorías.');
     }
   }
 
   async onSubmit() {
+    console.log('Formulario antes de enviar:', this.activityForm.value);
     if (this.activityForm.invalid) {
-      toast.error('Por favor, completa todos los campos requeridos.');
+      console.log('Campos inválidos:', this.activityForm.errors);
+      console.log('Errores de category_id:', this.activityForm.get('category_id')?.errors);
+      toast.error('Por favor, completa todos los campos requeridos, incluida la categoría.');
       return;
     }
     try {
-      await this.activityService.updateActivity(this.activity.activity_id, this.activityForm.value);
+      const activity = {
+        ...this.activityForm.value,
+        routine_id: this.activity.routine_id,
+        day_of_week: null,
+        start_time: null,
+        end_time: null
+      };
+      console.log('Enviando actividad al backend:', activity);
+      await this.activityService.updateActivity(this.activity.activity_id, activity);
       toast.success('Actividad actualizada con éxito.');
       this.close.emit();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error al actualizar actividad:', error);
-      toast.error('Error al actualizar la actividad.');
+      toast.error(error.message || 'Error al actualizar la actividad.');
     }
   }
 }
