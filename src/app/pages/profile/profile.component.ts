@@ -22,6 +22,7 @@ import { IProfileGoal } from '../../interfaces/iprofile-goal.interface';
 import { IRoutine } from '../../interfaces/iroutine.interface';
 import { IGuideUser } from '../../interfaces/iguide-user.interface';
 import { ICategory } from '../../interfaces/icategory.interface';
+import { IActivity } from '../../interfaces/iactivity.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DateFormatPipe } from '../../pipes/date-format.pipe';
@@ -63,11 +64,13 @@ export class ProfileComponent {
   interests = signal<IProfileInterest[]>([]);
   goals = signal<IProfileGoal[]>([]);
   routines = signal<IRoutine[]>([]);
+  activities = signal<IActivity[]>([]);
   guideUserRelations = signal<IGuideUser[]>([]);
   categories = signal<ICategory[]>([]);
   selectedUserId = signal<number | null>(null);
   completedGoalsCount = computed(() => this.goals().filter(g => g.status === 'completed').length);
   activeRoutinesCount = computed(() => this.routines().filter(r => !this.isExpired(r.end_time)).length);
+  activitiesCount = computed(() => this.activities().length);
   userService = inject(UserService);
   routineService = inject(RoutineService);
   goalService = inject(GoalService);
@@ -132,15 +135,17 @@ export class ProfileComponent {
   async loadUserData(userId: number | null) {
     try {
       console.log('Cargando datos para userId:', userId);
-      const [interests, goals, routines] = await Promise.all([
+      const [interests, goals, routines, activities] = await Promise.all([
         this.userService.getInterests(userId),
         this.goalService.getGoals(userId),
-        this.routineService.getRoutines(userId)
+        this.routineService.getRoutines(userId),
+        this.activityService.getActivities()
       ]);
       this.interests.set(interests);
       this.goals.set(goals);
       this.routines.set(routines);
-      console.log('Rutinas cargadas:', routines);
+      this.activities.set(activities);
+      console.log('Actividades cargadas:', activities);
     } catch (error) {
       console.error('Error al cargar datos del usuario:', error);
       toast.error('Error al cargar los datos del usuario.');
