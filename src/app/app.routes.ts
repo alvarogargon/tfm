@@ -6,6 +6,7 @@ import { Error404Component } from './pages/error404/error404.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { CalendarPageComponent } from './pages/calendar-page/calendar-page.component';
+import { RoutineDetailsComponent } from './components/routine-details/routine-details.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'dashboard/calendar', component: CalendarPageComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
+  { path: 'routines/:id', component: RoutineDetailsComponent, canActivate: [authGuard] },
   { path: '**', component: Error404Component }
 ];

@@ -8,12 +8,14 @@ import { AddRoutineModalComponent } from './add-routine-modal/add-routine-modal.
 import { EditRoutineModalComponent } from './edit-routine-modal/edit-routine-modal.component';
 import { AddGuideUserModalComponent } from './add-guide-user-modal/add-guide-user-modal.component';
 import { AddCategoryModalComponent } from './add-category-modal/add-category-modal.component';
+import { AddActivityModalComponent } from './add-activity-modal/add-activity-modal.component';
 import { IUser } from '../../interfaces/iuser.interface';
 import { UserService } from '../../services/user.service';
 import { RoutineService } from '../../services/routine.service';
 import { GoalService } from '../../services/goal.service';
 import { GuideUserService } from '../../services/guide-user.service';
 import { CategoryService } from '../../services/category.service';
+import { ActivityService } from '../../services/activity.service';
 import { toast } from 'ngx-sonner';
 import { IProfileInterest } from '../../interfaces/iprofile-interest.interface';
 import { IProfileGoal } from '../../interfaces/iprofile-goal.interface';
@@ -39,6 +41,7 @@ import { DateFormatPipe } from '../../pipes/date-format.pipe';
     EditRoutineModalComponent,
     AddGuideUserModalComponent,
     AddCategoryModalComponent,
+    AddActivityModalComponent,
     DateFormatPipe
   ],
   templateUrl: './profile.component.html',
@@ -53,6 +56,7 @@ export class ProfileComponent {
   showEditRoutineModal = signal(false);
   showAddGuideUserModal = signal(false);
   showAddCategoryModal = signal(false);
+  showAddActivityModal = signal(false);
   selectedGoal = signal<IProfileGoal | null>(null);
   selectedRoutine = signal<IRoutine | null>(null);
   user = signal<IUser | undefined>(undefined);
@@ -69,6 +73,7 @@ export class ProfileComponent {
   goalService = inject(GoalService);
   guideUserService = inject(GuideUserService);
   categoryService = inject(CategoryService);
+  activityService = inject(ActivityService);
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   async ngOnInit() {
@@ -201,6 +206,11 @@ export class ProfileComponent {
     this.showEditRoutineModal.set(true);
   }
 
+  openAddActivityModal(routine: IRoutine) {
+    this.selectedRoutine.set(routine);
+    this.showAddActivityModal.set(true);
+  }
+
   async deleteRoutine(routineId: number) {
     try {
       await this.routineService.deleteRoutine(routineId);
@@ -262,6 +272,7 @@ export class ProfileComponent {
     this.showEditRoutineModal.set(false);
     this.showAddGuideUserModal.set(false);
     this.showAddCategoryModal.set(false);
+    this.showAddActivityModal.set(false);
     const userId = this.user()?.role === 'guide' ? this.selectedUserId() : null;
     await this.loadUserData(userId);
   }

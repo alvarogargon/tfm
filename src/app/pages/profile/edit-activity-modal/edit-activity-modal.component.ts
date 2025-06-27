@@ -2,19 +2,20 @@ import { Component, EventEmitter, inject, Input, Output, signal } from '@angular
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivityService } from '../../../services/activity.service';
 import { CategoryService } from '../../../services/category.service';
+import { IActivity } from '../../../interfaces/iactivity.interface';
 import { ICategory } from '../../../interfaces/icategory.interface';
 import { CommonModule } from '@angular/common';
 import { toast } from 'ngx-sonner';
 
 @Component({
-  selector: 'app-add-activity-modal',
+  selector: 'app-edit-activity-modal',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './add-activity-modal.component.html',
-  styleUrls: ['./add-activity-modal.component.css']
+  templateUrl: './edit-activity-modal.component.html',
+  styleUrls: ['./edit-activity-modal.component.css']
 })
-export class AddActivityModalComponent {
-  @Input() routineId!: number;
+export class EditActivityModalComponent {
+  @Input() activity!: IActivity;
   @Output() close = new EventEmitter<void>();
   activityForm: FormGroup;
   activityService = inject(ActivityService);
@@ -50,7 +51,14 @@ export class AddActivityModalComponent {
       const categories = await this.categoryService.getCategories();
       console.log('Categorías cargadas:', categories);
       this.categories.set(categories);
-      this.activityForm.patchValue({ routine_id: this.routineId });
+      this.activityForm.patchValue({
+        ...this.activity,
+        routine_id: this.activity.routine_id,
+        category_id: this.activity.category_id || null,
+        day_of_week: null,
+        start_time: null,
+        end_time: null
+      });
       if (categories.length === 0) {
         toast.warning('No hay categorías disponibles. Por favor, crea una categoría primero.');
       }
@@ -71,18 +79,18 @@ export class AddActivityModalComponent {
     try {
       const activity = {
         ...this.activityForm.value,
-        routine_id: this.routineId,
+        routine_id: this.activity.routine_id,
         day_of_week: null,
         start_time: null,
         end_time: null
       };
       console.log('Enviando actividad al backend:', activity);
-      await this.activityService.createActivity(activity);
-      toast.success('Actividad creada con éxito.');
+      await this.activityService.updateActivity(this.activity.activity_id, activity);
+      toast.success('Actividad actualizada con éxito.');
       this.close.emit();
     } catch (error: any) {
-      console.error('Error al crear actividad:', error);
-      toast.error(error.message || 'Error al crear la actividad.');
+      console.error('Error al actualizar actividad:', error);
+      toast.error(error.message || 'Error al actualizar la actividad.');
     }
   }
 }

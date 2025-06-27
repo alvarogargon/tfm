@@ -55,7 +55,7 @@
                 </button>
               </div>
               <ul class="list-unstyled mb-0 highlights">
-                @for (category of categories(); track category.categoryId) {
+                @for (category of categories(); track category.category_id) {
                   <li>
                     <span class="badge" [style.backgroundColor]="category.color || '#6c757d'">{{ category.name }}</span>
                   </li>
@@ -119,7 +119,7 @@
             <div class="section-header">
               <h4>Intereses del Usuario</h4>
               <button class="icon-button" (click)="openAddInterestModal()" aria-label="Añadir Interés">
-                <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c-17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
               </button>
             </div>
             <ul class="list-unstyled mb-0 highlights">
@@ -243,9 +243,11 @@
                   </div>
                 </div>
                 <p class="card-text">{{ routine.description || 'Sin descripción' }}</p>
+                <div class="activity-count">Actividades: {{ routine.activities.length || 0 }}</div>
                 <div class="button-group">
                   <button class="button" [routerLink]="['/routines', routine.routine_id]" aria-label="Ver detalles de la rutina">Ver Detalles</button>
                   <button class="button" (click)="openEditRoutineModal(routine)" aria-label="Editar rutina">Editar</button>
+                  <button class="button" (click)="openAddActivityModal(routine)" aria-label="Añadir actividad">Añadir Actividad</button>
                   <button class="button" (click)="deleteRoutine(routine.routine_id)" aria-label="Eliminar rutina">Eliminar</button>
                 </div>
               </div>
@@ -258,6 +260,9 @@
           }
           @if (showEditRoutineModal() && selectedRoutine()) {
             <app-edit-routine-modal [routine]="selectedRoutine()!" [guideUserRelations]="guideUserRelations()" [selectedUserId]="selectedUserId()" (close)="onModalClosed()"></app-edit-routine-modal>
+          }
+          @if (showAddActivityModal() && selectedRoutine()) {
+            <app-add-activity-modal [routineId]="selectedRoutine()!.routine_id" (close)="onModalClosed()"></app-add-activity-modal>
           }
         </div>
 

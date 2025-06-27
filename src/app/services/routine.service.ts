@@ -23,6 +23,7 @@ export class RoutineService {
 
     try {
       const res = await lastValueFrom(this.httpClient.get<{ message: string, routines: any[] }>(url, { headers }));
+      console.log('Respuesta de getRoutines:', res); // Para depuración
       return res.routines.map(routine => ({
         routine_id: routine.routine_id,
         user_id: routine.user_id,
@@ -34,12 +35,81 @@ export class RoutineService {
         start_time: routine.start_time,
         end_time: routine.end_time,
         daily_routine: routine.daily_routine,
-        activities: routine.activities || []
+        activities: (routine.activities || []).map((activity: any) => ({
+          activity_id: activity.activity_id,
+          routine_id: activity.routine_id,
+          category_id: activity.category_id,
+          title: activity.activity_name || activity.title || 'Sin título', // Mapear activity_name a title
+          description: activity.description,
+          day_of_week: activity.day_of_week,
+          start_time: activity.start_time,
+          end_time: activity.end_time,
+          location: activity.location,
+          datetime_start: activity.datetime_start,
+          datetime_end: activity.datetime_end,
+          created_at: activity.created_at,
+          updated_at: activity.updated_at,
+          icon: activity.icon,
+          category: activity.category
+        }))
       }));
     } catch (error) {
       console.error('Error al obtener rutinas:', error);
       toast.error('Error al obtener las rutinas.');
       throw new Error('Error fetching routines.');
+    }
+  }
+
+  async getRoutineById(id: number): Promise<IRoutine> {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No token found. Please log in.');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    try {
+      const res = await lastValueFrom(this.httpClient.get<{ message: string, routine: any }>(`${this.endpoint}/${id}`, { headers }));
+      console.log('Respuesta de getRoutineById:', res); // Para depuración
+      return {
+        routine_id: res.routine.routine_id,
+        user_id: res.routine.user_id,
+        name: res.routine.name,
+        description: res.routine.description,
+        is_template: res.routine.is_template,
+        created_at: res.routine.created_at,
+        updated_at: res.routine.updated_at,
+        start_time: res.routine.start_time,
+        end_time: res.routine.end_time,
+        daily_routine: res.routine.daily_routine,
+        activities: (res.routine.activities || []).map((activity: any) => ({
+          activity_id: activity.activity_id,
+          routine_id: activity.routine_id,
+          category_id: activity.category_id,
+          title: activity.activity_name || activity.title || 'Sin título', // Mapear activity_name a title
+          description: activity.description,
+          day_of_week: activity.day_of_week,
+          start_time: activity.start_time,
+          end_time: activity.end_time,
+          location: activity.location,
+          datetime_start: activity.datetime_start,
+          datetime_end: activity.datetime_end,
+          created_at: activity.created_at,
+          updated_at: activity.updated_at,
+          icon: activity.icon,
+          category: activity.category
+        }))
+      };
+    } catch (error: any) {
+      console.error('Error al obtener rutina:', error);
+      if (error.status === 404) {
+        toast.error('Rutina no encontrada o no autorizada.');
+      } else if (error.status === 400) {
+        toast.error('El ID de la rutina debe ser un número entero.');
+      } else {
+        toast.error('Error al obtener la rutina.');
+      }
+      throw new Error('Error fetching routine.');
     }
   }
 
