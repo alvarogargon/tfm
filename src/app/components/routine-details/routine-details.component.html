@@ -1,51 +1,54 @@
 <section class="routine-details-container py-5">
   <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="section-header">
-          <h2>{{ routine()?.name || 'Detalles de la Rutina' }}</h2>
+    <div class="col-12">
+      <div class="section-header">
+        <h2>{{ routine()?.name || 'Detalles de la Rutina' }}</h2>
+        <div class="button-group">
           <button class="icon-button" (click)="openAddActivityModal()" aria-label="Añadir Actividad">
             <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
           </button>
+          <button class="icon-button" (click)="goToProfile()" aria-label="Volver al Perfil">
+            <svg viewBox="0 0 512 512"><path d="M177.5 414c-8.8 3.8-19 2-26-4.6l-144-136C2.7 268.9 0 262.6 0 256s2.7-12.9 7.5-17.4l144-136c7-6.6 17.2-8.4 26-4.6s14.5 12.5 14.5 22l0 88 192 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32l-192 0 0 88c0 9.6-5.7 18.2-14.5 22z"/></svg>
+          </button>
         </div>
-        <p>{{ routine()?.description || 'Sin descripción' }}</p>
-        <p><strong>Tipo:</strong> {{ routine()?.daily_routine | titlecase }}</p>
-        @if (routine()?.end_time) {
-          <p><strong>Fecha de fin:</strong> {{ routine()?.end_time ? (routine()?.end_time | dateFormat) : 'Sin fecha de fin' }}</p>
-        }
-        <h4>Actividades</h4>
-        @for (activity of routine()?.activities; track activity.activity_id) {
-          <div class="card shadow-sm mb-3">
-            <div class="card-body">
-              <div class="activity-header">
-                <h5 class="card-title">{{ activity.title }}</h5>
-                @if (activity.category) {
-                  <span class="badge" [style.backgroundColor]="activity.category.color || '#6c757d'">{{ activity.category.name }}</span>
-                }
-              </div>
-              <p class="card-text">{{ activity.description || 'Sin descripción' }}</p>
-              <p><strong>Día:</strong> {{ activity.day_of_week ? (activity.day_of_week | titlecase) : 'No especificado' }}</p>
-              <p><strong>Hora:</strong> {{ activity.start_time || 'No especificada' }} - {{ activity.end_time || 'No especificada' }}</p>
-              <p><strong>Ubicación:</strong> {{ activity.location || 'No especificada' }}</p>
-              <div class="button-group">
-                <button class="button" (click)="openEditActivityModal(activity)" aria-label="Editar actividad">Editar</button>
-                <button class="button" (click)="openDeleteActivityModal(activity)" aria-label="Eliminar actividad">Eliminar</button>
-              </div>
+      </div>
+      <p>{{ routine()?.description || 'Sin descripción' }}</p>
+      <p><strong>Tipo:</strong> {{ routine()?.daily_routine | titlecase }}</p>
+      @if (routine()?.end_time) {
+        <p><strong>Fecha de fin:</strong> {{ routine()?.end_time ? (routine()?.end_time | dateFormat) : 'Sin fecha de fin' }}</p>
+      }
+      <h4>Actividades</h4>
+      @for (activity of routine()?.activities; track activity.activity_id) {
+        <div class="card shadow-sm mb-3">
+          <div class="card-body">
+            <div class="activity-header">
+              <h5 class="card-title">{{ activity.title || 'Sin título' }}</h5>
+              @if (activity.category) {
+                <span class="badge" [style.backgroundColor]="activity.category.color || '#6c757d'">{{ activity.category.name }}</span>
+              }
+            </div>
+            <p class="card-text">{{ activity.description || 'Sin descripción' }}</p>
+            <p><strong>Día:</strong> {{ activity.datetime_start ? (activity.datetime_start | dateFormat:'weekday') : 'No especificado' }}</p>
+            <p><strong>Hora:</strong> {{ activity.datetime_start ? (activity.datetime_start | dateFormat:'time') : 'No especificada' }} - {{ activity.datetime_end ? (activity.datetime_end | dateFormat:'time') : 'No especificada' }}</p>
+            <p><strong>Ubicación:</strong> {{ activity.location || 'No especificada' }}</p>
+            <div class="button-group">
+              <button class="button" (click)="openEditActivityModal(activity)" aria-label="Editar actividad">Editar</button>
+              <button class="button" (click)="openDeleteActivityModal(activity)" aria-label="Eliminar actividad">Eliminar</button>
             </div>
           </div>
-        } @empty {
-          <p>No hay actividades registradas para esta rutina.</p>
-        }
-        @if (showEditActivityModal() && selectedActivity()) {
-          <app-edit-activity-modal [activity]="selectedActivity()!" (close)="onModalClosed()"></app-edit-activity-modal>
-        }
-        @if (showDeleteActivityModal() && selectedActivity()) {
-          <app-delete-activity-modal [activity]="selectedActivity()!" (close)="onModalClosed()"></app-delete-activity-modal>
-        }
-        @if (showAddActivityModal()) {
-          <app-add-activity-modal [routineId]="routine()!.routine_id" (close)="onModalClosed()"></app-add-activity-modal>
-        }
-      </div>
+        </div>
+      } @empty {
+        <p>No hay actividades registradas para esta rutina.</p>
+      }
+      @if (showEditActivityModal() && selectedActivity()) {
+        <app-edit-activity-modal [activity]="selectedActivity()!" (close)="onModalClosed()"></app-edit-activity-modal>
+      }
+      @if (showDeleteActivityModal() && selectedActivity()) {
+        <app-delete-activity-modal [activity]="selectedActivity()!" (close)="onModalClosed()"></app-delete-activity-modal>
+      }
+      @if (showAddActivityModal()) {
+        <app-add-activity-modal [routineId]="routine()!.routine_id" (close)="onModalClosed()"></app-add-activity-modal>
+      }
     </div>
   </div>
 </section>

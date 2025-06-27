@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { RoutineService } from '../../services/routine.service';
 import { ActivityService } from '../../services/activity.service';
 import { IRoutine } from '../../interfaces/iroutine.interface';
@@ -29,6 +29,7 @@ export class RoutineDetailsComponent {
   routineService = inject(RoutineService);
   activityService = inject(ActivityService);
   route = inject(ActivatedRoute);
+  router = inject(Router);
   routine = signal<IRoutine | null>(null);
   showEditActivityModal = signal(false);
   showDeleteActivityModal = signal(false);
@@ -43,6 +44,7 @@ export class RoutineDetailsComponent {
   async loadRoutine(routineId: number) {
     try {
       const routine = await this.routineService.getRoutineById(routineId);
+      console.log('Rutina cargada:', routine);
       this.routine.set(routine);
     } catch (error) {
       console.error('Error al cargar rutina:', error);
@@ -51,17 +53,23 @@ export class RoutineDetailsComponent {
   }
 
   openEditActivityModal(activity: IActivity) {
+    console.log('Abriendo modal de edición para actividad:', activity);
     this.selectedActivity.set(activity);
     this.showEditActivityModal.set(true);
   }
 
   openDeleteActivityModal(activity: IActivity) {
+    console.log('Abriendo modal de eliminación para actividad:', activity);
     this.selectedActivity.set(activity);
     this.showDeleteActivityModal.set(true);
   }
 
   openAddActivityModal() {
     this.showAddActivityModal.set(true);
+  }
+
+  goToProfile() {
+    this.router.navigate(['/profile']);
   }
 
   async onModalClosed() {
