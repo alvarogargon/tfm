@@ -10,6 +10,9 @@ import { RoutineDetailsComponent } from './components/routine-details/routine-de
 import { authGuard } from './guards/auth.guard';
 import { NuestraMisionComponent } from './shared/infoFooter/nuestra-mision/nuestra-mision.component';
 import { EquipoComponent } from './shared/infoFooter/equipo/equipo.component';
+import { PoliticaPrivacidadComponent } from './shared/infoFooter/politica-privacidad/politica-privacidad.component';
+import { CookiesComponent } from './shared/infoFooter/cookies/cookies.component';
+import { AvisoLegalComponent } from './shared/infoFooter/aviso-legal/aviso-legal.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -19,6 +22,9 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'nuestra-mision', component: NuestraMisionComponent },
   { path: 'equipo', component: EquipoComponent},
+  { path: 'politica-de-privacidad', component: PoliticaPrivacidadComponent},
+  { path: 'politica-de-cookies', component: CookiesComponent},
+  { path: 'aviso-legal', component: AvisoLegalComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'dashboard/calendar', component: CalendarPageComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
