@@ -37,20 +37,21 @@ export class RoutineService {
         daily_routine: routine.daily_routine,
         activities: (routine.activities || []).map((activity: any) => ({
           activity_id: activity.activity_id,
-          routine_id: activity.routine_id,
-          category_id: activity.category_id,
-          title: activity.activity_name || activity.title || 'Sin título', // Mapear activity_name a title
-          description: activity.description,
-          day_of_week: activity.day_of_week,
-          start_time: activity.start_time,
-          end_time: activity.end_time,
-          location: activity.location,
-          datetime_start: activity.datetime_start,
-          datetime_end: activity.datetime_end,
-          created_at: activity.created_at,
-          updated_at: activity.updated_at,
-          icon: activity.icon,
-          category: activity.category
+          // Asegurar que routine_id se mapee correctamente
+          routine_id: activity.routine_id || routine.routine_id, // Fallback al routine_id padre
+          category_id: activity.category_id || null,
+          title: activity.activity_name || activity.title || 'Sin título',
+          description: activity.description || '',
+          day_of_week: activity.day_of_week || null,
+          start_time: activity.start_time || null,
+          end_time: activity.end_time || null,
+          location: activity.location || null,
+          datetime_start: activity.datetime_start || null,
+          datetime_end: activity.datetime_end || null,
+          created_at: activity.created_at || null,
+          updated_at: activity.updated_at || null,
+          icon: activity.icon || null,
+          category: activity.category || null
         }))
       }));
     } catch (error) {
@@ -71,7 +72,13 @@ export class RoutineService {
     try {
       const res = await lastValueFrom(this.httpClient.get<{ message: string, routine: any }>(`${this.endpoint}/${id}`, { headers }));
       console.log('Respuesta de getRoutineById:', res); // Para depuración
-      return {
+      
+      // Verificar estructura de datos recibidos
+      if (res.routine && res.routine.activities) {
+        console.log('Actividades antes del mapeo:', res.routine.activities);
+      }
+
+      const mappedRoutine = {
         routine_id: res.routine.routine_id,
         user_id: res.routine.user_id,
         name: res.routine.name,
@@ -82,24 +89,35 @@ export class RoutineService {
         start_time: res.routine.start_time,
         end_time: res.routine.end_time,
         daily_routine: res.routine.daily_routine,
-        activities: (res.routine.activities || []).map((activity: any) => ({
-          activity_id: activity.activity_id,
-          routine_id: activity.routine_id,
-          category_id: activity.category_id,
-          title: activity.activity_name || activity.title || 'Sin título', // Mapear activity_name a title
-          description: activity.description,
-          day_of_week: activity.day_of_week,
-          start_time: activity.start_time,
-          end_time: activity.end_time,
-          location: activity.location,
-          datetime_start: activity.datetime_start,
-          datetime_end: activity.datetime_end,
-          created_at: activity.created_at,
-          updated_at: activity.updated_at,
-          icon: activity.icon,
-          category: activity.category
-        }))
+        activities: (res.routine.activities || []).map((activity: any) => {
+          console.log('Mapeando actividad:', activity); // Debug individual
+          
+          const mappedActivity = {
+            activity_id: activity.activity_id,
+            // Múltiples fallbacks para routine_id
+            routine_id: activity.routine_id || res.routine.routine_id || id,
+            category_id: activity.category_id || null,
+            title: activity.activity_name || activity.title || 'Sin título',
+            description: activity.description || '',
+            day_of_week: activity.day_of_week || null,
+            start_time: activity.start_time || null,
+            end_time: activity.end_time || null,
+            location: activity.location || null,
+            datetime_start: activity.datetime_start || null,
+            datetime_end: activity.datetime_end || null,
+            created_at: activity.created_at || null,
+            updated_at: activity.updated_at || null,
+            icon: activity.icon || null,
+            category: activity.category || null
+          };
+          
+          console.log('Actividad mapeada:', mappedActivity); // Debug resultado
+          return mappedActivity;
+        })
       };
+
+      console.log('Rutina completamente mapeada:', mappedRoutine);
+      return mappedRoutine;
     } catch (error: any) {
       console.error('Error al obtener rutina:', error);
       if (error.status === 404) {

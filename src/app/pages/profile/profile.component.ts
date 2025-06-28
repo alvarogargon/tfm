@@ -277,17 +277,18 @@ export class ProfileComponent {
     await this.loadUserData(userId);
   }
 
+
   isExpired(endTime: string | null): boolean {
     if (!endTime) return false;
     const endDate = new Date(endTime);
-    const currentDate = new Date('2025-06-26T00:00:00Z');
+    const currentDate = new Date();
     return endDate.getTime() < currentDate.getTime();
   }
 
   isWarning(endTime: string | null): boolean {
     if (!endTime) return false;
     const endDate = new Date(endTime);
-    const currentDate = new Date('2025-06-26T00:00:00Z');
+    const currentDate = new Date();
     const diffDays = Math.ceil((endDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
     return diffDays <= 3 && diffDays > 1;
   }
@@ -295,7 +296,7 @@ export class ProfileComponent {
   isDanger(endTime: string | null): boolean {
     if (!endTime) return false;
     const endDate = new Date(endTime);
-    const currentDate = new Date('2025-06-26T00:00:00Z');
+    const currentDate = new Date();
     const diffDays = Math.ceil((endDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
     return diffDays <= 1 && diffDays >= 0;
   }
