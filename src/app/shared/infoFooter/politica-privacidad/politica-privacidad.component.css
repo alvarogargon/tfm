@@ -40,11 +40,11 @@
 
 
 .privacy-box {
-      border: 2px solid #e9e091; /* amarillo pastel */
+      border: 2px solid #e9e091;
   padding: 20px;
   border-radius: 10px;
-  background-color: #fffff8; /* fondo muy suave, opcional */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* opcional para dar profundidad */
+  background-color: #fffff8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   text-align: justify;
   padding: 50px;
 }
