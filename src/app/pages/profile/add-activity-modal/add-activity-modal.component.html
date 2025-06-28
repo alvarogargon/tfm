@@ -5,6 +5,9 @@
       <div class="input-wrapper">
         <input type="text" class="input" formControlName="title" placeholder="Título de la actividad">
         <label class="label">Título</label>
+        @if (activityForm.get('title')?.invalid && activityForm.get('title')?.touched) {
+          <span class="error-text">El título es obligatorio</span>
+        }
       </div>
       <div class="input-wrapper">
         <textarea class="input" formControlName="description" placeholder="Descripción"></textarea>
@@ -25,10 +28,16 @@
       <div class="input-wrapper">
         <input type="datetime-local" class="input" formControlName="datetime_start">
         <label class="label">Fecha y Hora de Inicio</label>
+        @if (activityForm.get('datetime_start')?.invalid && activityForm.get('datetime_start')?.touched) {
+          <span class="error-text">La fecha de inicio es obligatoria</span>
+        }
       </div>
       <div class="input-wrapper">
         <input type="datetime-local" class="input" formControlName="datetime_end">
         <label class="label">Fecha y Hora de Fin</label>
+        @if (activityForm.get('datetime_end')?.invalid && activityForm.get('datetime_end')?.touched) {
+          <span class="error-text">La fecha de fin es obligatoria</span>
+        }
       </div>
       <div class="input-wrapper">
         <input type="text" class="input" formControlName="location" placeholder="Ubicación">

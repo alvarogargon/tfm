@@ -31,12 +31,7 @@ export class EditActivityModalComponent {
       location: [''],
       icon: [''],
       category_id: [null, Validators.required],
-      routine_id: [0, Validators.required]
-    });
-
-    // Escuchar cambios en category_id para depuración
-    this.activityForm.get('category_id')?.valueChanges.subscribe(value => {
-      console.log('category_id seleccionado:', value);
+      routine_id: [0, [Validators.required, Validators.min(1)]] // Añadir validación min(1)
     });
   }
 
@@ -51,14 +46,45 @@ export class EditActivityModalComponent {
       const categories = await this.categoryService.getCategories();
       console.log('Categorías cargadas:', categories);
       this.categories.set(categories);
+
+      // Validar routine_id
+      if (!this.activity.routine_id || this.activity.routine_id <= 0) {
+        console.error('routine_id inválido en la actividad:', this.activity);
+        toast.error('No se pudo cargar la rutina de la actividad. Por favor, intenta de nuevo.');
+        this.close.emit();
+        return;
+      }
+
+      // Formatear fechas para datetime-local (YYYY-MM-DDTHH:mm)
+      const datetimeStart = this.activity.datetime_start
+        ? new Date(this.activity.datetime_start).toISOString().slice(0, 16)
+        : '';
+      const datetimeEnd = this.activity.datetime_end
+        ? new Date(this.activity.datetime_end).toISOString().slice(0, 16)
+        : '';
+
+      // Inicializar formulario
       this.activityForm.patchValue({
-        ...this.activity,
-        routine_id: this.activity.routine_id,
+        title: this.activity.title || '',
+        description: this.activity.description || '',
+        datetime_start: datetimeStart,
+        datetime_end: datetimeEnd,
+        location: this.activity.location || '',
+        icon: this.activity.icon || '',
         category_id: this.activity.category_id || null,
-        day_of_week: null,
-        start_time: null,
-        end_time: null
+        routine_id: this.activity.routine_id
       });
+      console.log('Formulario inicializado:', this.activityForm.value);
+      console.log('Estado del formulario:', this.activityForm.valid ? 'Válido' : 'Inválido');
+      if (!this.activityForm.valid) {
+        console.log('Errores del formulario:', {
+          title: this.activityForm.get('title')?.errors,
+          datetime_start: this.activityForm.get('datetime_start')?.errors,
+          datetime_end: this.activityForm.get('datetime_end')?.errors,
+          category_id: this.activityForm.get('category_id')?.errors,
+          routine_id: this.activityForm.get('routine_id')?.errors
+        });
+      }
       if (categories.length === 0) {
         toast.warning('No hay categorías disponibles. Por favor, crea una categoría primero.');
       }
@@ -69,17 +95,25 @@ export class EditActivityModalComponent {
   }
 
   async onSubmit() {
-    console.log('Formulario antes de enviar:', this.activityForm.value);
     if (this.activityForm.invalid) {
-      console.log('Campos inválidos:', this.activityForm.errors);
-      console.log('Errores de category_id:', this.activityForm.get('category_id')?.errors);
-      toast.error('Por favor, completa todos los campos requeridos, incluida la categoría.');
+      this.activityForm.markAllAsTouched();
+      console.log('Formulario inválido:', {
+        title: this.activityForm.get('title')?.errors,
+        datetime_start: this.activityForm.get('datetime_start')?.errors,
+        datetime_end: this.activityForm.get('datetime_end')?.errors,
+        category_id: this.activityForm.get('category_id')?.errors,
+        routine_id: this.activityForm.get('routine_id')?.errors
+      });
+      toast.error('Por favor, completa todos los campos requeridos: título, fechas, categoría y rutina.');
       return;
     }
     try {
+      const { datetime_start, datetime_end, ...rest } = this.activityForm.value;
       const activity = {
-        ...this.activityForm.value,
-        routine_id: this.activity.routine_id,
+        ...rest,
+        routine_id: this.activity.routine_id, // Asegurar que routine_id se envíe
+        datetime_start: datetime_start ? new Date(datetime_start).toISOString() : null,
+        datetime_end: datetime_end ? new Date(datetime_end).toISOString() : null,
         day_of_week: null,
         start_time: null,
         end_time: null
@@ -90,7 +124,15 @@ export class EditActivityModalComponent {
       this.close.emit();
     } catch (error: any) {
       console.error('Error al actualizar actividad:', error);
-      toast.error(error.message || 'Error al actualizar la actividad.');
+      if (error.status === 400) {
+        toast.error(error.error?.message || 'Datos inválidos. Verifica los campos requeridos.');
+      } else if (error.status === 403) {
+        toast.error('No autorizado para actualizar esta actividad.');
+      } else if (error.status === 404) {
+        toast.error('Actividad no encontrada.');
+      } else {
+        toast.error('Error al actualizar la actividad: ' + (error.message || 'Error desconocido.'));
+      }
     }
   }
 }

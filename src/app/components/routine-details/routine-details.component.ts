@@ -54,6 +54,11 @@ export class RoutineDetailsComponent {
 
   openEditActivityModal(activity: IActivity) {
     console.log('Abriendo modal de edición para actividad:', activity);
+    if (!activity.routine_id || activity.routine_id <= 0) {
+      console.error('Actividad con routine_id inválido:', activity);
+      toast.error('No se puede editar la actividad: ID de rutina inválido.');
+      return;
+    }
     this.selectedActivity.set(activity);
     this.showEditActivityModal.set(true);
   }

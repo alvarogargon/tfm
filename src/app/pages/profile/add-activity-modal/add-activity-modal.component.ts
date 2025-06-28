@@ -2,6 +2,7 @@ import { Component, EventEmitter, inject, Input, Output, signal } from '@angular
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivityService } from '../../../services/activity.service';
 import { CategoryService } from '../../../services/category.service';
+import { IActivity } from '../../../interfaces/iactivity.interface';
 import { ICategory } from '../../../interfaces/icategory.interface';
 import { CommonModule } from '@angular/common';
 import { toast } from 'ngx-sonner';
@@ -32,11 +33,6 @@ export class AddActivityModalComponent {
       category_id: [null, Validators.required],
       routine_id: [0, Validators.required]
     });
-
-    // Escuchar cambios en category_id para depuración
-    this.activityForm.get('category_id')?.valueChanges.subscribe(value => {
-      console.log('category_id seleccionado:', value);
-    });
   }
 
   async ngOnInit() {
@@ -51,6 +47,8 @@ export class AddActivityModalComponent {
       console.log('Categorías cargadas:', categories);
       this.categories.set(categories);
       this.activityForm.patchValue({ routine_id: this.routineId });
+      console.log('Formulario inicializado:', this.activityForm.value);
+      console.log('Estado del formulario:', this.activityForm.valid ? 'Válido' : 'Inválido');
       if (categories.length === 0) {
         toast.warning('No hay categorías disponibles. Por favor, crea una categoría primero.');
       }
@@ -61,17 +59,25 @@ export class AddActivityModalComponent {
   }
 
   async onSubmit() {
-    console.log('Formulario antes de enviar:', this.activityForm.value);
     if (this.activityForm.invalid) {
-      console.log('Campos inválidos:', this.activityForm.errors);
-      console.log('Errores de category_id:', this.activityForm.get('category_id')?.errors);
-      toast.error('Por favor, completa todos los campos requeridos, incluida la categoría.');
+      this.activityForm.markAllAsTouched();
+      console.log('Formulario inválido:', {
+        title: this.activityForm.get('title')?.errors,
+        datetime_start: this.activityForm.get('datetime_start')?.errors,
+        datetime_end: this.activityForm.get('datetime_end')?.errors,
+        category_id: this.activityForm.get('category_id')?.errors,
+        routine_id: this.activityForm.get('routine_id')?.errors
+      });
+      toast.error('Por favor, completa todos los campos requeridos: título, fechas y categoría.');
       return;
     }
     try {
-      const activity = {
-        ...this.activityForm.value,
+      const { datetime_start, datetime_end, ...rest } = this.activityForm.value;
+      const activity: Partial<IActivity> = {
+        ...rest,
         routine_id: this.routineId,
+        datetime_start: datetime_start ? new Date(datetime_start).toISOString() : null,
+        datetime_end: datetime_end ? new Date(datetime_end).toISOString() : null,
         day_of_week: null,
         start_time: null,
         end_time: null
