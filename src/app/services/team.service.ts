@@ -39,7 +39,7 @@ export class TeamService {
     {
       id: 6,
       name: 'Álvaro García',
-      description: 'ssdsadsad',
+      description: 'Es un crack',
       avatar: 'sdsadsadsadsadsadsad',
     },
     {
