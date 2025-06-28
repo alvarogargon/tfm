@@ -14,7 +14,7 @@
 :host {
   display: block;
   padding: 2rem;
-  background: url('../../../../../public/images/pastel.jpg') no-repeat;
+  background: url('/images/pastel.jpg') no-repeat;
   color: #333;
   font-family: 'Segoe UI', sans-serif;
   height: 100%;
