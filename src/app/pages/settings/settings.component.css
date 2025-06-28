@@ -1,0 +1,53 @@
+.sidebar {
+    max-width: 500px;
+}
+
+.profile-avatar {
+  width: 80px;         
+  height: 80px;       
+  border-radius: 50%;
+  object-fit: cover;  
+  object-position: center;
+  display: block;
+}
+
+.profile-avatar-wrapper h3 {
+  font-size: 0.9rem;
+}
+
+.username {
+    color: gray;
+}
+
+.options-list {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8rem;
+    width: 200px;
+}
+
+.options-list .link.active {
+  background: #e6e6e6;
+  color: #222;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.options-list a {
+    margin: 0.4rem 0;
+    padding: 0.6rem;
+}
+
+svg {
+    margin-right: 8px;
+}
+
+.link {
+    text-decoration: none;
+}
+
+.role {
+  font-size: 0.9rem;
+  font-weight: 700;
+}

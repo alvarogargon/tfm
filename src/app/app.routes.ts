@@ -13,6 +13,9 @@ import { EquipoComponent } from './shared/infoFooter/equipo/equipo.component';
 import { PoliticaPrivacidadComponent } from './shared/infoFooter/politica-privacidad/politica-privacidad.component';
 import { CookiesComponent } from './shared/infoFooter/cookies/cookies.component';
 import { AvisoLegalComponent } from './shared/infoFooter/aviso-legal/aviso-legal.component';
+import { SettingsComponent } from './pages/settings/settings.component';
+import { ProfileSettingsComponent } from './pages/settings/profile-settings/profile-settings.component';
+import { AppearanceComponent } from './pages/settings/appearance/appearance.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -29,5 +32,15 @@ export const routes: Routes = [
   { path: 'dashboard/calendar', component: CalendarPageComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'routines/:id', component: RoutineDetailsComponent, canActivate: [authGuard] },
+  { 
+    path: 'settings', 
+    component: SettingsComponent, 
+    canActivate: [authGuard],
+    children: [
+      { path: '', redirectTo: 'profile', pathMatch: 'full' },
+      { path: 'profile', component: ProfileSettingsComponent },
+      { path: 'appearance', component: AppearanceComponent }
+    ] 
+  },
   { path: '**', component: Error404Component }
 ];

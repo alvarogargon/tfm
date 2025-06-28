@@ -1,166 +1,57 @@
 <div class="edit-profile-panel">
   <div class="edit-profile-body">
-    <h3>Editar Perfil</h3>
     <form [formGroup]="editProfileForm" (ngSubmit)="onSubmit()">
-      <!-- Rol (no editable) -->
-      <div class="input-wrapper">
-        <label class="label">Rol</label>
-        <p class="form-control-static" [class.text-success]="user?.role === 'guide'" [class.text-primary]="user?.role === 'user'" [attr.aria-label]="'Rol del usuario: ' + (user?.role === 'guide' ? 'Guía' : 'Usuario')">
-          {{ user?.role === 'guide' ? 'Guía' : 'Usuario' }}
+
+      <!-- First Name -->
+      <div class="inputs d-flex flex-column align-items-start">
+        <div class="input-wrapper">
+            <span class="icon icon-left">
+                <svg 
+                height="15" 
+                viewBox="0 0 32 32" 
+                xmlns="http://www.w3.org/2000/svg">
+                <g data-name="7. Id Card" id="_7._Id_Card">
+                  <path class="cls-1" d="M29,9H24a1,1,0,0,0,0,2h5a1,1,0,0,1,1,1V28a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1h8a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V3a2,2,0,0,0-2-2H13a2,2,0,0,0-2,2V9H3a3,3,0,0,0-3,3V28a3,3,0,0,0,3,3H29a3,3,0,0,0,3-3V12A3,3,0,0,0,29,9ZM13,3h6v8H13Z"/>
+                  <path class="cls-1" d="M4,26a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1,5,5,0,0,0-2.207-4.145,4,4,0,1,0-5.586,0A5,5,0,0,0,4,26Zm3-7a2,2,0,1,1,2,2A2,2,0,0,1,7,19Zm2,4a3.006,3.006,0,0,1,2.829,2H6.171A3.006,3.006,0,0,1,9,23Z"/>
+                  <path class="cls-2" d="M25,25H19a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z"/>
+                  <path class="cls-2" d="M27,21H19a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
+                  <path class="cls-2" d="M27,17H19a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
+                  <path class="cls-2" d="M16.02,9a1,1,0,0,1-.01-2h.01a1,1,0,0,1,0,2Z"/>
+                </g>
+                </svg>
+            </span>
+            <input type="text" class="input" formControlName="firstName" placeholder="">
+            <label class="label">NOMBRE</label>
+        </div>
+        <p class="error">
+            {{ checkControl('firstName', 'required') ? 'Campo obligatorio' : (checkControl('firstName', 'minlength') ? 'La longitud mínimas es 3 caracteres' : '\u00A0') }}
         </p>
       </div>
 
-      <!-- Username -->
-      <div class="input-wrapper">
-        <span class="icon icon-left">
-          <svg height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM6 8a6 6 0 1 1 12 0A6 6 0 0 1 6 8zm2 10a3 3 0 0 0-3 3 1 1 0 1 1-2 0 5 5 0 0 1 5-5h8a5 5 0 0 1 5 5 1 1 0 1 1-2 0 3 3 0 0 0-3-3H8z" fill="#0D0D0D"/>
-          </svg>
-        </span>
-        <input type="text" class="input" formControlName="username" placeholder="Nombre de usuario" aria-label="Nombre de usuario">
-        <label class="label">Nombre de usuario</label>
-        @if (editProfileForm.get('username')?.invalid && editProfileForm.get('username')?.touched) {
-          <span class="error-text" [attr.aria-live]="'polite'">El nombre de usuario es obligatorio y debe tener al menos 3 caracteres.</span>
-        }
-      </div>
-
-      <!-- Email -->
-      <div class="input-wrapper">
-        <span class="icon icon-left">
-          <svg height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 2l-8 5-8-5h16zM4 18V8l8 5 8-5v10H4z" fill="#0D0D0D"/>
-          </svg>
-        </span>
-        <input type="email" class="input" formControlName="email" placeholder="Correo electrónico" aria-label="Correo electrónico">
-        <label class="label">Correo electrónico</label>
-        @if (editProfileForm.get('email')?.invalid && editProfileForm.get('email')?.touched) {
-          <span class="error-text" [attr.aria-live]="'polite'">Por favor, introduce un correo electrónico válido.</span>
-        }
-      </div>
-
-      <!-- First Name -->
-      <div class="input-wrapper">
-        <span class="icon icon-left">
-          <svg height="15" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <path d="M29,9H24a1,1,0,0,0,0,2h5a1,1,0,0,1,1,1V28a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1h8a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V3a2,2,0,0,0-2-2H13a2,2,0,0,0-2,2V9H3a3,3,0,0,0-3,3V28a3,3,0,0,0,3,3H29a3,3,0,0,0,3-3V12A3,3,0,0,0,29,9ZM13,3h6v8H13Z"/>
-          </svg>
-        </span>
-        <input type="text" class="input" formControlName="firstName" placeholder="Nombre" aria-label="Nombre">
-        <label class="label">Nombre</label>
-        @if (editProfileForm.get('firstName')?.invalid && editProfileForm.get('firstName')?.touched) {
-          <span class="error-text" [attr.aria-live]="'polite'">El nombre es obligatorio.</span>
-        }
-      </div>
-
       <!-- Last Name -->
-      <div class="input-wrapper">
-        <span class="icon icon-left">
-          <svg height="15" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <path d="M29,9H24a1,1,0,0,0,0,2h5a1,1,0,0,1,1,1V28a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1h8a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V3a2,2,0,0,0-2-2H13a2,2,0,0,0-2,2V9H3a3,3,0,0,0-3,3V28a3,3,0,0,0,3,3H29a3,3,0,0,0,3-3V12A3,3,0,0,0,29,9ZM13,3h6v8H13Z"/>
-          </svg>
-        </span>
-        <input type="text" class="input" formControlName="lastName" placeholder="Apellidos" aria-label="Apellidos">
-        <label class="label">Apellidos</label>
-        @if (editProfileForm.get('lastName')?.invalid && editProfileForm.get('lastName')?.touched) {
-          <span class="error-text" [attr.aria-live]="'polite'">Los apellidos son obligatorios.</span>
-        }
-      </div>
-
-      <!-- Age -->
-      <div class="input-wrapper">
-        <span class="icon icon-left">
-          <svg height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm-1-9h2v6h-2v-6zm0-2h2v2h-2V9z" fill="#0D0D0D"/>
-          </svg>
-        </span>
-        <input type="number" class="input" formControlName="age" placeholder="Edad" aria-label="Edad">
-        <label class="label">Edad</label>
-        @if (editProfileForm.get('age')?.invalid && editProfileForm.get('age')?.touched) {
-          <span class="error-text" [attr.aria-live]="'polite'">La edad debe ser un número mayor que 0.</span>
-        }
-      </div>
-
-      <!-- Phone Number -->
-      <div class="input-wrapper">
-        <span class="icon icon-left">
-          <svg height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6.62 10.79a15.07 15.07 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.41-.14c1.13.87 2.39 1.54 3.74 1.95a1 1 0 0 1 .65 1.22l-.5 3a1 1 0 0 1-1 .86A16.07 16.07 0 0 1 3 6a1 1 0 0 1 .86-1l3 .5a1 1 0 0 1 .76 1.22c-.41 1.35-1.08 2.61-1.95 3.74a1 1 0 0 1-.14 1.41l-2.2 2.2z" fill="#0D0D0D"/>
-          </svg>
-        </span>
-        <input type="text" class="input" formControlName="numTel" placeholder="Teléfono (9 dígitos)" aria-label="Número de teléfono">
-        <label class="label">Teléfono</label>
-        @if (editProfileForm.get('numTel')?.invalid && editProfileForm.get('numTel')?.touched) {
-          <span class="error-text" [attr.aria-live]="'polite'">El teléfono debe tener exactamente 9 dígitos.</span>
-        }
-      </div>
-
-      <!-- Gender -->
-      <div class="input-wrapper">
-        <span class="icon icon-left">
-          <svg height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2a10 10 0 0 0-7.35 16.83c.15.15.22.35.22.55 0 .2-.07.4-.22.55A10 10 0 1 0 12 2zm-1 17.93a8 8 0 0 1-6.86-5.66c.38.13.77.22 1.17.22 1.66 0 3.15-.81 4.1-2.07.95 1.26 2.44 2.07 4.1 2.07.4 0 .79-.09 1.17-.22a8 8 0 0 1-6.58 5.66zM12 4a8 8 0 0 1 7.35 4.83c-.38-.13-.77-.22-1.17-.22-1.66 0-3.15.81-4.1 2.07-.95-1.26-2.44-2.07-4.1-2.07-.4 0-.79.09-1.17.22A8 8 0 0 1 12 4z" fill="#0D0D0D"/>
-          </svg>
-        </span>
-        <select class="input" formControlName="gender" aria-label="Género">
-          <option value="Hombre">Hombre</option>
-          <option value="Mujer">Mujer</option>
-          <option value="Otro">Otro</option>
-        </select>
-        <label class="label">Género</label>
-        @if (editProfileForm.get('gender')?.invalid && editProfileForm.get('gender')?.touched) {
-          <span class="error-text" [attr.aria-live]="'polite'">Por favor, selecciona un género.</span>
-        }
-      </div>
-
-      <!-- Availability (solo para guías) -->
-      @if (user?.role === 'guide') {
+      <div class="inputs d-flex flex-column align-items-start">
         <div class="input-wrapper">
-          <span class="icon icon-left">
-            <svg height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm1-13h-2v6h4v-4h-2V7z" fill="#0D0D0D"/>
-            </svg>
-          </span>
-          <input type="text" class="input" formControlName="availability" placeholder="Ej. Lunes a Viernes, 09:00-13:00" aria-label="Disponibilidad">
-          <label class="label">Disponibilidad</label>
+            <span class="icon icon-left">
+                <svg 
+                height="15" 
+                viewBox="0 0 32 32" 
+                xmlns="http://www.w3.org/2000/svg">
+                <g data-name="7. Id Card" id="_7._Id_Card">
+                  <path class="cls-1" d="M29,9H24a1,1,0,0,0,0,2h5a1,1,0,0,1,1,1V28a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1h8a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V3a2,2,0,0,0-2-2H13a2,2,0,0,0-2,2V9H3a3,3,0,0,0-3,3V28a3,3,0,0,0,3,3H29a3,3,0,0,0,3-3V12A3,3,0,0,0,29,9ZM13,3h6v8H13Z"/>
+                  <path class="cls-1" d="M4,26a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1,5,5,0,0,0-2.207-4.145,4,4,0,1,0-5.586,0A5,5,0,0,0,4,26Zm3-7a2,2,0,1,1,2,2A2,2,0,0,1,7,19Zm2,4a3.006,3.006,0,0,1,2.829,2H6.171A3.006,3.006,0,0,1,9,23Z"/>
+                  <path class="cls-2" d="M25,25H19a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z"/>
+                  <path class="cls-2" d="M27,21H19a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
+                  <path class="cls-2" d="M27,17H19a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
+                  <path class="cls-2" d="M16.02,9a1,1,0,0,1-.01-2h.01a1,1,0,0,1,0,2Z"/>
+                </g>
+                </svg>
+            </span>
+            <input type="text" class="input" formControlName="lastName" placeholder="" aria-label="APELLIDOS">
+            <label class="label">APELLIDOS</label>
         </div>
-      }
-
-      <!-- Color Palette -->
-      <div class="input-wrapper">
-        <span class="icon icon-left">
-          <svg height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5.5.16.82-.34.66-.84-.84-2.67-.17-5.47 1.16-7.5 1.33-2.03 3.33-3.33 5.34-3.33 2.01 0 3.67 1.34 4.34 3.33.5 1.5.83 3.17.83 4.84 0 .5.33 1 .83 1.17.5.17 1-.17 1.17-.67A10 10 0 0 0 12 2zm-2 16a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm3 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm3 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" fill="#0D0D0D"/>
-          </svg>
-        </span>
-        <input type="color" class="input" formControlName="primaryColor" aria-label="Color primario">
-        <label class="label">Color primario</label>
-      </div>
-      <div class="input-wrapper">
-        <span class="icon icon-left">
-          <svg height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5.5.16.82-.34.66-.84-.84-2.67-.17-5.47 1.16-7.5 1.33-2.03 3.33-3.33 5.34-3.33 2.01 0 3.67 1.34 4.34 3.33.5 1.5.83 3.17.83 4.84 0 .5.33 1 .83 1.17.5.17 1-.17 1.17-.67A10 10 0 0 0 12 2zm-2 16a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm3 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm3 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" fill="#0D0D0D"/>
-          </svg>
-        </span>
-        <input type="color" class="input" formControlName="secondaryColor" aria-label="Color secundario">
-        <label class="label">Color secundario</label>
-      </div>
-      <div class="input-wrapper">
-        <span class="icon icon-left">
-          <svg height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5.5.16.82-.34.66-.84-.84-2.67-.17-5.47 1.16-7.5 1.33-2.03 3.33-3.33 5.34-3.33 2.01 0 3.67 1.34 4.34 3.33.5 1.5.83 3.17.83 4.84 0 .5.33 1 .83 1.17.5.17 1-.17 1.17-.67A10 10 0 0 0 12 2zm-2 16a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm3 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm3 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" fill="#0D0D0D"/>
-          </svg>
-        </span>
-        <input type="color" class="input" formControlName="accentColor" aria-label="Color de acento">
-        <label class="label">Color de acento</label>
-      </div>
-      <div class="input-wrapper">
-        <span class="icon icon-left">
-          <svg height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5.5.16.82-.34.66-.84-.84-2.67-.17-5.47 1.16-7.5 1.33-2.03 3.33-3.33 5.34-3.33 2.01 0 3.67 1.34 4.34 3.33.5 1.5.83 3.17.83 4.84 0 .5.33 1 .83 1.17.5.17 1-.17 1.17-.67A10 10 0 0 0 12 2zm-2 16a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm3 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm3 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" fill="#0D0D0D"/>
-          </svg>
-        </span>
-        <input type="color" class="input" formControlName="backgroundColor" aria-label="Color de fondo">
-        <label class="label">Color de fondo</label>
+        <p class="error">
+            {{ checkControl('lastName', 'required') ? 'Campo obligatorio' : (checkControl('lastName', 'minlength') ? 'La longitud mínimas es 4 caracteres' : '\u00A0') }}
+        </p>
       </div>
 
       <!-- Form Footer -->

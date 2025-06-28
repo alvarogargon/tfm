@@ -126,4 +126,19 @@ export class UserService {
       throw new Error('Error adding interest.');
     }
   }
+
+  async updateAvailability(availability: string): Promise<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    return lastValueFrom(
+      this.httpClient.put<{ message: string, availability: any }>(
+        `${this.endpoint}/availability`,
+        { availability },
+        { headers }
+      )
+    );
+  }
 }

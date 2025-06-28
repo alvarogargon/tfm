@@ -19,18 +19,8 @@ export class EditProfileComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.editProfileForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
       firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      age: ['', [Validators.required, Validators.min(1)]],
-      numTel: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
-      gender: ['Otro', Validators.required],
-      availability: [''],
-      primaryColor: ['#007bff'],
-      secondaryColor: ['#6c757d'],
-      accentColor: ['#0056b3'],
-      backgroundColor: ['#ffffff']
+      lastName: ['', Validators.required]
     });
   }
 
@@ -39,26 +29,9 @@ export class EditProfileComponent implements OnInit {
       this.user = await this.userService.getProfile();
       if (this.user) {
         this.editProfileForm.patchValue({
-          username: this.user.username,
-          email: this.user.email,
           firstName: this.user.firstName,
-          lastName: this.user.lastName,
-          age: this.user.age,
-          numTel: this.user.numTel,
-          gender: this.user.gender,
-          availability: this.user.availability || '',
-          primaryColor: this.user.colorPalette?.primary || '#007bff',
-          secondaryColor: this.user.colorPalette?.secondary || '#6c757d',
-          accentColor: this.user.colorPalette?.accent || '#0056b3',
-          backgroundColor: this.user.colorPalette?.background || '#ffffff'
+          lastName: this.user.lastName
         });
-        if (this.user.colorPalette) {
-          this.setThemeColors(this.user.colorPalette);
-        }
-        // Deshabilitar el campo availability para usuarios no guías
-        if (this.user.role !== 'guide') {
-          this.editProfileForm.get('availability')?.disable();
-        }
       }
     } catch (error) {
       console.error('Error al cargar el perfil:', error);
@@ -78,6 +51,10 @@ export class EditProfileComponent implements OnInit {
     if (palette?.background) root.style.setProperty('--background-color', palette.background);
   }
 
+  checkControl(controlName: string, errorName: string): boolean | undefined {
+    return this.editProfileForm.get(controlName)?.hasError(errorName) && this.editProfileForm.get(controlName)?.touched
+  }
+
   async onSubmit() {
     if (this.editProfileForm.invalid) {
       toast.error('Por favor, completa todos los campos requeridos correctamente.');
@@ -86,29 +63,12 @@ export class EditProfileComponent implements OnInit {
 
     const formValue = this.editProfileForm.value;
     const formData = new FormData();
-    formData.append('username', formValue.username);
-    formData.append('email', formValue.email);
     formData.append('first_name', formValue.firstName);
     formData.append('last_name', formValue.lastName);
-    formData.append('age', formValue.age.toString());
-    formData.append('num_tel', formValue.numTel);
-    formData.append('gender', formValue.gender);
-    if (formValue.availability && this.user?.role === 'guide') {
-      formData.append('availability', formValue.availability);
-    }
-    formData.append('color_palette', JSON.stringify({
-      primary: formValue.primaryColor,
-      secondary: formValue.secondaryColor,
-      accent: formValue.accentColor,
-      background: formValue.backgroundColor
-    }));
 
     try {
       const updatedUser = await this.userService.updateProfile(formData);
       this.user = updatedUser;
-      if (updatedUser.colorPalette) {
-        this.setThemeColors(updatedUser.colorPalette);
-      }
       this.closeModal();
       toast.success('Perfil actualizado con éxito.');
     } catch (error) {

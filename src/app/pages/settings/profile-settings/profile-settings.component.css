@@ -1,21 +1,3 @@
-.edit-profile-panel {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: var(--background-color, #ffffff); 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.edit-profile-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.modal-body {
-    max-width: 500px;
-}
-
 .inputs {
     position: relative;
     margin: 2.5rem 0;
@@ -31,7 +13,7 @@
 
 .input {
     padding: 0.3rem 1.5rem;
-    width: 100%;
+    width: 300px;
     background-color: transparent;
     border: none;
     outline: none;
@@ -88,27 +70,18 @@ input.ng-valid.ng-touched {
     transform: translateY(-50%);
 }
 
-.icon-right {
-    right: 0.5rem;
-    position: absolute;
-    top: 45%;
-}
-
 .icon-left {
     position: absolute;
     top: 20%;
     transform: translateY(-25%);
 }
 
-.flex-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    justify-content: space-between;
+.edit-profile-footer {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
-
-.button-submit, .button-close {
+.button-submit {
     transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
     width: 100%;
     margin: 20px 0 10px 0;
@@ -123,47 +96,7 @@ input.ng-valid.ng-touched {
     margin: 0 2rem;
 }
 
-.button-close {
-    background-color: var(--secondary-color);
-}
-
-.button-submit:active, .button-close:active {
-    transform: scale(0.98);
-}
-
-.edit-profile-panel {
-  background: var(--background-color);
-  border: 1px solid #e3e3e3;
-  border-radius: 10px;
-  padding: 1.5rem 1rem 1rem 1rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-}
-
-.edit-profile-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.edit-profile-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 1.2rem;
-}
-
-.edit-profile-body {
-  padding: 0;
-}
-
-.edit-profile-footer {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.button-submit, .button-close {
+.button-submit {
   flex: 1 1 0;
   margin: 0;
 }
