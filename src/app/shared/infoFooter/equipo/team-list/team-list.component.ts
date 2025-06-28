@@ -16,6 +16,4 @@ export class TeamListComponent {
   ngOnInit() {
     this.arrTeams = this.teamsService.getAll();
   }
-
-
 }

@@ -1,9 +1,117 @@
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    @for(team of arrTeams; track team.id) {
-        <app-team-card [miTeam]="team"></app-team-card>
-    }@empty {
-        <p>UPSSS, no se ha cargado el equipo</p>
-    }
-    
+<div class="team-list-container">
 
+
+<h2 class="text-center text-primary-emphasis mt-5 py-3 border border-warning border-4 rounded-5">Nuestro equipo</h2>
+  <section class="team-section">
+    <h3 class="team-title py-3">Frontend</h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+      @for(team of arrTeams; track team.id) {
+        @if(team.category === 'frontend') {
+          <div class="col d-flex justify-content-center">
+            <app-team-card [miTeam]="team"></app-team-card>
+          </div>
+        }
+      }
+    </div>
+  </section>
+
+  <section class="team-section">
+    <h3 class="team-title py-3">Backend</h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+      @for(team of arrTeams; track team.id) {
+        @if(team.category === 'backend') {
+          <div class="col d-flex justify-content-center">
+            <app-team-card [miTeam]="team"></app-team-card>
+          </div>
+        }
+      }
+    </div>
+  </section>
+
+  <section class="team-section">
+    <h3 class="team-title py-3">API/BDD</h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+      @for(team of arrTeams; track team.id) {
+        @if(team.category === 'apibdd') {
+          <div class="col d-flex justify-content-center">
+            <app-team-card [miTeam]="team"></app-team-card>
+          </div>
+        }
+      }
+    </div>
+  </section>
+
+  <section class="team-section">
+    <h3 class="team-title py-3">Coordinación</h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+      @for(team of arrTeams; track team.id) {
+        @if(team.category === 'coordinator') {
+          <div class="col d-flex justify-content-center">
+            <app-team-card [miTeam]="team"></app-team-card>
+          </div>
+        }
+      }
+    </div>
+  </section>
 </div>
+
+<style>
+.team-list-container {
+  width: 100vw;
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: url('../../../../../../public/images/pastel2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding-bottom: 40px;
+  box-sizing: border-box;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@media (max-width: 767px) {
+  .team-list-container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.team-title {
+  text-align: center;
+  margin: 40px 0 30px 0;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #2c3e50;
+  text-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+}
+
+@media (max-width: 767px) {
+  .team-title {
+    font-size: 1.3rem;
+    margin: 30px 0 20px 0;
+  }
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: width 0.2s, height 0.2s;
+}
+
+@media (max-width: 767px) {
+  .avatar {
+    width: 90px;
+    height: 90px;
+  }
+}
+</style>

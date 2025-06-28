@@ -8,70 +8,88 @@ export class TeamService {
   private arrTeams: ITeam[] = [
     {
       id: 1,
-      name: 'Álvaro García',
-      description: 'ssdsadsad',
-      avatar: 'sdsadsadsadsadsadsad',
+      name: 'Luis Llerena',
+      description: 'Frontend Developer, especializado en Angular.',
+      avatar: 'teamImages/luis.png',
+      category: 'frontend'
     },
-    {
+      {
       id: 2,
-      name: 'Álvaro García',
-      description: 'ssdsadsad',
-      avatar: 'sdsadsadsadsadsadsad',
+      name: 'Pablo Álvarez ',
+      description: 'Frontend Developer, especializado en Bootstrap.',
+      avatar: 'teamImages/pablo.png',
+      category: 'frontend'
     },
-    {
+      {
       id: 3,
-      name: 'Álvaro García',
-      description: 'ssdsadsad',
-      avatar: 'sdsadsadsadsadsadsad',
+      name: 'Álvaro Carrasco',
+      description: 'Frontend Developer, especializado en UI/IX.',
+      avatar: 'teamImages/alvaroC.png',
+      category: 'frontend'
     },
-    {
+      {
       id: 4,
-      name: 'Álvaro García',
-      description: 'ssdsadsad',
-      avatar: 'sdsadsadsadsadsadsad',
+      name: 'Alberto Romera',
+      description: 'Frontend Developer, especializado en componentes.',
+      avatar: 'teamImages/alberto.png',
+      category: 'frontend'
     },
-    {
+      {
       id: 5,
       name: 'Álvaro García',
-      description: 'ssdsadsad',
-      avatar: 'sdsadsadsadsadsadsad',
+      description: 'Frontend Developer, especializado en responsive.',
+      avatar: 'teamImages/alvaroG.png',
+      category: 'frontend'
     },
-    {
+      {
       id: 6,
-      name: 'Álvaro García',
-      description: 'Es un crack',
-      avatar: 'sdsadsadsadsadsadsad',
+      name: 'Pau Miquel',
+      description: 'Backend Developer, especializado en seguridad.',
+      avatar: 'teamImages/pau.png',
+      category: 'backend'
     },
-    {
+      {
       id: 7,
-      name: 'Álvaro García',
-      description: 'ssdsadsad',
-      avatar: 'sdsadsadsadsadsadsad',
+      name: 'Raquel Morgado',
+      description: 'Backend Developer, especializado en microservicios.',
+      avatar: 'teamImages/raquel.png',
+      category: 'backend'
     },
-    {
+      {
       id: 8,
-      name: 'Álvaro García',
-      description: 'ssdsadsad',
-      avatar: 'sdsadsadsadsadsadsad',
+      name: 'Óscar González',
+      description: 'Backend Developer, especializado en testing.',
+      avatar: 'teamImages/oscar.png',
+      category: 'backend'
     },
-    {
+      {
       id: 9,
-      name: 'Álvaro García',
-      description: 'ssdsadsad',
-      avatar: 'sdsadsadsadsadsadsad',
+      name: 'Flávia Das Graças',
+      description: 'Backend Developer.',
+      avatar: 'teamImages/flavia.png',
+      category: 'backend'
     },
-    {
+      {
       id: 10,
-      name: 'Álvaro García',
-      description: 'ssdsadsad',
-      avatar: 'sdsadsadsadsadsadsad',
+      name: 'Lucas Percivale',
+      description: 'API Developer, especializado en Node.js.',
+      avatar: 'teamImages/lucas.png',
+      category: 'apibdd'
+    },
+      {
+      id: 11,
+      name: 'Jesus Plata',
+      description: 'Coordinador del equipo.',
+      avatar: 'teamImages/jesus.png',
+      category: 'coordinator'
     },
     {
-      id: 11,
-      name: 'Álvaro García',
-      description: 'ssdsadsad',
-      avatar: 'sdsadsadsadsadsadsad',
-    },
+      id: 12,
+      name: 'Jesus Plata',
+      description: 'Especialista en API/BDD.',
+      avatar: 'teamImages/jesus.png',
+      category: 'apibdd'
+    }
 
   ];
   getAll():ITeam[] {
