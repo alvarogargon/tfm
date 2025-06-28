@@ -1,0 +1,53 @@
+ 
+.intro {
+    font-size: x-large;
+} h1 {
+    color: purple;
+}
+ 
+.comienzo {
+    font-size: x-large;
+} h2 {
+    color: purple;
+}
+ 
+:host {
+  display: block;
+  padding: 2rem;
+  background: url('/images/pastel.jpg') no-repeat;
+  color: #333;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100%;
+  width: 100%;
+  font-size: large;
+}
+ 
+.text-center {
+  text-align: center;
+}
+ 
+ 
+.valores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+ 
+.card {
+  flex: 1 1 250px;
+  background: #f7f7f7;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+ 
+.card:hover {
+  transform: translateY(-5px);
+}
+ 
+ 
+ 
+ 

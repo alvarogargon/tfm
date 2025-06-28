@@ -1,0 +1,9 @@
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @for(team of arrTeams; track team.id) {
+        <app-team-card [miTeam]="team"></app-team-card>
+    }@empty {
+        <p>UPSSS, no se ha cargado el equipo</p>
+    }
+    
+
+</div>
