@@ -10,6 +10,7 @@ import { RoutineDetailsComponent } from './components/routine-details/routine-de
 import { authGuard } from './guards/auth.guard';
 import { TeamListComponent } from './shared/infoFooter/equipo/team-list/team-list.component';
 import { NuestraMisionComponent } from './shared/infoFooter/nuestra-mision/nuestra-mision.component';
+import { TeamCardComponent } from './shared/infoFooter/equipo/team-card/team-card.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -18,6 +19,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'nuestra-mision', component: NuestraMisionComponent },
+  { path: 'equipo', component: TeamCardComponent},
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'dashboard/calendar', component: CalendarPageComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
