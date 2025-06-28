@@ -120,6 +120,10 @@
   cursor: pointer;
 }
 
+.button:hover {
+  background-color: var(--accent-color, #ffc107);
+}
+
 .button:active {
   transform: scale(0.98);
 }

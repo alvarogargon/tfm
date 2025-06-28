@@ -131,6 +131,10 @@ input.ng-valid.ng-touched {
     transform: scale(0.98);
 }
 
+.button-submit:hover, .button-close:hover {
+    background-color: var(--accent-color, #ffc107);
+}
+
 .edit-profile-panel {
   background: var(--background-color);
   border: 1px solid #e3e3e3;

@@ -28,7 +28,7 @@
 }
 
 .options-list .link.active {
-  background: #e6e6e6;
+  background: var(--background-color);
   color: #222;
   font-weight: bold;
   border-radius: 6px;
@@ -45,9 +45,15 @@ svg {
 
 .link {
     text-decoration: none;
+    color: black;
 }
 
 .role {
   font-size: 0.9rem;
   font-weight: 700;
+}
+
+.dashboard {
+  flex: 1;
+  width: 100%;
 }

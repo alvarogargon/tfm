@@ -1,3 +1,16 @@
+section {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    padding: 2rem;
+}
+
+.edit-profile-panel {
+    width: 100%;
+    max-width: 500px;
+}
+
 .inputs {
     position: relative;
     margin: 2.5rem 0;
@@ -84,6 +97,7 @@ input.ng-valid.ng-touched {
 .button-submit {
     transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
     width: 100%;
+    max-width: 300px;
     margin: 20px 0 10px 0;
     background-color: var(--primary-color);
     border: none;
@@ -99,6 +113,14 @@ input.ng-valid.ng-touched {
 .button-submit {
   flex: 1 1 0;
   margin: 0;
+}
+
+.button-submit:active {
+    transform: scale(0.98);
+}
+
+.button-submit:hover {
+    background-color: var(--accent-color, #ffc107);
 }
 
 .error {
