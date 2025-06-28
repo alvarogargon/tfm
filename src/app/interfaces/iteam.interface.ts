@@ -1,6 +1,6 @@
 export interface ITeam {
 id?: number;
-title: string;
+name: string;
 description: string;
 avatar: string;    
 }
