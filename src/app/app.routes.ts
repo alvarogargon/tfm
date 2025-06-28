@@ -8,9 +8,8 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { CalendarPageComponent } from './pages/calendar-page/calendar-page.component';
 import { RoutineDetailsComponent } from './components/routine-details/routine-details.component';
 import { authGuard } from './guards/auth.guard';
-import { TeamListComponent } from './shared/infoFooter/equipo/team-list/team-list.component';
 import { NuestraMisionComponent } from './shared/infoFooter/nuestra-mision/nuestra-mision.component';
-import { TeamCardComponent } from './shared/infoFooter/equipo/team-card/team-card.component';
+import { EquipoComponent } from './shared/infoFooter/equipo/equipo.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -19,7 +18,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'nuestra-mision', component: NuestraMisionComponent },
-  { path: 'equipo', component: TeamCardComponent},
+  { path: 'equipo', component: EquipoComponent},
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'dashboard/calendar', component: CalendarPageComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
