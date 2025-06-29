@@ -298,7 +298,10 @@
               <p>No hay usuarios asignados.</p>
             }
             @if (showAddGuideUserModal()) {
-              <app-add-guide-user-modal (close)="onModalClosed()"></app-add-guide-user-modal>
+              <app-add-guide-user-modal 
+                (close)="onModalClosed()" 
+                (relationCreated)="onGuideUserRelationCreated()">
+              </app-add-guide-user-modal>
             }
           </div>
         }

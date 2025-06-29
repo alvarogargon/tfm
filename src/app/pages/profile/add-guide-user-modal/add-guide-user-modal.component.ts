@@ -14,6 +14,7 @@ import { toast } from 'ngx-sonner';
 })
 export class AddGuideUserModalComponent {
   @Output() close = new EventEmitter<void>();
+  @Output() relationCreated = new EventEmitter<void>();
 
   guideUserForm: FormGroup;
   isSubmitting = false;
@@ -41,6 +42,7 @@ export class AddGuideUserModalComponent {
         await this.guideUserService.createGuideUserRelation(guideId, userId);
         
         toast.success('Usuario asignado correctamente.');
+        this.relationCreated.emit(); // Emitir evento de actualización
         this.onCancel();
         
       } catch (error) {

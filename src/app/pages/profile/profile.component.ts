@@ -305,4 +305,33 @@ export class ProfileComponent {
     const diffDays = Math.ceil((endDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
     return diffDays <= 1 && diffDays >= 0;
   }
+
+  // Método para manejar la creación exitosa de una relación guía-usuario
+  async onGuideUserRelationCreated() {
+    try {
+      // Recargar las relaciones guía-usuario
+      await this.loadGuideUserRelations();
+      
+      // Cerrar el modal
+      this.showAddGuideUserModal.set(false);
+      
+      console.log('Relaciones guía-usuario actualizadas');
+    } catch (error) {
+      console.error('Error al recargar las relaciones:', error);
+      toast.error('Error al actualizar la lista de usuarios asignados.');
+    }
+  }
+
+  // Método para cargar las relaciones guía-usuario (si no existe ya)
+  private async loadGuideUserRelations() {
+    if (this.user()?.role === 'guide') {
+      try {
+        const relations = await this.guideUserService.getGuideUserRelations();
+        this.guideUserRelations.set(relations);
+      } catch (error) {
+        console.error('Error al cargar relaciones guía-usuario:', error);
+      }
+    }
+  }
+  
 }
