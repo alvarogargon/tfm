@@ -1,3 +1,4 @@
+// iactivity.interface.ts
 export interface IActivity {
   activity_id: number;
   routine_id: number;
@@ -13,6 +14,6 @@ export interface IActivity {
   created_at: string;
   updated_at: string;
   icon: string | null;
-  category_name?: string; // Nuevo campo
-  category_color?: string; // Nuevo campo
+  category_name?: string;
+  category_color?: string;  // Nuevo campo añadido
 }

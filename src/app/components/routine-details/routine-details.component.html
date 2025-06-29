@@ -27,11 +27,11 @@
           id="categoryFilter" 
           class="form-select" 
           (change)="onCategoryChange()" 
-          [(ngModel)]="selectedCategoryId"
+          [(ngModel)]="selectedCategoryName"
         >
           <option [ngValue]="null">Todas las categorías</option>
-          @for (category of categories(); track category.category_id) {
-            <option [ngValue]="category.category_id">{{ category.name }}</option>
+          @for (category of routineCategories(); track category.name) {
+            <option [ngValue]="category.name">{{ category.name }}</option>
           }
         </select>
       </div>
@@ -43,12 +43,12 @@
           <span class="badge ms-2" [style.backgroundColor]="selectedCategory()!.color || '#6c757d'">
             {{ selectedCategory()!.name }}
           </span>
-          <button class="btn btn-sm btn-link ms-auto" (click)="selectedCategoryId.set(null)">Limpiar filtro</button>
+          <button class="btn btn-sm btn-link ms-auto" (click)="selectedCategoryName.set(null)">Limpiar filtro</button>
         </div>
       }
       
       <!-- Lista de actividades filtradas -->
-      @for (activity of activities(); track activity.activity_id) {
+      @for (activity of filteredActivities(); track activity.activity_id) {
         <div class="card shadow-sm mb-3">
           <div class="card-body">
             <div class="activity-header">
@@ -71,8 +71,8 @@
         </div>
       } @empty {
         <div class="alert alert-warning">
-          @if (selectedCategoryId() !== null) {
-            No hay actividades en esta categoría
+          @if (selectedCategoryName()) {
+            No hay actividades en la categoría "{{ selectedCategoryName() }}"
           } @else {
             No hay actividades registradas para esta rutina
           }
