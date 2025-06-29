@@ -1,46 +1,26 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { GuideUserService } from '../../../services/guide-user.service';
-import { toast } from 'ngx-sonner';
 import { CommonModule } from '@angular/common';
+import { GuideUserService } from '../../../services/guide-user.service';
+import { UserService } from '../../../services/user.service';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-add-guide-user-modal',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  template: `
-    <div class="modal fade show d-block" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Asignar Usuario a Guía</h5>
-            <button type="button" class="btn-close" (click)="close.emit()" aria-label="Cerrar"></button>
-          </div>
-          <div class="modal-body">
-            <form [formGroup]="guideUserForm" (ngSubmit)="onSubmit()">
-              <div class="mb-3">
-                <label for="guideId" class="form-label">ID del Guía</label>
-                <input type="number" class="form-control" id="guideId" formControlName="guideId" required>
-              </div>
-              <div class="mb-3">
-                <label for="userId" class="form-label">ID del Usuario</label>
-                <input type="number" class="form-control" id="userId" formControlName="userId" required>
-              </div>
-              <button type="submit" class="btn btn-primary" [disabled]="guideUserForm.invalid">Asignar</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-backdrop fade show"></div>
-  `,
+  templateUrl: './add-guide-user-modal.component.html',
   styleUrls: ['./add-guide-user-modal.component.css']
 })
 export class AddGuideUserModalComponent {
   @Output() close = new EventEmitter<void>();
+
   guideUserForm: FormGroup;
-  private guideUserService = inject(GuideUserService);
+  isSubmitting = false;
+  
   private fb = inject(FormBuilder);
+  private guideUserService = inject(GuideUserService);
+  private userService = inject(UserService);
 
   constructor() {
     this.guideUserForm = this.fb.group({
@@ -50,16 +30,41 @@ export class AddGuideUserModalComponent {
   }
 
   async onSubmit() {
-    if (this.guideUserForm.valid) {
+    if (this.guideUserForm.valid && !this.isSubmitting) {
+      this.isSubmitting = true;
+      
       try {
-        const { guideId, userId } = this.guideUserForm.value;
-        await this.guideUserService.createGuideUserRelation(Number(guideId), Number(userId));
-        toast.success('Relación guía-usuario creada con éxito.');
-        this.close.emit();
+        const guideId = this.guideUserForm.get('guideId')?.value;
+        const userId = this.guideUserForm.get('userId')?.value;
+
+        // Crear la relación guía-usuario con ambos IDs del formulario
+        await this.guideUserService.createGuideUserRelation(guideId, userId);
+        
+        toast.success('Usuario asignado correctamente.');
+        this.onCancel();
+        
       } catch (error) {
-        console.error('Error al crear relación:', error as Error);
-        toast.error('Error al asignar el usuario al guía.');
+        console.error('Error al asignar usuario:', error);
+        toast.error('Error al asignar usuario. Por favor, verifica que los IDs sean correctos.');
+      } finally {
+        this.isSubmitting = false;
       }
+    } else {
+      toast.error('Por favor, introduce IDs válidos para la guía y el usuario.');
     }
+  }
+
+  onCancel() {
+    this.guideUserForm.reset();
+    this.close.emit();
+  }
+
+  // Getters para facilitar el acceso a los controles del formulario
+  get guideId() {
+    return this.guideUserForm.get('guideId');
+  }
+
+  get userId() {
+    return this.guideUserForm.get('userId');
   }
 }

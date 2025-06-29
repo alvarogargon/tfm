@@ -29,14 +29,10 @@ export class GuideUserService {
         user: {
           user_id: relation.user.user_id,
           username: relation.user.username,
-          email: undefined, // Compatible con opcional
-          firstName: relation.user.first_name,
-          lastName: relation.user.last_name,
-          age: undefined, // Compatible con opcional
-          numTel: undefined, // Compatible con opcional
-          gender: undefined, // Compatible con opcional
-          image: null,
+          firstName: relation.user.first_name || '',
+          lastName: relation.user.last_name || '',
           role: relation.user.role,
+          image: null,
           colorPalette: null,
           availability: null
         }
@@ -57,26 +53,25 @@ export class GuideUserService {
       'Content-Type': 'application/json'
     });
 
-    const body = { guide_id: guideId, user_id: userId };
+    // Corregir los nombres de los campos para que coincidan con la API
+    const body = { guideId: guideId, userId: userId };
 
     try {
       const res = await lastValueFrom(this.httpClient.post<{ message: string, relation: any }>(this.endpoint, body, { headers }));
+      
+      // Mapear la respuesta al formato esperado
       return {
-        guide_user_id: res.relation.guide_user_id,
-        guide_id: res.relation.guide.user_id,
-        user_id: res.relation.user.user_id,
-        created_at: res.relation.created_at,
+        guide_user_id: res.relation.guideUserId,
+        guide_id: res.relation.guideId,
+        user_id: res.relation.userId,
+        created_at: new Date().toISOString(), // La API no devuelve created_at, usar fecha actual
         user: {
-          user_id: res.relation.user.user_id,
-          username: res.relation.user.username,
-          email: undefined, // Compatible con opcional
-          firstName: res.relation.user.first_name,
-          lastName: res.relation.user.last_name,
-          age: undefined, // Compatible con opcional
-          numTel: undefined, // Compatible con opcional
-          gender: undefined, // Compatible con opcional
+          user_id: res.relation.userId,
+          username: `Usuario ${res.relation.userId}`, // Placeholder, se actualizará al recargar
+          firstName: '', // Valor por defecto vacío
+          lastName: '', // Valor por defecto vacío
+          role: 'user',
           image: null,
-          role: res.relation.user.role,
           colorPalette: null,
           availability: null
         }
