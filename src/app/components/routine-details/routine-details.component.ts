@@ -2,17 +2,15 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutineService } from '../../services/routine.service';
 import { ActivityService } from '../../services/activity.service';
-import { CategoryService } from '../../services/category.service'; // Nuevo servicio
 import { IRoutine } from '../../interfaces/iroutine.interface';
 import { IActivity } from '../../interfaces/iactivity.interface';
-import { ICategory } from '../../interfaces/icategory.interface'; // Nueva interfaz
 import { CommonModule } from '@angular/common';
 import { DateFormatPipe } from '../../pipes/date-format.pipe';
 import { toast } from 'ngx-sonner';
 import { EditActivityModalComponent } from '../../pages/profile/edit-activity-modal/edit-activity-modal.component';
 import { DeleteActivityModalComponent } from '../../pages/profile/delete-activity-modal/delete-activity-modal.component';
 import { AddActivityModalComponent } from '../../pages/profile/add-activity-modal/add-activity-modal.component';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-routine-details',
@@ -31,7 +29,6 @@ import { FormsModule } from '@angular/forms';
 export class RoutineDetailsComponent {
   routineService = inject(RoutineService);
   activityService = inject(ActivityService);
-  categoryService = inject(CategoryService); // Nuevo servicio inyectado
   route = inject(ActivatedRoute);
   router = inject(Router);
   
@@ -41,22 +38,35 @@ export class RoutineDetailsComponent {
   showAddActivityModal = signal(false);
   selectedActivity = signal<IActivity | null>(null);
   
-  // Nuevas señales para manejar categorías y actividades
-  categories = signal<ICategory[]>([]);
-  selectedCategoryId = signal<number | null>(null);
-  activities = signal<IActivity[]>([]);
+  // Almacena todas las actividades sin filtrar
+  allActivities = signal<IActivity[]>([]);
   
-  // Señal computada para obtener la categoría seleccionada
+  // Almacena las categorías únicas de esta rutina
+  routineCategories = signal<{name: string; color: string}[]>([]);
+  
+  // Almacena el nombre de la categoría seleccionada para filtrar
+  selectedCategoryName = signal<string | null>(null);
+  
+  // Señal computada para las actividades filtradas
+  filteredActivities = computed(() => {
+    if (!this.selectedCategoryName()) {
+      return this.allActivities();
+    }
+    return this.allActivities().filter(activity => 
+      activity.category_name === this.selectedCategoryName()
+    );
+  });
+
+  // Señal computada para la categoría seleccionada
   selectedCategory = computed(() => {
-    if (this.selectedCategoryId() === null) return null;
-    return this.categories().find(c => c.category_id === this.selectedCategoryId()) || null;
+    if (!this.selectedCategoryName()) return null;
+    return this.routineCategories().find(c => c.name === this.selectedCategoryName()) || null;
   });
 
   async ngOnInit() {
     const routineId = Number(this.route.snapshot.paramMap.get('id'));
     await this.loadRoutine(routineId);
-    await this.loadCategories(); // Cargar categorías al inicializar
-    await this.loadActivities(); // Cargar actividades al inicializar
+    await this.loadActivities();
   }
 
   async loadRoutine(routineId: number) {
@@ -69,41 +79,48 @@ export class RoutineDetailsComponent {
     }
   }
 
-  // Nuevo método para cargar categorías
-  async loadCategories() {
-    try {
-      const categories = await this.categoryService.getCategories();
-      this.categories.set(categories);
-    } catch (error) {
-      console.error('Error al cargar categorías:', error);
-      toast.error('Error al cargar las categorías.');
-    }
-  }
-
-  // Nuevo método para cargar actividades (con filtro opcional)
   async loadActivities() {
     const routineId = this.routine()?.routine_id;
     if (!routineId) return;
 
     try {
+      // Cargar todas las actividades sin filtro
       const activities = await this.activityService.getByRoutineAndCategory(
         routineId, 
-        this.selectedCategoryId()
+        null
       );
-      this.activities.set(activities);
+      
+      this.allActivities.set(activities);
+      this.extractUniqueCategories(activities);
     } catch (error) {
       console.error('Error al cargar actividades:', error);
       toast.error('Error al cargar las actividades.');
     }
   }
 
-  // Nuevo método para manejar cambio de categoría
+  private extractUniqueCategories(activities: IActivity[]) {
+    const categoryMap = new Map<string, string>();
+    
+    activities.forEach(activity => {
+      if (activity.category_name && activity.category_color) {
+        categoryMap.set(activity.category_name, activity.category_color);
+      }
+    });
+    
+    const uniqueCategories = Array.from(categoryMap, ([name, color]) => ({
+      name,
+      color
+    }));
+    
+    this.routineCategories.set(uniqueCategories);
+  }
+
   onCategoryChange() {
-    this.loadActivities();
+    // Solo actualizamos la señal de categoría seleccionada
+    // Las actividades filtradas se actualizan automáticamente a través de filteredActivities
   }
 
   openEditActivityModal(activity: IActivity) {
-    // Validaciones básicas
     if (!activity) {
       console.error('No se proporcionó una actividad válida');
       toast.error('Error: Actividad no válida.');
@@ -116,11 +133,9 @@ export class RoutineDetailsComponent {
       return;
     }
 
-    // Obtener routine_id actual de la URL como fallback
     const currentRoutineId = Number(this.route.snapshot.paramMap.get('id'));
     const routineFromSignal = this.routine()?.routine_id;
 
-    // Determinar routine_id válido
     let validRoutineId = activity.routine_id;
     
     if (!validRoutineId || validRoutineId <= 0) {
@@ -133,7 +148,6 @@ export class RoutineDetailsComponent {
       }
     }
     
-    // Crear actividad corregida con routine_id válido
     const correctedActivity: IActivity = {
       ...activity,
       routine_id: validRoutineId,
@@ -162,7 +176,6 @@ export class RoutineDetailsComponent {
       return;
     }
 
-    // Aplicar la misma lógica de corrección para delete
     const currentRoutineId = Number(this.route.snapshot.paramMap.get('id'));
     const routineFromSignal = this.routine()?.routine_id;
     
@@ -191,19 +204,12 @@ export class RoutineDetailsComponent {
   }
 
   async onModalClosed() {
-    // Limpiar estado
     this.showEditActivityModal.set(false);
     this.showDeleteActivityModal.set(false);
     this.showAddActivityModal.set(false);
     this.selectedActivity.set(null);
     
-    // Recargar actividades
+    // Recargar actividades después de cualquier cambio
     await this.loadActivities();
-    
-    // Recargar rutina si es necesario
-    const routineId = Number(this.route.snapshot.paramMap.get('id'));
-    if (routineId && routineId > 0) {
-      await this.loadRoutine(routineId);
-    }
   }
 }
