@@ -1,0 +1,25 @@
+.valores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  justify-content: center;
+}
+ 
+.card {
+  flex: 1 1 250px;
+  background: #f7f7f7;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+  max-width: 500px;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+.fondo {
+        background-color: rgba(240, 128, 128, 0.112);
+
+}
