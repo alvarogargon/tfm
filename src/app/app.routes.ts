@@ -16,6 +16,7 @@ import { AvisoLegalComponent } from './shared/infoFooter/aviso-legal/aviso-legal
 import { SettingsComponent } from './pages/settings/settings.component';
 import { ProfileSettingsComponent } from './pages/settings/profile-settings/profile-settings.component';
 import { AppearanceComponent } from './pages/settings/appearance/appearance.component';
+import { RutinasVisualesComponent } from './shared/infoFooter/rutinas-visuales/rutinas-visuales.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -28,6 +29,7 @@ export const routes: Routes = [
   { path: 'politica-de-privacidad', component: PoliticaPrivacidadComponent},
   { path: 'politica-de-cookies', component: CookiesComponent},
   { path: 'aviso-legal', component: AvisoLegalComponent },
+  { path: 'rutinas-visuales', component: RutinasVisualesComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'dashboard/calendar', component: CalendarPageComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
