@@ -100,4 +100,24 @@ export class GuideUserService {
       throw new Error('Error deleting guide-user relation.');
     }
   }
+
+  async getUnassignedUsers(): Promise<any[]> {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('No token found. Please log in.');
+
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
+
+  try {
+    const res = await lastValueFrom(
+      this.httpClient.get<{ users: any[] }>(`${this.endpoint}/unassigned-users`, { headers })
+    );
+    return res.users;
+  } catch (error) {
+    console.error('Error al obtener usuarios sin guía:', error);
+    toast.error('Error al cargar usuarios sin asignar');
+    throw error;
+  }
+}
 }

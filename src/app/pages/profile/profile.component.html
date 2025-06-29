@@ -299,6 +299,7 @@
             }
             @if (showAddGuideUserModal()) {
               <app-add-guide-user-modal 
+                [selectedUserId]="selectedUserId()"
                 (close)="onModalClosed()" 
                 (relationCreated)="onGuideUserRelationCreated()">
               </app-add-guide-user-modal>

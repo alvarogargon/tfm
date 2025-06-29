@@ -17,14 +17,46 @@
       @if (routine()?.end_time) {
         <p><strong>Fecha de fin:</strong> {{ routine()?.end_time ? (routine()?.end_time | dateFormat) : 'Sin fecha de fin' }}</p>
       }
+      
       <h4>Actividades</h4>
-      @for (activity of routine()?.activities; track activity.activity_id) {
+      
+      <!-- Selector de categoría para filtrar -->
+      <div class="mb-3">
+        <label for="categoryFilter" class="form-label">Filtrar por categoría</label>
+        <select 
+          id="categoryFilter" 
+          class="form-select" 
+          (change)="onCategoryChange()" 
+          [(ngModel)]="selectedCategoryId"
+        >
+          <option [ngValue]="null">Todas las categorías</option>
+          @for (category of categories(); track category.category_id) {
+            <option [ngValue]="category.category_id">{{ category.name }}</option>
+          }
+        </select>
+      </div>
+      
+      <!-- Mostrar categoría seleccionada -->
+      @if (selectedCategory()) {
+        <div class="alert alert-info d-flex align-items-center">
+          <strong>Filtro activo:</strong> 
+          <span class="badge ms-2" [style.backgroundColor]="selectedCategory()!.color || '#6c757d'">
+            {{ selectedCategory()!.name }}
+          </span>
+          <button class="btn btn-sm btn-link ms-auto" (click)="selectedCategoryId.set(null)">Limpiar filtro</button>
+        </div>
+      }
+      
+      <!-- Lista de actividades filtradas -->
+      @for (activity of activities(); track activity.activity_id) {
         <div class="card shadow-sm mb-3">
           <div class="card-body">
             <div class="activity-header">
               <h5 class="card-title">{{ activity.title || 'Sin título' }}</h5>
-              @if (activity.category) {
-                <span class="badge" [style.backgroundColor]="activity.category.color || '#6c757d'">{{ activity.category.name }}</span>
+              @if (activity.category_name) {
+                <span class="badge" [style.backgroundColor]="activity.category_color || '#6c757d'">
+                  {{ activity.category_name }}
+                </span>
               }
             </div>
             <p class="card-text">{{ activity.description || 'Sin descripción' }}</p>
@@ -38,8 +70,15 @@
           </div>
         </div>
       } @empty {
-        <p>No hay actividades registradas para esta rutina.</p>
+        <div class="alert alert-warning">
+          @if (selectedCategoryId() !== null) {
+            No hay actividades en esta categoría
+          } @else {
+            No hay actividades registradas para esta rutina
+          }
+        </div>
       }
+      
       @if (showEditActivityModal() && selectedActivity()) {
         <app-edit-activity-modal [activity]="selectedActivity()!" (close)="onModalClosed()"></app-edit-activity-modal>
       }

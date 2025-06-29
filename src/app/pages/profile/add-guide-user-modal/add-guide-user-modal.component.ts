@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Output, Input, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { GuideUserService } from '../../../services/guide-user.service';
@@ -12,22 +12,51 @@ import { toast } from 'ngx-sonner';
   templateUrl: './add-guide-user-modal.component.html',
   styleUrls: ['./add-guide-user-modal.component.css']
 })
-export class AddGuideUserModalComponent {
+export class AddGuideUserModalComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() relationCreated = new EventEmitter<void>();
+  @Input() selectedUserId: number | null = null;
 
   guideUserForm: FormGroup;
   isSubmitting = false;
-  
+  unassignedUsers: any[] = []; // Almacena los usuarios sin guía asignada
+  isLoading = false; // Estado de carga para usuarios
+
   private fb = inject(FormBuilder);
   private guideUserService = inject(GuideUserService);
   private userService = inject(UserService);
 
   constructor() {
+    // Actualizar validación para userId (solo required)
     this.guideUserForm = this.fb.group({
       guideId: ['', [Validators.required, Validators.min(1)]],
-      userId: ['', [Validators.required, Validators.min(1)]]
+      userId: ['', [Validators.required]] // Removido Validators.min
     });
+  }
+
+  async ngOnInit() {
+    // Auto-rellenar el campo guideId con el selectedUserId del perfil
+    if (this.selectedUserId) {
+      this.guideUserForm.patchValue({
+        guideId: this.selectedUserId
+      });
+    }
+    
+    // Cargar usuarios no asignados al inicializar el componente
+    await this.loadUnassignedUsers();
+  }
+  
+  // Cargar usuarios sin guía asignada
+  async loadUnassignedUsers() {
+    this.isLoading = true;
+    try {
+      this.unassignedUsers = await this.guideUserService.getUnassignedUsers();
+    } catch (error) {
+      console.error('Error al cargar usuarios sin guía:', error);
+      toast.error('Error al cargar usuarios disponibles');
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   async onSubmit() {
@@ -47,12 +76,17 @@ export class AddGuideUserModalComponent {
         
       } catch (error) {
         console.error('Error al asignar usuario:', error);
-        toast.error('Error al asignar usuario. Por favor, verifica que los IDs sean correctos.');
+        toast.error('Error al asignar usuario. Por favor, inténtalo de nuevo.');
       } finally {
         this.isSubmitting = false;
       }
     } else {
-      toast.error('Por favor, introduce IDs válidos para la guía y el usuario.');
+      // Verificar si hay errores específicos en userId
+      if (this.userId?.errors?.['required']) {
+        toast.error('Por favor, selecciona un usuario de la lista.');
+      } else {
+        toast.error('Por favor, completa correctamente el formulario.');
+      }
     }
   }
 

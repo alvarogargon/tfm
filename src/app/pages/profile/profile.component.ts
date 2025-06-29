@@ -327,7 +327,35 @@ export class ProfileComponent {
     if (this.user()?.role === 'guide') {
       try {
         const relations = await this.guideUserService.getGuideUserRelations();
-        this.guideUserRelations.set(relations);
+        const user = this.user();
+        
+        if (user) {
+          // Crear la relación "Mi Perfil" para el guía
+          const guideRelation: IGuideUser = {
+            guide_user_id: 0,
+            guide_id: user.user_id,
+            user_id: user.user_id,
+            created_at: new Date().toISOString(),
+            user: {
+              user_id: user.user_id,
+              username: user.username,
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              age: user.age,
+              numTel: user.numTel,
+              gender: user.gender,
+              image: user.image,
+              role: user.role,
+              colorPalette: user.colorPalette,
+              availability: user.availability
+            }
+          };
+          
+          this.guideUserRelations.set([guideRelation, ...relations]);
+        } else {
+          this.guideUserRelations.set(relations);
+        }
       } catch (error) {
         console.error('Error al cargar relaciones guía-usuario:', error);
       }

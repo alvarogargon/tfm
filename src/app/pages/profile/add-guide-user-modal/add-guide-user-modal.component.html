@@ -4,13 +4,14 @@
     <form [formGroup]="guideUserForm" (ngSubmit)="onSubmit()">
       <div class="input-wrapper">
         <input 
-          type="number" 
+          type="hidden" 
           class="input" 
           formControlName="guideId" 
           placeholder="ID de la guía"
+          readonly
           [class.error]="guideId?.invalid && guideId?.touched"
           [attr.aria-describedby]="guideId?.invalid && guideId?.touched ? 'guideId-error' : null">
-        <label class="label">ID de la Guía</label>
+        <label class="label">ID de la Guía (Auto-rellenado)</label>
         
         @if (guideId?.invalid && guideId?.touched) {
           <div id="guideId-error" class="error-message">
@@ -25,22 +26,33 @@
       </div>
 
       <div class="input-wrapper">
-        <input 
-          type="number" 
-          class="input" 
-          formControlName="userId" 
-          placeholder="ID del usuario"
+        <!-- Cambiar input por select -->
+        <select 
+          class="input"
+          formControlName="userId"
           [class.error]="userId?.invalid && userId?.touched"
-          [attr.aria-describedby]="userId?.invalid && userId?.touched ? 'userId-error' : null">
-        <label class="label">ID del Usuario</label>
+          [attr.aria-describedby]="userId?.invalid && userId?.touched ? 'userId-error' : null"
+        >
+          <option value="" disabled selected>Selecciona un usuario</option>
+          @if (isLoading) {
+            <option disabled>Cargando usuarios...</option>
+          } @else {
+            @for (user of unassignedUsers; track user.user_id) {
+              <option [value]="user.user_id">
+                {{ user.first_name }} {{ user.last_name }} ({{ user.username }})
+              </option>
+            }
+            @if (unassignedUsers.length === 0) {
+              <option disabled>No hay usuarios disponibles</option>
+            }
+          }
+        </select>
+        <label class="label">Usuario a Asignar</label>
         
         @if (userId?.invalid && userId?.touched) {
           <div id="userId-error" class="error-message">
             @if (userId?.errors?.['required']) {
-              <span>El ID del usuario es obligatorio.</span>
-            }
-            @if (userId?.errors?.['min']) {
-              <span>El ID del usuario debe ser mayor a 0.</span>
+              <span>Debes seleccionar un usuario</span>
             }
           </div>
         }
