@@ -13,8 +13,6 @@ export interface IActivity {
   created_at: string;
   updated_at: string;
   icon: string | null;
-  category?: {
-    name: string;
-    color: string;
-  };
+  category_name?: string; // Nuevo campo
+  category_color?: string; // Nuevo campo
 }

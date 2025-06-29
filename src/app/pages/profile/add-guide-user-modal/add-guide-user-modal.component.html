@@ -3,12 +3,81 @@
     <h3>Asignar Usuario a Guía</h3>
     <form [formGroup]="guideUserForm" (ngSubmit)="onSubmit()">
       <div class="input-wrapper">
-        <input type="number" class="input" formControlName="user_id" placeholder="ID del usuario">
-        <label class="label">ID del Usuario</label>
+        <input 
+          type="hidden" 
+          class="input" 
+          formControlName="guideId" 
+          placeholder="ID de la guía"
+          readonly
+          [class.error]="guideId?.invalid && guideId?.touched"
+          [attr.aria-describedby]="guideId?.invalid && guideId?.touched ? 'guideId-error' : null">
+        <label class="label">ID de la Guía (Auto-rellenado)</label>
+        
+        @if (guideId?.invalid && guideId?.touched) {
+          <div id="guideId-error" class="error-message">
+            @if (guideId?.errors?.['required']) {
+              <span>El ID de la guía es obligatorio.</span>
+            }
+            @if (guideId?.errors?.['min']) {
+              <span>El ID de la guía debe ser mayor a 0.</span>
+            }
+          </div>
+        }
       </div>
+
+      <div class="input-wrapper">
+        <!-- Cambiar input por select -->
+        <select 
+          class="input"
+          formControlName="userId"
+          [class.error]="userId?.invalid && userId?.touched"
+          [attr.aria-describedby]="userId?.invalid && userId?.touched ? 'userId-error' : null"
+        >
+          <option value="" disabled selected>Selecciona un usuario</option>
+          @if (isLoading) {
+            <option disabled>Cargando usuarios...</option>
+          } @else {
+            @for (user of unassignedUsers; track user.user_id) {
+              <option [value]="user.user_id">
+                {{ user.first_name }} {{ user.last_name }} ({{ user.username }})
+              </option>
+            }
+            @if (unassignedUsers.length === 0) {
+              <option disabled>No hay usuarios disponibles</option>
+            }
+          }
+        </select>
+        <label class="label">Usuario a Asignar</label>
+        
+        @if (userId?.invalid && userId?.touched) {
+          <div id="userId-error" class="error-message">
+            @if (userId?.errors?.['required']) {
+              <span>Debes seleccionar un usuario</span>
+            }
+          </div>
+        }
+      </div>
+      
       <div class="modal-footer">
-        <button type="submit" class="button-submit">Guardar</button>
-        <button type="button" class="button-close" (click)="close.emit()">Cerrar</button>
+        <button 
+          type="submit" 
+          class="button-submit" 
+          [disabled]="isSubmitting || guideUserForm.invalid"
+          aria-label="Asignar usuario">
+          @if (isSubmitting) {
+            <span>Asignando...</span>
+          } @else {
+            <span>Asignar Usuario</span>
+          }
+        </button>
+        <button 
+          type="button" 
+          class="button-close" 
+          (click)="onCancel()" 
+          [disabled]="isSubmitting"
+          aria-label="Cancelar">
+          Cancelar
+        </button>
       </div>
     </form>
   </div>

@@ -55,6 +55,33 @@ export class ActivityService {
     }
   }
 
+  async getByRoutineAndCategory(routineId: number, categoryId: number | null): Promise<IActivity[]> {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No token found. Please log in.');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    // Construir la URL con parámetros
+    let url = `${this.endpoint}/routine/${routineId}`;
+    if (categoryId !== null) {
+      url += `?category_id=${categoryId}`;
+    }
+
+    try {
+      const res = await lastValueFrom(
+        this.httpClient.get<{ activities: IActivity[] }>(url, { headers })
+      );
+      return res.activities;
+    } catch (error: any) {
+      console.error('Error al obtener actividades por rutina y categoría:', error);
+      toast.error(error.message || 'Error al obtener las actividades filtradas.');
+      throw new Error('Error fetching activities by routine and category.');
+    }
+  }
+
+
   async createActivity(activity: Partial<IActivity>): Promise<IActivity> {
     const token = localStorage.getItem('token');
     if (!token) throw new Error('No token found. Please log in.');

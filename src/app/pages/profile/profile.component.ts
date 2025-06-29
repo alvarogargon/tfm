@@ -305,4 +305,61 @@ export class ProfileComponent {
     const diffDays = Math.ceil((endDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
     return diffDays <= 1 && diffDays >= 0;
   }
+
+  // Método para manejar la creación exitosa de una relación guía-usuario
+  async onGuideUserRelationCreated() {
+    try {
+      // Recargar las relaciones guía-usuario
+      await this.loadGuideUserRelations();
+      
+      // Cerrar el modal
+      this.showAddGuideUserModal.set(false);
+      
+      console.log('Relaciones guía-usuario actualizadas');
+    } catch (error) {
+      console.error('Error al recargar las relaciones:', error);
+      toast.error('Error al actualizar la lista de usuarios asignados.');
+    }
+  }
+
+  // Método para cargar las relaciones guía-usuario (si no existe ya)
+  private async loadGuideUserRelations() {
+    if (this.user()?.role === 'guide') {
+      try {
+        const relations = await this.guideUserService.getGuideUserRelations();
+        const user = this.user();
+        
+        if (user) {
+          // Crear la relación "Mi Perfil" para el guía
+          const guideRelation: IGuideUser = {
+            guide_user_id: 0,
+            guide_id: user.user_id,
+            user_id: user.user_id,
+            created_at: new Date().toISOString(),
+            user: {
+              user_id: user.user_id,
+              username: user.username,
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              age: user.age,
+              numTel: user.numTel,
+              gender: user.gender,
+              image: user.image,
+              role: user.role,
+              colorPalette: user.colorPalette,
+              availability: user.availability
+            }
+          };
+          
+          this.guideUserRelations.set([guideRelation, ...relations]);
+        } else {
+          this.guideUserRelations.set(relations);
+        }
+      } catch (error) {
+        console.error('Error al cargar relaciones guía-usuario:', error);
+      }
+    }
+  }
+  
 }
