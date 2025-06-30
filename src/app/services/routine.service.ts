@@ -233,7 +233,7 @@ export class RoutineService {
           { headers }
         )
       );
-      
+      console.log('Respuesta cruda de la API para rutinas públicas:', res);
       return res.routines.map(routine => ({
         routine_id: routine.routine_id,
         user_id: routine.user_id,

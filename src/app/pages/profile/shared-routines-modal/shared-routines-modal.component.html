@@ -13,7 +13,7 @@
       </div>
       
       <div class="input-wrapper">
-        <textarea class="input" [value]="selectedTemplate?.description || ''" readonly placeholder="Descripción"></textarea>
+        <textarea class="input" [(ngModel)]="selectedTemplateDescription" name="description" readonly placeholder="Descripción"></textarea>
         <label class="label">Descripción</label>
       </div>
       
