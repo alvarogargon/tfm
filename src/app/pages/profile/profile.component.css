@@ -293,6 +293,13 @@
   font-size: 1rem;
 }
 
+.from-template-icon {
+  margin-left: 8px;
+  font-size: 1.2em;
+  color: #007bff; /* Color azul para destacar */
+  vertical-align: middle;
+}
+
 @media (max-width: 768px) {
   .button-group {
     flex-direction: column;

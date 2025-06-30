@@ -20,7 +20,7 @@ import { ActivityService } from '../../services/activity.service';
 import { toast } from 'ngx-sonner';
 import { IProfileInterest } from '../../interfaces/iprofile-interest.interface';
 import { IProfileGoal } from '../../interfaces/iprofile-goal.interface';
-import { IRoutine } from '../../interfaces/iroutine.interface';
+import { IRoutine, IReceivedRoutine } from '../../interfaces/iroutine.interface';
 import { IGuideUser } from '../../interfaces/iguide-user.interface';
 import { ICategory } from '../../interfaces/icategory.interface';
 import { IActivity } from '../../interfaces/iactivity.interface';
@@ -71,6 +71,7 @@ export class ProfileComponent {
   categories = signal<ICategory[]>([]);
   selectedUserId = signal<number | null>(null);
   showSharedRoutinesModal = signal(false);
+  receivedRoutines = signal<IReceivedRoutine[]>([]); // Nuevo signal para rutinas compartidas recibidas
   completedGoalsCount = computed(() => this.goals().filter(g => g.status === 'completed').length);
   activeRoutinesCount = computed(() => this.routines().filter(r => !this.isExpired(r.end_time)).length);
   activitiesCount = computed(() => this.activities().length);
@@ -129,6 +130,14 @@ export class ProfileComponent {
 
       const categories = await this.categoryService.getCategories();
       this.categories.set(categories);
+
+      // Cargar rutinas compartidas recibidas
+      const receivedRoutines = await this.routineService.getReceivedRoutinesByUser();
+      this.receivedRoutines.set(receivedRoutines);
+      console.log('Rutinas compartidas recibidas:', receivedRoutines);
+
+      // Marcar rutinas creadas desde plantillas
+      this.markRoutinesFromTemplates();
     } catch (error) {
       console.error('Error al cargar datos del perfil:', error);
       toast.error('Error al cargar los datos del perfil.');
@@ -149,10 +158,24 @@ export class ProfileComponent {
       this.routines.set(routines);
       this.activities.set(activities);
       console.log('Actividades cargadas:', activities);
+
+      // Volver a marcar rutinas después de cargar las nuevas
+      this.markRoutinesFromTemplates();
     } catch (error) {
       console.error('Error al cargar datos del usuario:', error);
       toast.error('Error al cargar los datos del usuario.');
     }
+  }
+
+  // Método para marcar rutinas creadas desde plantillas
+  private markRoutinesFromTemplates() {
+    const receivedRoutineIds = this.receivedRoutines().map(r => r.new_routine.routine_id);
+    this.routines.update(routines =>
+      routines.map(routine => ({
+        ...routine,
+        from_template: receivedRoutineIds.includes(routine.routine_id)
+      }))
+    );
   }
 
   async onUserSelected() {
@@ -224,7 +247,9 @@ export class ProfileComponent {
   }
 
   onRoutineCopied(newRoutine: IRoutine) {
-    this.routines.update(routines => [...routines, newRoutine]);
+    this.routines.update(routines => [...routines, { ...newRoutine, from_template: true }]);
+    this.showSharedRoutinesModal.set(false);
+    toast.success('Rutina añadida a tu perfil.');
   }
 
   async deleteRoutine(routineId: number) {
@@ -294,7 +319,6 @@ export class ProfileComponent {
     await this.loadUserData(userId);
   }
 
-
   isExpired(endTime: string | null): boolean {
     if (!endTime) return false;
     const endDate = new Date(endTime);
@@ -318,15 +342,10 @@ export class ProfileComponent {
     return diffDays <= 1 && diffDays >= 0;
   }
 
-  // Método para manejar la creación exitosa de una relación guía-usuario
   async onGuideUserRelationCreated() {
     try {
-      // Recargar las relaciones guía-usuario
       await this.loadGuideUserRelations();
-      
-      // Cerrar el modal
       this.showAddGuideUserModal.set(false);
-      
       console.log('Relaciones guía-usuario actualizadas');
     } catch (error) {
       console.error('Error al recargar las relaciones:', error);
@@ -334,15 +353,12 @@ export class ProfileComponent {
     }
   }
 
-  // Método para cargar las relaciones guía-usuario (si no existe ya)
   private async loadGuideUserRelations() {
     if (this.user()?.role === 'guide') {
       try {
         const relations = await this.guideUserService.getGuideUserRelations();
         const user = this.user();
-        
         if (user) {
-          // Crear la relación "Mi Perfil" para el guía
           const guideRelation: IGuideUser = {
             guide_user_id: 0,
             guide_id: user.user_id,
@@ -363,7 +379,6 @@ export class ProfileComponent {
               availability: user.availability
             }
           };
-          
           this.guideUserRelations.set([guideRelation, ...relations]);
         } else {
           this.guideUserRelations.set(relations);
@@ -373,5 +388,4 @@ export class ProfileComponent {
       }
     }
   }
-  
 }

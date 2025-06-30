@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
-import { IRoutine, IRoutinePayload } from '../interfaces/iroutine.interface';
+import { IRoutine, IRoutinePayload, IReceivedRoutine } from '../interfaces/iroutine.interface';
 import { toast } from 'ngx-sonner';
 
 @Injectable({
@@ -268,6 +268,30 @@ export class RoutineService {
       console.error('Error al obtener rutinas públicas:', error);
       toast.error('Error al obtener rutinas públicas.');
       throw new Error('Error fetching public routines.');
+    }
+  }
+
+  async getReceivedRoutinesByUser(): Promise<IReceivedRoutine[]> {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No token found. Please log in.');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    try {
+      const res = await lastValueFrom(
+        this.httpClient.get<{ message: string, received: IReceivedRoutine[] }>(
+          `${this.endpoint}/shared/received`,
+          { headers }
+        )
+      );
+      console.log('Respuesta cruda de getReceivedRoutinesByUser:', res);
+      return res.received;
+    } catch (error) {
+      console.error('Error al obtener rutinas compartidas recibidas:', error);
+      toast.error('Error al obtener las rutinas compartidas recibidas.');
+      throw new Error('Error fetching received routines.');
     }
   }
 

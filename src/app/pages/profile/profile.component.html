@@ -227,7 +227,12 @@
             <div class="card shadow-sm mb-3">
               <div class="card-body">
                 <div class="routine-header">
-                  <h5 class="card-title">{{ routine.name }}</h5>
+                  <h5 class="card-title">
+                    {{ routine.name }}
+                    @if (routine.from_template) {
+                      <span class="from-template-icon" aria-label="Rutina creada desde una plantilla pública">👁️‍🗨️</span>
+                    }
+                  </h5>
                   <div class="routine-status-container">
                     <span class="routine-status">{{ routine.daily_routine | titlecase }}</span>
                     @if (routine.end_time) {
@@ -281,9 +286,9 @@
           @if (showSharedRoutinesModal()) {
             <app-shared-routines-modal 
               (closed)="onModalClosed()"
-              (routineCopied)="onRoutineCopied($event)"> <!-- Mantenemos $event -->
+              (routineCopied)="onRoutineCopied($event)">
             </app-shared-routines-modal>
-}
+          }
         </div>
 
         @if (user()?.role === 'guide') {
