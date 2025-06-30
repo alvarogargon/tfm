@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
-import { IRoutine, IRoutinePayload } from '../interfaces/iroutine.interface';
+import { IRoutine, IRoutinePayload, IReceivedRoutine } from '../interfaces/iroutine.interface';
 import { toast } from 'ngx-sonner';
 
 @Injectable({
@@ -217,4 +217,149 @@ export class RoutineService {
       throw new Error('Error deleting routine.');
     }
   }
+// Obtener rutinas públicas
+  async getPublicRoutines(): Promise<IRoutine[]> {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No token found. Please log in.');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    try {
+      const res = await lastValueFrom(
+        this.httpClient.get<{ message: string, routines: any[] }>(
+          `${this.endpoint}/public/templates`, 
+          { headers }
+        )
+      );
+      console.log('Respuesta cruda de la API para rutinas públicas:', res);
+      return res.routines.map(routine => ({
+        routine_id: routine.routine_id,
+        user_id: routine.user_id,
+        name: routine.name,
+        description: routine.description,
+        is_template: routine.is_template,
+        created_at: routine.created_at,
+        updated_at: routine.updated_at,
+        start_time: routine.start_time,
+        end_time: routine.end_time,
+        daily_routine: routine.daily_routine,
+        shared_by: routine.shared_by,
+        activities: (routine.activities || []).map((activity: any) => ({
+          activity_id: activity.activity_id,
+          routine_id: activity.routine_id || routine.routine_id,
+          category_id: activity.category_id || null,
+          title: activity.activity_name || activity.title || 'Sin título',
+          description: activity.description || '',
+          day_of_week: activity.day_of_week || null,
+          start_time: activity.start_time || null,
+          end_time: activity.end_time || null,
+          location: activity.location || null,
+          datetime_start: activity.datetime_start || null,
+          datetime_end: activity.datetime_end || null,
+          created_at: activity.created_at || null,
+          updated_at: activity.updated_at || null,
+          icon: activity.icon || null,
+          category: activity.category || null
+        }))
+      }));
+    } catch (error) {
+      console.error('Error al obtener rutinas públicas:', error);
+      toast.error('Error al obtener rutinas públicas.');
+      throw new Error('Error fetching public routines.');
+    }
+  }
+
+  async getReceivedRoutinesByUser(): Promise<IReceivedRoutine[]> {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No token found. Please log in.');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    try {
+      const res = await lastValueFrom(
+        this.httpClient.get<{ message: string, received: IReceivedRoutine[] }>(
+          `${this.endpoint}/shared/received`,
+          { headers }
+        )
+      );
+      console.log('Respuesta cruda de getReceivedRoutinesByUser:', res);
+      return res.received;
+    } catch (error) {
+      console.error('Error al obtener rutinas compartidas recibidas:', error);
+      toast.error('Error al obtener las rutinas compartidas recibidas.');
+      throw new Error('Error fetching received routines.');
+    }
+  }
+
+  // Crear rutina desde plantilla
+  async createRoutineFromTemplate(
+    templateId: number, 
+    startTime: string, 
+    endTime: string, 
+    dailyRoutine: string
+  ): Promise<IRoutine> {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No token found. Please log in.');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const body = {
+      templateId,
+      start_time: startTime,
+      end_time: endTime,
+      daily_routine: dailyRoutine
+    };
+
+    try {
+      const res = await lastValueFrom(
+        this.httpClient.post<{ message: string, routine: any }>(
+          `${this.endpoint}/create-from-template`, 
+          body, 
+          { headers }
+        )
+      );
+      
+      return {
+        routine_id: res.routine.routine_id,
+        user_id: res.routine.user_id,
+        name: res.routine.name,
+        description: res.routine.description,
+        is_template: res.routine.is_template,
+        created_at: res.routine.created_at,
+        updated_at: res.routine.updated_at,
+        start_time: res.routine.start_time,
+        end_time: res.routine.end_time,
+        daily_routine: res.routine.daily_routine,
+        activities: (res.routine.activities || []).map((activity: any) => ({
+          activity_id: activity.activity_id,
+          routine_id: activity.routine_id || res.routine.routine_id,
+          category_id: activity.category_id || null,
+          title: activity.activity_name || activity.title || 'Sin título',
+          description: activity.description || '',
+          day_of_week: activity.day_of_week || null,
+          start_time: activity.start_time || null,
+          end_time: activity.end_time || null,
+          location: activity.location || null,
+          datetime_start: activity.datetime_start || null,
+          datetime_end: activity.datetime_end || null,
+          created_at: activity.created_at || null,
+          updated_at: activity.updated_at || null,
+          icon: activity.icon || null,
+          category: activity.category || null
+        }))
+      };
+    } catch (error) {
+      console.error('Error al crear rutina desde plantilla:', error);
+      toast.error('Error al crear rutina desde plantilla.');
+      throw new Error('Error creating routine from template.');
+    }
+  }
+  
 }
