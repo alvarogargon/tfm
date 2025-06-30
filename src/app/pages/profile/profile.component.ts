@@ -9,6 +9,7 @@ import { EditRoutineModalComponent } from './edit-routine-modal/edit-routine-mod
 import { AddGuideUserModalComponent } from './add-guide-user-modal/add-guide-user-modal.component';
 import { AddCategoryModalComponent } from './add-category-modal/add-category-modal.component';
 import { AddActivityModalComponent } from './add-activity-modal/add-activity-modal.component';
+import { SharedRoutinesModalComponent } from './shared-routines-modal/shared-routines-modal.component';
 import { IUser } from '../../interfaces/iuser.interface';
 import { UserService } from '../../services/user.service';
 import { RoutineService } from '../../services/routine.service';
@@ -43,7 +44,8 @@ import { DateFormatPipe } from '../../pipes/date-format.pipe';
     AddGuideUserModalComponent,
     AddCategoryModalComponent,
     AddActivityModalComponent,
-    DateFormatPipe
+    DateFormatPipe,
+    SharedRoutinesModalComponent
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
@@ -68,6 +70,7 @@ export class ProfileComponent {
   guideUserRelations = signal<IGuideUser[]>([]);
   categories = signal<ICategory[]>([]);
   selectedUserId = signal<number | null>(null);
+  showSharedRoutinesModal = signal(false);
   completedGoalsCount = computed(() => this.goals().filter(g => g.status === 'completed').length);
   activeRoutinesCount = computed(() => this.routines().filter(r => !this.isExpired(r.end_time)).length);
   activitiesCount = computed(() => this.activities().length);
@@ -216,6 +219,14 @@ export class ProfileComponent {
     this.showAddActivityModal.set(true);
   }
 
+  openSharedRoutinesModal() {
+    this.showSharedRoutinesModal.set(true);
+  }
+
+  onRoutineCopied(newRoutine: IRoutine) {
+    this.routines.update(routines => [...routines, newRoutine]);
+  }
+
   async deleteRoutine(routineId: number) {
     try {
       await this.routineService.deleteRoutine(routineId);
@@ -278,6 +289,7 @@ export class ProfileComponent {
     this.showAddGuideUserModal.set(false);
     this.showAddCategoryModal.set(false);
     this.showAddActivityModal.set(false);
+    this.showSharedRoutinesModal.set(false);
     const userId = this.user()?.role === 'guide' ? this.selectedUserId() : null;
     await this.loadUserData(userId);
   }

@@ -15,5 +15,5 @@ export interface IActivity {
   updated_at: string;
   icon: string | null;
   category_name?: string;
-  category_color?: string;  // Nuevo campo añadido
+  category_color?: string;
 }
