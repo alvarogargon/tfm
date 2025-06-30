@@ -17,6 +17,9 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { ProfileSettingsComponent } from './pages/settings/profile-settings/profile-settings.component';
 import { AppearanceComponent } from './pages/settings/appearance/appearance.component';
 import { RutinasVisualesComponent } from './shared/infoFooter/rutinas-visuales/rutinas-visuales.component';
+import { RegistroEmocionalComponent } from './shared/infoFooter/registro-emocional/registro-emocional.component';
+import { HorariosPersonalizadosComponent } from './shared/infoFooter/horarios-personalizados/horarios-personalizados.component';
+
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -30,6 +33,8 @@ export const routes: Routes = [
   { path: 'politica-de-cookies', component: CookiesComponent},
   { path: 'aviso-legal', component: AvisoLegalComponent },
   { path: 'rutinas-visuales', component: RutinasVisualesComponent },
+  { path: 'registro-emocional', component: RegistroEmocionalComponent },
+  { path: 'horarios-personalizados', component: HorariosPersonalizadosComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'dashboard/calendar', component: CalendarPageComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
