@@ -245,13 +245,10 @@ export class ProfileComponent {
 
   async onRoutineCopied(newRoutine: IRoutine) {
     try {
-      // Añadir la nueva rutina con from_template: true
       this.routines.update(routines => [...routines, { ...newRoutine, from_template: true }]);
-      // Recargar las rutinas compartidas recibidas para sincronizar
       const receivedRoutines = await this.routineService.getReceivedRoutinesByUser();
       this.receivedRoutines.set(receivedRoutines);
       console.log('Rutinas compartidas recibidas actualizadas:', receivedRoutines);
-      // Volver a marcar las rutinas para reflejar los cambios
       this.markRoutinesFromTemplates();
       this.showSharedRoutinesModal.set(false);
       toast.success('Rutina añadida a tu perfil.');

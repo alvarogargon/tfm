@@ -33,6 +33,7 @@
       @if (guideUserRelations.length > 0) {
         <div class="input-wrapper">
           <select class="input" formControlName="targetUserId">
+            <option [ngValue]="null" disabled>Selecciona un usuario</option>
             @for (relation of guideUserRelations; track relation.guide_user_id) {
               <option [ngValue]="relation.user_id">
                 {{ relation.guide_user_id === 0 ? 'Mi Perfil' : relation.user?.username }} (ID: {{ relation.user_id }})

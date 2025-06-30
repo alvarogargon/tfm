@@ -275,7 +275,12 @@
             <p>No hay rutinas registradas.</p>
           }
           @if (showAddRoutineModal()) {
-            <app-add-routine-modal [selectedUserId]="selectedUserId()" [guideUserRelations]="guideUserRelations()" (close)="onModalClosed()"></app-add-routine-modal>
+            <app-add-routine-modal 
+              [selectedUserId]="selectedUserId()" 
+              [guideUserRelations]="guideUserRelations()" 
+              [authUserId]="user()?.user_id ?? null"
+              (close)="onModalClosed()">
+            </app-add-routine-modal>
           }
           @if (showEditRoutineModal() && selectedRoutine()) {
             <app-edit-routine-modal [routine]="selectedRoutine()!" [guideUserRelations]="guideUserRelations()" [selectedUserId]="selectedUserId()" (close)="onModalClosed()"></app-edit-routine-modal>
