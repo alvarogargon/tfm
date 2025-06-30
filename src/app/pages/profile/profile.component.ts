@@ -71,7 +71,7 @@ export class ProfileComponent {
   categories = signal<ICategory[]>([]);
   selectedUserId = signal<number | null>(null);
   showSharedRoutinesModal = signal(false);
-  receivedRoutines = signal<IReceivedRoutine[]>([]); // Nuevo signal para rutinas compartidas recibidas
+  receivedRoutines = signal<IReceivedRoutine[]>([]);
   completedGoalsCount = computed(() => this.goals().filter(g => g.status === 'completed').length);
   activeRoutinesCount = computed(() => this.routines().filter(r => !this.isExpired(r.end_time)).length);
   activitiesCount = computed(() => this.activities().length);
@@ -131,12 +131,10 @@ export class ProfileComponent {
       const categories = await this.categoryService.getCategories();
       this.categories.set(categories);
 
-      // Cargar rutinas compartidas recibidas
       const receivedRoutines = await this.routineService.getReceivedRoutinesByUser();
       this.receivedRoutines.set(receivedRoutines);
       console.log('Rutinas compartidas recibidas:', receivedRoutines);
 
-      // Marcar rutinas creadas desde plantillas
       this.markRoutinesFromTemplates();
     } catch (error) {
       console.error('Error al cargar datos del perfil:', error);
@@ -159,7 +157,6 @@ export class ProfileComponent {
       this.activities.set(activities);
       console.log('Actividades cargadas:', activities);
 
-      // Volver a marcar rutinas después de cargar las nuevas
       this.markRoutinesFromTemplates();
     } catch (error) {
       console.error('Error al cargar datos del usuario:', error);
@@ -167,15 +164,15 @@ export class ProfileComponent {
     }
   }
 
-  // Método para marcar rutinas creadas desde plantillas
   private markRoutinesFromTemplates() {
-    const receivedRoutineIds = this.receivedRoutines().map(r => r.new_routine.routine_id);
+    const receivedRoutineIds = new Set(this.receivedRoutines().map(r => r.new_routine.routine_id));
     this.routines.update(routines =>
       routines.map(routine => ({
         ...routine,
-        from_template: receivedRoutineIds.includes(routine.routine_id)
+        from_template: receivedRoutineIds.has(routine.routine_id)
       }))
     );
+    console.log('Rutinas actualizadas con from_template:', this.routines());
   }
 
   async onUserSelected() {
@@ -246,10 +243,22 @@ export class ProfileComponent {
     this.showSharedRoutinesModal.set(true);
   }
 
-  onRoutineCopied(newRoutine: IRoutine) {
-    this.routines.update(routines => [...routines, { ...newRoutine, from_template: true }]);
-    this.showSharedRoutinesModal.set(false);
-    toast.success('Rutina añadida a tu perfil.');
+  async onRoutineCopied(newRoutine: IRoutine) {
+    try {
+      // Añadir la nueva rutina con from_template: true
+      this.routines.update(routines => [...routines, { ...newRoutine, from_template: true }]);
+      // Recargar las rutinas compartidas recibidas para sincronizar
+      const receivedRoutines = await this.routineService.getReceivedRoutinesByUser();
+      this.receivedRoutines.set(receivedRoutines);
+      console.log('Rutinas compartidas recibidas actualizadas:', receivedRoutines);
+      // Volver a marcar las rutinas para reflejar los cambios
+      this.markRoutinesFromTemplates();
+      this.showSharedRoutinesModal.set(false);
+      toast.success('Rutina añadida a tu perfil.');
+    } catch (error) {
+      console.error('Error al actualizar las rutinas compartidas recibidas:', error);
+      toast.error('Error al añadir la rutina.');
+    }
   }
 
   async deleteRoutine(routineId: number) {
