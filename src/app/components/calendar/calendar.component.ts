@@ -28,6 +28,8 @@ export class CalendarComponent {
 
   selectedActivity: IActivity | null = null;
   showActivityInfoModal: boolean = false;
+  isAllDay: boolean = false;
+  selectedDateStr: string = '';
 
   availableRoutines: IRoutine[] = [];
   availableCategories: ICategory[] = [];
@@ -97,6 +99,30 @@ export class CalendarComponent {
       toast.error('Error al cargar las categorías.');
     }
   }
+
+    closeModal() {
+      this.showActivityInfoModal = false;
+      this.resetForm();
+    }
+
+    resetForm() {
+      this.newActivity = {
+        title: '',
+    description: '',
+    routine_id: null,
+    category_id: null,
+    location: '',
+    start_time: '',
+    end_time: '',
+    icon: '',
+    day_of_week: null,
+    datetime_start: '',
+    datetime_end: '',
+      }
+      this.isAllDay = false;
+      this.selectedDateStr = '';
+    }
+
 
   private transformRoutinesToEvents(routines: IRoutine[]): EventInput[] {
     const events: EventInput[] = [];
