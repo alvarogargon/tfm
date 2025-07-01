@@ -108,6 +108,14 @@ export class CalendarComponent {
         arg.revert();
         return;
       }
+
+      const originalStart = new Date(activity.datetime_start);
+      const newStartDate = new Date(originalStart.getTime() + timeDifference);
+
+      if (activity.datetime_end) {
+        const originalEnd= new Date(activity.datetime_end);
+        const newEnd = new Date(originalEnd.getTime() + timeDifference);
+      }
       
 
 
