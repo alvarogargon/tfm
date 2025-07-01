@@ -24,6 +24,23 @@ export class CalendarComponent {
   private activityService = inject(ActivityService);
   private categoryService = inject(CategoryService);
 
+  selectedActivity: IActivity | null = null;
+  showActivityInfoModal: boolean = false;
+
+  newActivity: any = {
+    title: '',
+    description: '',
+    routine_id: null,
+    category_id: null,
+    location: '',
+    start_time: '',
+    end_time: '',
+    icon: '',
+    day_of_week: null,
+    datetime_start: '',
+    datetime_end: '',
+  }
+
   calendarOptions: CalendarOptions = {
     locale: 'es',
     timeZone: 'local',
@@ -80,8 +97,16 @@ export class CalendarComponent {
     return events;
   }
 
-  handleEventClick(arg: any) {
-    toast.info(`Evento clicado: ${arg.event.title}`);
+  async handleEventClick(arg: any) {
+    const activityId = parseInt(arg.event.id);
+    try {
+      this.selectedActivity = await this.activityService.getActivityById(activityId);
+      this.showActivityInfoModal = true;
+    }
+    catch (error) {
+      console.error('Error al obtener la actividad:', error);
+      toast.error('Error al obtener la actividad.');
+    }
   }
 
   async handleEventMove(arg: any) {
