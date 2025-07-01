@@ -1,8 +1,11 @@
-  <div class='demo-app-main'>
-    <full-calendar *ngIf='calendarVisible()' [options]='calendarOptions()'>
-      <ng-template #eventContent let-arg>
-        <b>{{ arg.timeText }}</b>
-        <i>{{ arg.event.title }}</i>
-      </ng-template>
-    </full-calendar>
-  </div>
+<div class="pb-3 text-center">
+  <h1>Calendario de Actividades</h1>
+</div>
+<hr>
+<div class="calendar-container">
+  <full-calendar [options]="calendarOptions"></full-calendar>
+
+
+
+
+</div>

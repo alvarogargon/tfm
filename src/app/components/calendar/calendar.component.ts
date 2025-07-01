@@ -16,9 +16,7 @@ import interactionPlugin from '@fullcalendar/interaction';
   selector: 'app-calendar',
   standalone: true,
   imports: [CommonModule, FullCalendarModule],
-  template: `
-    <full-calendar [options]="calendarOptions"></full-calendar>
-  `,
+  templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css']
 })
 export class CalendarComponent {
