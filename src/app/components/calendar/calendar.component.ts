@@ -8,6 +8,9 @@ import { IActivity } from '../../interfaces/iactivity.interface';
 import { toast } from 'ngx-sonner';
 import { CommonModule } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { ActivityService } from '../../services/activity.service';
+import { CategoryService } from '../../services/category.service';
+import interactionPlugin from '@fullcalendar/interaction';
 
 @Component({
   selector: 'app-calendar',
@@ -20,9 +23,13 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 })
 export class CalendarComponent {
   private routineService = inject(RoutineService);
+  private activityService = inject(ActivityService);
+  private categoryService = inject(CategoryService);
 
   calendarOptions: CalendarOptions = {
-    plugins: [dayGridPlugin, timeGridPlugin],
+    locale: 'es',
+    timeZone: 'local',
+    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
     headerToolbar: {
       left: 'prev,next today',
@@ -30,7 +37,10 @@ export class CalendarComponent {
       right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
     events: [],
-    eventClick: this.handleEventClick.bind(this)
+    eventClick: this.handleEventClick.bind(this),
+    editable: true,
+    selectable: true,
+    eventDrop: this.handleEventMove.bind(this),
   };
 
   async ngOnInit() {
@@ -74,5 +84,24 @@ export class CalendarComponent {
 
   handleEventClick(arg: any) {
     toast.info(`Evento clicado: ${arg.event.title}`);
+  }
+
+  async handleEventMove(arg: any) {
+    const activityId = parseInt(arg.event.id);
+    
+
+    try {
+      const activity = await this.activityService.getActivityById(activityId);
+
+      if(!activity) {
+        toast.error('Actividad no encontrada.');
+        arg.revert();
+        return;
+      }
+    } catch (error) {
+      console.error('Error al mover la actividad:', error);
+      toast.error('Error al mover la actividad.');
+      arg.revert();
+    }
   }
 }
