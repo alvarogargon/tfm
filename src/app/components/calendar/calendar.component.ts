@@ -12,7 +12,8 @@ import { toast } from 'ngx-sonner';
 import { CommonModule } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { FormsModule } from '@angular/forms';
-import interactionPlugin from '@fullcalendar/interaction'; // Importar el plugin de interacción
+import listplugin from '@fullcalendar/list';
+import interactionPlugin from '@fullcalendar/interaction';
 
 
 @Component({
@@ -57,12 +58,12 @@ export class CalendarComponent {
   };
 
   calendarOptions: CalendarOptions = {
-    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listplugin],
     initialView: 'dayGridMonth',
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
     },
     events: [],
     eventClick: this.handleEventClick.bind(this),

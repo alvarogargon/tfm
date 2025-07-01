@@ -1,4 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
 
 :root {
     --color-btn-ac: #4A90E2;
@@ -9,7 +8,8 @@
     --color-primary-yellow: #FEEEA0;
     --color-secondary-red: #F88379;
 
-    /* USER THEME PALETTE */
+    /* Paleta del tema del usuario */
+
     --primary-color: #4682B4;
     --secondary-color: #708090;
     --accent-color: #FFD700;
@@ -42,7 +42,7 @@
 
 
 .fc-day-grid-event {
-    background-color: #f0f0f0;
+    background-color: #f0f0f0; 
 }
  
 .fc-event-solid {
@@ -58,13 +58,28 @@
 
 
 }
+.fc-event-bg-color {
+    background-color: rgba(240, 128, 128, 0.491); /* Cambiar el color de fondo de los eventos */
+}
+
 .fc .fc-button-primary{ /* cambiar  color números cabecera tabla*/
-    background-color: var(--color-secondary-green);
+    background-color: lightcoral;
     border: none;
 } 
 
-.fc-event-title-container { /* ccolor evento*/
-    background-color: var(--color-secondary-green);
+.fc-sticky {
+    color: white;
+    background-color: rgba(240, 128, 128, 0.491);
+}
+.fc-event-title-container { /* color evento*/
+    background-color: rgba(240, 128, 128, 0.491);
+    display: grid;
+}
+.fc-h-event {
+    background-color: rgba(240, 128, 128, 0.491);
+    border: none;
+    display: grid;
+    margin: 10px;
 }
 .fc-today-button {
     background-color: var(--color-black);

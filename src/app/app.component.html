@@ -1,9 +1,23 @@
 <div class="d-flex flex-column min-vh-100">
-  <app-navbar class="nav-app"></app-navbar>
+
+  <header class="nav-app">
+
+    <app-navbar></app-navbar>
+
+  </header>
+
   <main class="flex-grow-1">
+
     <router-outlet></router-outlet>
+
   </main>
 
-  <app-footer2></app-footer2>
+  <footer>
+
+    <app-footer2></app-footer2>
+
+  </footer>
+
   <ngx-sonner-toaster richColors visibleToasts="10" />
+  
 </div>
