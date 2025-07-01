@@ -31,6 +31,11 @@
         <input type="date" class="input" formControlName="deadline">
         <label class="label">Fecha Límite</label>
       </div>
+      <div class="input-wrapper">
+        <input type="checkbox" class="input-checkbox" formControlName="need_reminder" id="need_reminder" />
+        <label class="label-checkbox" for="need_reminder">Avisame</label>
+      </div>
+      
       <div class="modal-footer">
         <button type="submit" class="button-submit">Guardar</button>
         <button type="button" class="button-close" (click)="close.emit()">Cerrar</button>

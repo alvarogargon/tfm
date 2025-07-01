@@ -22,7 +22,8 @@ export class AddGoalModalComponent {
       description: [''],
       target_hours_weekly: [null, Validators.min(0)],
       status: ['active', Validators.required],
-      deadline: ['']
+      deadline: [''],
+      need_reminder: [false]
     });
   }
 

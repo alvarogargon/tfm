@@ -25,7 +25,8 @@ export class EditGoalModalComponent implements OnInit {
       target_hours_weekly: [null, Validators.min(0)],
       status: ['active', Validators.required],
       progress: [0, [Validators.min(0), Validators.max(100)]],
-      deadline: ['']
+      deadline: [''],
+      need_reminder: [false]
     });
   }
 
@@ -37,7 +38,7 @@ export class EditGoalModalComponent implements OnInit {
       target_hours_weekly: this.goal.target_hours_weekly,
       status: this.goal.status,
       progress: this.goal.progress,
-      deadline: this.goal.deadline
+      deadline: this.goal.deadline,
     });
   }
 
