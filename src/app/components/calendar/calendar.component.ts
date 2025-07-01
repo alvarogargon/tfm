@@ -68,7 +68,6 @@ export class CalendarComponent {
     eventClick: this.handleEventClick.bind(this),
     dateClick: this.dateClicked.bind(this),
     selectable: true,
-    select: this.dateClicked.bind(this),
     editable: true,
     eventDrop: this.handleEventDrop.bind(this), // Manejar el arrastre de eventos
    };
@@ -224,7 +223,7 @@ export class CalendarComponent {
   }
 
   dateClicked(arg: any) {
-    toast.info(`Fecha clicada: ${arg.dateStr}`);
+    toast.info(`Fecha seleccionada: ${arg.dateStr}`);
     
     // Configurar la fecha seleccionada
     this.selectedDate = arg.date;
