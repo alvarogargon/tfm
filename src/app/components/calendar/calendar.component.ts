@@ -11,11 +11,13 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { ActivityService } from '../../services/activity.service';
 import { CategoryService } from '../../services/category.service';
 import interactionPlugin from '@fullcalendar/interaction';
+import { FormsModule } from '@angular/forms';
+import { ICategory } from '../../interfaces/icategory.interface';
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, FullCalendarModule],
+  imports: [CommonModule, FullCalendarModule, FormsModule],
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css']
 })
@@ -26,6 +28,10 @@ export class CalendarComponent {
 
   selectedActivity: IActivity | null = null;
   showActivityInfoModal: boolean = false;
+
+  availableRoutines: IRoutine[] = [];
+  availableCategories: ICategory[] = [];
+
 
   newActivity: any = {
     title: '',
@@ -70,6 +76,25 @@ export class CalendarComponent {
     } catch (error) {
       console.error('Error al cargar rutinas:', error);
       toast.error('Error al cargar las rutinas en el calendario.');
+    }
+  }
+
+  
+  async loadRoutinesForm() {
+    try {
+      this.availableRoutines = await this.routineService.getRoutines(null);
+    } catch (error) {
+      console.error('Error al cargar rutinas:', error);
+      toast.error('Error al cargar las rutinas.');
+    }
+  }
+
+  async loadCategories() {
+    try {
+      this.availableCategories = await this.categoryService.getCategories();
+    } catch (error) {
+      console.error('Error al cargar categorías:', error);
+      toast.error('Error al cargar las categorías.');
     }
   }
 
