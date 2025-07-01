@@ -103,6 +103,8 @@ export class CalendarComponent {
       const timeDifference = newStart.getTime() - oldStart.getTime();
       const daysDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24));
 
+      const updatedActivity = {...activity};
+
       if (!activity.datetime_start) {
         toast.error('La actividad no tiene fecha de inicio válida.');
         arg.revert();
@@ -111,14 +113,20 @@ export class CalendarComponent {
 
       const originalStart = new Date(activity.datetime_start);
       const newStartDate = new Date(originalStart.getTime() + timeDifference);
+      updatedActivity.datetime_start = newStartDate.toISOString();
 
       if (activity.datetime_end) {
         const originalEnd= new Date(activity.datetime_end);
         const newEnd = new Date(originalEnd.getTime() + timeDifference);
+        updatedActivity.datetime_end = newEnd.toISOString();
       }
+
+      await this.activityService.updateActivity(activityId, updatedActivity);
+
+      toast.success(`Actividad movida ${daysDifference} día(s) con éxito.`);
+
+      await this.loadRoutines();
       
-
-
     } catch (error) {
       console.error('Error al mover la actividad:', error);
       toast.error('Error al mover la actividad.');
