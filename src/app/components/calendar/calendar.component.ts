@@ -88,7 +88,8 @@ export class CalendarComponent {
 
   async handleEventMove(arg: any) {
     const activityId = parseInt(arg.event.id);
-    
+    const newStart = arg.event.start;
+    const oldStart = arg.oldEvent.start;
 
     try {
       const activity = await this.activityService.getActivityById(activityId);
@@ -98,6 +99,18 @@ export class CalendarComponent {
         arg.revert();
         return;
       }
+
+      const timeDifference = newStart.getTime() - oldStart.getTime();
+      const daysDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24));
+
+      if (!activity.datetime_start) {
+        toast.error('La actividad no tiene fecha de inicio válida.');
+        arg.revert();
+        return;
+      }
+      
+
+
     } catch (error) {
       console.error('Error al mover la actividad:', error);
       toast.error('Error al mover la actividad.');
