@@ -3,42 +3,45 @@ import { CalendarOptions, EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { RoutineService } from '../../services/routine.service';
+import { ActivityService } from '../../services/activity.service';
+import { CategoryService } from '../../services/category.service';
 import { IRoutine } from '../../interfaces/iroutine.interface';
 import { IActivity } from '../../interfaces/iactivity.interface';
+import { ICategory } from '../../interfaces/icategory.interface';
 import { toast } from 'ngx-sonner';
 import { CommonModule } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { ActivityService } from '../../services/activity.service';
-import { CategoryService } from '../../services/category.service';
-import interactionPlugin from '@fullcalendar/interaction';
 import { FormsModule } from '@angular/forms';
-import { ICategory } from '../../interfaces/icategory.interface';
+import interactionPlugin from '@fullcalendar/interaction'; // Importar el plugin de interacción
+
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
   imports: [CommonModule, FullCalendarModule, FormsModule],
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.css'],
+  styleUrls: ['./calendar.component.css']
 })
 export class CalendarComponent {
   private routineService = inject(RoutineService);
   private activityService = inject(ActivityService);
   private categoryService = inject(CategoryService);
 
-  selectedActivity: IActivity | null = null;
-  showActivityInfoModal: boolean = false;
-  isAllDay: boolean = false;
-  selectedDateStr: string = '';
   selectedDate: Date | null = null;
+  selectedDateStr: string = '';
+  showAddActivityForm: boolean = false;
+  showActivityInfoModal: boolean = false;
+  showDeleteConfirmModal: boolean = false;
+  selectedActivity: IActivity | null = null;
+  isAllDay: boolean = false;
   isSubmitting: boolean = false;
   isDeleting: boolean = false;
-  showDeleteConfirmModal: boolean = false;
-  showAddActivityForm: boolean = false;
 
+  // Datos para el formulario
   availableRoutines: IRoutine[] = [];
   availableCategories: ICategory[] = [];
-
+  
+  // Objeto para la nueva actividad - simplificado
   newActivity: any = {
     title: '',
     description: '',
@@ -49,31 +52,29 @@ export class CalendarComponent {
     end_time: '',
     icon: '',
     day_of_week: null,
-    datetime_start: '',
-    datetime_end: '',
+    datetime_start: null,
+    datetime_end: null
   };
 
   calendarOptions: CalendarOptions = {
-    locale: 'es',
-    timeZone: 'local',
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
     events: [],
     eventClick: this.handleEventClick.bind(this),
-    editable: true,
-    selectable: true,
-    eventDrop: this.handleEventMove.bind(this),
     dateClick: this.dateClicked.bind(this),
-  };
+    selectable: true,
+    editable: true,
+    eventDrop: this.handleEventDrop.bind(this), // Manejar el arrastre de eventos
+   };
 
   async ngOnInit() {
     await this.loadRoutines();
-    await this.loadRoutinesForm();
+    await this.loadRoutinesForForm();
     await this.loadCategories();
   }
 
@@ -88,11 +89,46 @@ export class CalendarComponent {
     }
   }
 
-  async loadRoutinesForm() {
+  private transformRoutinesToEvents(routines: IRoutine[]): EventInput[] {
+    const events: EventInput[] = [];
+    
+    routines.forEach(routine => {
+      routine.activities.forEach(activity => {
+        // Solo incluir eventos con fechas válidas
+        if (activity.datetime_start) {
+          events.push({
+            id: activity.activity_id.toString(),
+            title: activity.title,
+            start: activity.datetime_start,
+            end: activity.datetime_end || undefined,
+            allDay: !activity.start_time,
+            extendedProps: {
+              routine_id: activity.routine_id
+            }
+          });
+        }
+      });
+    });
+
+    return events;
+  }
+
+  async handleEventClick(arg: any) {
+    const activityId = parseInt(arg.event.id);
+    try {
+      this.selectedActivity = await this.activityService.getActivityById(activityId);
+      this.showActivityInfoModal = true;
+    } catch (error) {
+      console.error('Error al cargar información de la actividad:', error);
+      toast.error('Error al cargar la información del evento');
+    }
+  }
+
+  async loadRoutinesForForm() {
     try {
       this.availableRoutines = await this.routineService.getRoutines(null);
     } catch (error) {
-      console.error('Error al cargar rutinas:', error);
+      console.error('Error al cargar rutinas para formulario:', error);
       toast.error('Error al cargar las rutinas.');
     }
   }
@@ -107,7 +143,7 @@ export class CalendarComponent {
   }
 
   closeModal() {
-    this.showActivityInfoModal = false;
+    this.showAddActivityForm = false;
     this.resetForm();
   }
 
@@ -127,120 +163,22 @@ export class CalendarComponent {
       end_time: '',
       icon: '',
       day_of_week: null,
-      datetime_start: '',
-      datetime_end: '',
+      datetime_start: null,
+      datetime_end: null
     };
     this.isAllDay = false;
     this.selectedDateStr = '';
   }
 
-  private transformRoutinesToEvents(routines: IRoutine[]): EventInput[] {
-    const events: EventInput[] = [];
-
-    routines.forEach((routine) => {
-      routine.activities.forEach((activity) => {
-        // Solo incluir eventos con fechas válidas
-        if (activity.datetime_start) {
-          events.push({
-            id: activity.activity_id.toString(),
-            title: activity.title,
-            start: activity.datetime_start,
-            end: activity.datetime_end || undefined,
-            allDay: !activity.start_time,
-            extendedProps: {
-              routine_id: activity.routine_id,
-            },
-          });
-        }
-      });
-    });
-
-    return events;
-  }
-
-  ateClicked(arg: any) {
-    toast.info(`Fecha clicada: ${arg.dateStr}`);
-
-    // Configurar la fecha seleccionada
-    this.selectedDate = arg.date;
-    this.selectedDateStr = arg.dateStr;
-
-    // Asegurar que el objeto newActivity está inicializado
-    this.resetForm();
-
-    // Mostrar el formulario
-    this.showAddActivityForm = true;
-  }
-
-  async handleEventClick(arg: any) {
-    const activityId = parseInt(arg.event.id);
-    try {
-      this.selectedActivity = await this.activityService.getActivityById(
-        activityId
-      );
-      this.showActivityInfoModal = true;
-    } catch (error) {
-      console.error('Error al obtener la actividad:', error);
-      toast.error('Error al obtener la actividad.');
-    }
-  }
-
-  async handleEventMove(arg: any) {
-    const activityId = parseInt(arg.event.id);
-    const newStart = arg.event.start;
-    const oldStart = arg.oldEvent.start;
-
-    try {
-      const activity = await this.activityService.getActivityById(activityId);
-
-      if (!activity) {
-        toast.error('Actividad no encontrada.');
-        arg.revert();
-        return;
-      }
-
-      const timeDifference = newStart.getTime() - oldStart.getTime();
-      const daysDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24));
-
-      const updatedActivity = { ...activity };
-
-      if (!activity.datetime_start) {
-        toast.error('La actividad no tiene fecha de inicio válida.');
-        arg.revert();
-        return;
-      }
-
-      const originalStart = new Date(activity.datetime_start);
-      const newStartDate = new Date(originalStart.getTime() + timeDifference);
-      updatedActivity.datetime_start = newStartDate.toISOString();
-
-      if (activity.datetime_end) {
-        const originalEnd = new Date(activity.datetime_end);
-        const newEnd = new Date(originalEnd.getTime() + timeDifference);
-        updatedActivity.datetime_end = newEnd.toISOString();
-      }
-
-      await this.activityService.updateActivity(activityId, updatedActivity);
-
-      toast.success(`Actividad movida ${daysDifference} día(s) con éxito.`);
-
-      await this.loadRoutines();
-    } catch (error) {
-      console.error('Error al mover la actividad:', error);
-      toast.error('Error al mover la actividad.');
-      arg.revert();
-    }
-  }
-
   async submitActivity() {
     if (this.isSubmitting) return;
-
+    
     this.isSubmitting = true;
-
+    
     try {
       // Preparar los datos de la actividad
       const activityData = { ...this.newActivity };
-
+      
       // Configurar las fechas y horas
       if (this.selectedDateStr) {
         if (this.isAllDay) {
@@ -256,7 +194,7 @@ export class CalendarComponent {
           } else {
             activityData.datetime_start = `${this.selectedDateStr}T00:00:00`;
           }
-
+          
           if (activityData.end_time) {
             activityData.datetime_end = `${this.selectedDateStr}T${activityData.end_time}:00`;
           } else {
@@ -264,16 +202,21 @@ export class CalendarComponent {
           }
         }
       }
+
+      // Crear la actividad
       await this.activityService.createActivity(activityData);
-
+      
       toast.success('Actividad creada exitosamente');
-
+      
+      // Recargar el calendario
       await this.loadRoutines();
-
+      
+      // Cerrar el modal
       this.closeModal();
+      
     } catch (error) {
-      console.error('Error al crear la actividad:', error);
-      toast.error('Error al crear la actividad.');
+      console.error('Error al crear actividad:', error);
+      toast.error('Error al crear la actividad');
     } finally {
       this.isSubmitting = false;
     }
@@ -281,24 +224,27 @@ export class CalendarComponent {
 
   dateClicked(arg: any) {
     toast.info(`Fecha seleccionada: ${arg.dateStr}`);
-
+    
+    // Configurar la fecha seleccionada
     this.selectedDate = arg.date;
     this.selectedDateStr = arg.dateStr;
-
+    
+    // Asegurar que el objeto newActivity está inicializado
     this.resetForm();
-
+    
+    // Mostrar el formulario
     this.showAddActivityForm = true;
   }
 
   formatDate(dateString: string | null): string {
     if (!dateString) return 'No especificada';
-
+    
     try {
       const date = new Date(dateString);
       return date.toLocaleDateString('es-ES', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric',
+        day: 'numeric'
       });
     } catch {
       return 'Fecha inválida';
@@ -307,7 +253,7 @@ export class CalendarComponent {
 
   formatTime(timeString: string | null): string {
     if (!timeString) return 'No especificada';
-
+    
     try {
       if (timeString.includes(':') && timeString.length <= 8) {
         const [hours, minutes] = timeString.split(':');
@@ -315,13 +261,15 @@ export class CalendarComponent {
         date.setHours(parseInt(hours), parseInt(minutes));
         return date.toLocaleTimeString('es-ES', {
           hour: '2-digit',
-          minute: '2-digit',
+          minute: '2-digit'
         });
       }
+      
+      // Si es datetime completo
       const date = new Date(timeString);
       return date.toLocaleTimeString('es-ES', {
         hour: '2-digit',
-        minute: '2-digit',
+        minute: '2-digit'
       });
     } catch {
       return 'Hora inválida';
@@ -330,19 +278,15 @@ export class CalendarComponent {
 
   getRoutineName(): string {
     if (!this.selectedActivity) return 'No especificada';
-
-    const routine = this.availableRoutines.find(
-      (r) => r.routine_id === this.selectedActivity!.routine_id
-    );
+    
+    const routine = this.availableRoutines.find(r => r.routine_id === this.selectedActivity!.routine_id);
     return routine ? routine.name : 'Rutina no encontrada';
   }
 
   getCategoryName(): string {
     if (!this.selectedActivity?.category_id) return 'Sin categoría';
-
-    const category = this.availableCategories.find(
-      (c) => c.category_id === this.selectedActivity!.category_id
-    );
+    
+    const category = this.availableCategories.find(c => c.category_id === this.selectedActivity!.category_id);
     return category ? category.name : 'Categoría no encontrada';
   }
 
@@ -354,7 +298,7 @@ export class CalendarComponent {
 
   confirmDeleteActivity() {
     if (!this.selectedActivity) return;
-
+    
     this.showDeleteConfirmModal = false;
     this.executeDelete();
   }
@@ -369,15 +313,14 @@ export class CalendarComponent {
     this.isDeleting = true;
 
     try {
-      await this.activityService.deleteActivity(
-        this.selectedActivity.activity_id
-      );
-
+      await this.activityService.deleteActivity(this.selectedActivity.activity_id);
+      
       toast.success('Actividad eliminada exitosamente');
-
+      
       await this.loadRoutines();
-
+      
       this.closeInfoModal();
+      
     } catch (error) {
       console.error('Error al eliminar actividad:', error);
       toast.error('Error al eliminar la actividad');
@@ -386,7 +329,8 @@ export class CalendarComponent {
     }
   }
 
-  checkModalClick(event: Event) {}
+  checkModalClick(event: Event) {
+  }
 
   async handleEventDrop(arg: any) {
     const activityId = parseInt(arg.event.id);
@@ -395,7 +339,7 @@ export class CalendarComponent {
 
     try {
       const activity = await this.activityService.getActivityById(activityId);
-
+      
       if (!activity) {
         toast.error('No se pudo encontrar la actividad');
         arg.revert(); // Revertir el cambio
@@ -424,14 +368,15 @@ export class CalendarComponent {
       }
 
       await this.activityService.updateActivity(activityId, updatedActivity);
-
+      
       toast.success(`Actividad movida ${daysDiff} día(s)`);
-
+      
       await this.loadRoutines();
+      
     } catch (error) {
       console.error('Error al actualizar la actividad:', error);
       toast.error('Error al mover la actividad');
-      arg.revert();
+      arg.revert(); 
     }
   }
 }
