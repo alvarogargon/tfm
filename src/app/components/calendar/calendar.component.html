@@ -1,11 +1,347 @@
-<div class="pb-3 text-center">
+<div class="pb-3 text-center ">
   <h1>Calendario de Actividades</h1>
 </div>
 <hr>
 <div class="calendar-container">
   <full-calendar [options]="calendarOptions"></full-calendar>
 
+  <!-- Modal para agregar actividad -->
+  <div
+    class="modal"
+    [class.show]="showAddActivityForm"
+    *ngIf="showAddActivityForm"
+    (click)="checkModalClick($event)"
+  >
+    <div class="modal-backdrop" (click)="closeModal()"></div>
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Agregar Nueva Actividad</h2>
+        <button class="close-btn" (click)="closeModal()">&times;</button>
+      </div>
 
+      <div class="modal-body">
+        <form (ngSubmit)="submitActivity()" #activityForm="ngForm">
+          <div class="form-group">
+            <label for="title">Título *</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              [(ngModel)]="newActivity.title"
+              required
+              #title="ngModel"
+              class="form-control"
+              placeholder="Escribe aquí el título..."
+              autocomplete="off"
+            />
+            <div class="error-message" *ngIf="title.invalid && title.touched">
+              El título es obligatorio
+            </div>
+          </div>
 
+          <div class="form-group">
+            <label for="routine">Rutina *</label>
+            <select
+              id="routine"
+              name="routine_id"
+              [(ngModel)]="newActivity.routine_id"
+              required
+              #routine="ngModel"
+              class="form-control"
+            >
+              <option value="">Seleccionar rutina</option>
+              <option
+                *ngFor="let routine of availableRoutines"
+                [value]="routine.routine_id"
+              >
+                {{ routine.name }}
+              </option>
+            </select>
+            <div
+              class="error-message"
+              *ngIf="routine.invalid && routine.touched"
+            >
+              Debe seleccionar una rutina
+            </div>
+          </div>
 
+          <div class="form-group">
+            <label for="category">Categoría</label>
+            <select
+              id="category"
+              name="category_id"
+              [(ngModel)]="newActivity.category_id"
+              class="form-control"
+            >
+              <option value="">Sin categoría</option>
+              <option
+                *ngFor="let category of availableCategories"
+                [value]="category.category_id"
+              >
+                {{ category.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Descripción</label>
+            <textarea
+              id="description"
+              name="description"
+              [(ngModel)]="newActivity.description"
+              class="form-control"
+              rows="3"
+              placeholder="Descripción de la actividad"
+              autocomplete="off"
+              [disabled]="false"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="location">Ubicación</label>
+            <input
+              type="text"
+              id="location"
+              name="location"
+              [(ngModel)]="newActivity.location"
+              class="form-control"
+              placeholder="Ubicación de la actividad"
+              autocomplete="off"
+              [disabled]="false"
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="date">Fecha *</label>
+              <input
+                type="date"
+                id="date"
+                name="date"
+                [(ngModel)]="selectedDateStr"
+                required
+                #date="ngModel"
+                class="form-control"
+              />
+              <div class="error-message" *ngIf="date.invalid && date.touched">
+                La fecha es obligatoria
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>
+                <input type="checkbox" [(ngModel)]="isAllDay" name="isAllDay" />
+                Todo el día
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row" *ngIf="!isAllDay">
+            <div class="form-group">
+              <label for="startTime">Hora inicio</label>
+              <input
+                type="time"
+                id="startTime"
+                name="start_time"
+                [(ngModel)]="newActivity.start_time"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="endTime">Hora fin</label>
+              <input
+                type="time"
+                id="endTime"
+                name="end_time"
+                [(ngModel)]="newActivity.end_time"
+                class="form-control"
+              />
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="closeModal()"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="activityForm.invalid || isSubmitting"
+            >
+              <span *ngIf="isSubmitting">Guardando...</span>
+              <span *ngIf="!isSubmitting">Guardar Actividad</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para ver información de actividad -->
+  <div
+    class="modal"
+    [class.show]="showActivityInfoModal"
+    *ngIf="showActivityInfoModal"
+    (click)="closeInfoModal()"
+  >
+    <div class="modal-backdrop"></div>
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>
+          <span
+            *ngIf="selectedActivity?.icon"
+            class="activity-icon"
+            >{{ selectedActivity?.icon }}</span
+          >
+          {{ selectedActivity?.title || 'Información de Actividad' }}
+        </h2>
+        <button class="close-btn" (click)="closeInfoModal()">&times;</button>
+      </div>
+
+      <div class="modal-body" *ngIf="selectedActivity">
+        <div class="info-section">
+          <div class="info-item">
+            <label> Fecha inicio:</label>
+            <span>{{ formatDate(selectedActivity.datetime_start) }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="selectedActivity.datetime_end && selectedActivity.datetime_end !== selectedActivity.datetime_start">
+            <label> Fecha fin:</label>
+            <span>{{ formatDate(selectedActivity.datetime_end) }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="!selectedActivity.start_time">
+            <label> Duración:</label>
+            <span>Todo el día</span>
+          </div>
+
+          <div class="info-item" *ngIf="selectedActivity.start_time">
+            <label> Hora inicio:</label>
+            <span>{{ formatTime(selectedActivity.start_time) }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="selectedActivity.end_time">
+            <label> Hora fin:</label>
+            <span>{{ formatTime(selectedActivity.end_time) }}</span>
+          </div>
+
+          <div class="info-item">
+            <label> Rutina:</label>
+            <span>{{ getRoutineName() }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="selectedActivity.category_id">
+            <label> Categoría:</label>
+            <span
+              class="category-badge"
+              [style.background-color]="
+                selectedActivity.category_color || '#6c757d'
+              "
+            >
+              {{ getCategoryName() }}
+            </span>
+          </div>
+
+          <div class="info-item" *ngIf="selectedActivity.description">
+            <label> Descripción:</label>
+            <p class="description-text">
+              {{ selectedActivity.description }}
+            </p>
+          </div>
+
+          <div class="info-item" *ngIf="selectedActivity.location">
+            <label> Ubicación:</label>
+            <span>{{ selectedActivity.location }}</span>
+          </div>
+
+          <div class="info-item">
+            <label> ID Actividad:</label>
+            <span class="id-badge">#{{ selectedActivity.activity_id }}</span>
+          </div>
+
+          <div class="info-item">
+            <label> Creada:</label>
+            <span>{{ formatDate(selectedActivity.created_at) }}</span>
+          </div>
+
+          <div
+            class="info-item"
+            *ngIf="selectedActivity.updated_at !== selectedActivity.created_at"
+          >
+            <label> Actualizada:</label>
+            <span>{{ formatDate(selectedActivity.updated_at) }}</span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closeInfoModal()"
+          >
+            Cerrar
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-danger" 
+            (click)="deleteActivity()"
+            [disabled]="isDeleting">
+            <span *ngIf="isDeleting"> Eliminando...</span>
+            <span *ngIf="!isDeleting"> Eliminar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación de eliminación -->
+  <div
+    class="modal confirmation-modal"
+    [class.show]="showDeleteConfirmModal"
+    *ngIf="showDeleteConfirmModal"
+    (click)="cancelDeleteActivity()"
+  >
+    <div class="modal-backdrop" (click)="cancelDeleteActivity()"></div>
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Confirmar Eliminación</h3>
+        <button class="close-btn" (click)="cancelDeleteActivity()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="confirmation-content">
+          <div class="warning-icon"></div>
+          <p class="confirmation-message">
+            ¿Estás seguro de que deseas eliminar la actividad 
+            <strong>"{{ selectedActivity?.title }}"</strong>?
+          </p>
+          <p class="confirmation-warning">
+            Esta acción no se puede deshacer.
+          </p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="cancelDeleteActivity()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="confirmDeleteActivity()"
+        >
+          Eliminar Actividad
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
