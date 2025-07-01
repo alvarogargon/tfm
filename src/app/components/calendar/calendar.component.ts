@@ -8,6 +8,9 @@ import { IActivity } from '../../interfaces/iactivity.interface';
 import { toast } from 'ngx-sonner';
 import { CommonModule } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { ActivityService } from '../../services/activity.service';
+import { CategoryService } from '../../services/category.service';
+import interactionPlugin from '@fullcalendar/interaction';
 
 @Component({
   selector: 'app-calendar',
@@ -20,9 +23,13 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 })
 export class CalendarComponent {
   private routineService = inject(RoutineService);
+  private activityService = inject(ActivityService);
+  private categoryService = inject(CategoryService);
 
   calendarOptions: CalendarOptions = {
-    plugins: [dayGridPlugin, timeGridPlugin],
+    locale: 'es',
+    timeZone: 'local',
+    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
     headerToolbar: {
       left: 'prev,next today',
@@ -30,7 +37,10 @@ export class CalendarComponent {
       right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
     events: [],
-    eventClick: this.handleEventClick.bind(this)
+    eventClick: this.handleEventClick.bind(this),
+    editable: true,
+    selectable: true,
+    eventDrop: this.handleEventMove.bind(this),
   };
 
   async ngOnInit() {
@@ -74,5 +84,53 @@ export class CalendarComponent {
 
   handleEventClick(arg: any) {
     toast.info(`Evento clicado: ${arg.event.title}`);
+  }
+
+  async handleEventMove(arg: any) {
+    const activityId = parseInt(arg.event.id);
+    const newStart = arg.event.start;
+    const oldStart = arg.oldEvent.start;
+
+    try {
+      const activity = await this.activityService.getActivityById(activityId);
+
+      if(!activity) {
+        toast.error('Actividad no encontrada.');
+        arg.revert();
+        return;
+      }
+
+      const timeDifference = newStart.getTime() - oldStart.getTime();
+      const daysDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24));
+
+      const updatedActivity = {...activity};
+
+      if (!activity.datetime_start) {
+        toast.error('La actividad no tiene fecha de inicio válida.');
+        arg.revert();
+        return;
+      }
+
+      const originalStart = new Date(activity.datetime_start);
+      const newStartDate = new Date(originalStart.getTime() + timeDifference);
+      updatedActivity.datetime_start = newStartDate.toISOString();
+
+      if (activity.datetime_end) {
+        const originalEnd= new Date(activity.datetime_end);
+        const newEnd = new Date(originalEnd.getTime() + timeDifference);
+        updatedActivity.datetime_end = newEnd.toISOString();
+      }
+
+      await this.activityService.updateActivity(activityId, updatedActivity);
+
+      toast.success(`Actividad movida ${daysDifference} día(s) con éxito.`);
+
+      await this.loadRoutines();
+      
+    } catch (error) {
+      console.error('Error al mover la actividad:', error);
+      toast.error('Error al mover la actividad.');
+      arg.revert();
+    }
   }
 }
