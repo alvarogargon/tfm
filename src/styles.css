@@ -63,24 +63,81 @@
 }
 
 .fc .fc-button-primary{ /* cambiar  color números cabecera tabla*/
-    background-color: lightcoral;
+    background-color: rgb(128, 200, 248);
     border: none;
 } 
 
 .fc-sticky {
-    color: white;
-    background-color: rgba(240, 128, 128, 0.491);
+    color: black;
+    background-color: rgba(210, 234, 250, 1);
 }
 .fc-event-title-container { /* color evento*/
-    background-color: rgba(240, 128, 128, 0.491);
+    background-color: rgba(210, 234, 250, 1);
     display: grid;
+    justify-content: space-evenly;
 }
 .fc-h-event {
-    background-color: rgba(240, 128, 128, 0.491);
+    background-color: rgba(210, 234, 250, 1);
     border: none;
     display: grid;
     margin: 10px;
+
 }
 .fc-today-button {
     background-color: var(--color-black);
 }
+
+.fc-daygrid-more-link {
+    background-color: rgb(128, 200, 248);
+     color: black;
+     padding: 10px 5px;
+     text-decoration: none;
+}
+.fc-daygrid-event{
+    color: black;
+}
+.fc-daygrid-event-dot {
+    color: black;
+    border: calc(var(--fc-daygrid-event-dot-width) / 2) solid black;
+}
+.fc .fc-daygrid-more-link {
+    padding: 5px 10px;
+}
+
+.fc .fc-daygrid-more-link:hover {
+    background-color: rgb(128, 200, 248);
+}
+  
+.fc-event-time {
+    color: black;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: rgba(211, 211, 211, 0.277);
+}
+.fc-daygrid-day-bottom{
+    align-items: center;
+}
+/* Asegura que el contenedor de eventos tenga una altura máxima fija */
+
+.fc-daygrid-day-frame {
+
+    height: 170px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.fc .fc-daygrid-day-bottom {
+    flex-shrink: 0;
+    padding-top: 4px;
+
+}
+
+.fc-event-short {
+    color: black;
+    padding: 0px 5px 0px 5px;
+}
+
+ 

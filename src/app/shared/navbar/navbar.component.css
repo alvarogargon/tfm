@@ -73,5 +73,9 @@ svg {
         width: 20px;
         height: 20px;
     }
+    .logo{
+        max-width: 75px;
+        
+    }
 
 }
