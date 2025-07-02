@@ -1,47 +1,4 @@
-.container {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    height: 500px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-}
-
-#vanta-bg-dashboard {
-    align-content: center;
-}
-
-.welcome {
-    text-align: center;
-}
-
-h2, h3 {
-    font-size: 3rem;
-    font-weight: 700;
-    margin: 0;
-    letter-spacing: -2px;
-}
-
-h2 {
-    color: var(--color-black);
-}
-
-h3 {
-    padding: 0.3rem 0.5rem;
-    background-color: var(--color-black);
-    color: white;
-    display: inline-block;
-}
-
-.calendar {
-    width: 70%;
-    justify-content: center;
-    margin: auto;
-}
-
-
+/* Contenedor con imagen de fondo en la parte superior */
 .container {
   width: 100%;
   max-width: none;
@@ -50,28 +7,28 @@ h3 {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
-}
-
-.container-xl {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
-}
-
-.pt-5 {
-  padding-top: 3rem;
+  padding: 0 2rem; /* agrega algo de padding horizontal */
+  margin-bottom: 5rem;
+  background: url('/images/fondo-call.png') center/cover no-repeat;
+  position: relative;
+  color: #000;
 }
 
 #vanta-bg-dashboard {
-  align-content: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
-.welcome {
+.hero-content {
+  max-width: 800px;
+  padding: 0 2rem;
   text-align: center;
 }
 
+/* Ajuste de fuentes para desktop */
 h2, h3 {
   font-size: 3rem;
   font-weight: 700;
@@ -80,48 +37,108 @@ h2, h3 {
 }
 
 h2 {
-  color: var(--color-black, #000000);
+  padding-bottom: 1rem;
 }
 
 h3 {
-  padding: 0.3rem 0.5rem;
-  background-color: var(--color-black, #000000);
-  color: white;
-  display: inline-block;
+  font-size: 2.4rem;
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
+/* Agregado para tarjetas con fondo rosa suave */
 .card {
-  background-color: var(--background-color, #ffffff);
+  background-color: rgba(240, 128, 128, 0.112);
   border: none;
   border-radius: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
-.progress-container {
-  background-color: #e9ecef;
-  border-radius: 0.25rem;
-  height: 20px;
-  overflow: hidden;
-  margin-bottom: 1rem;
+.card:hover {
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
 }
 
-.progress-bar {
+/* Botón estilo Profile */
+.button {
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  width: 100%;
+  max-width: 250px;
+  margin: 20px auto 10px auto;
   background-color: var(--primary-color, #007bff);
-  height: 100%;
-  transition: width 0.3s ease-in-out;
+  border: none;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 10px;
+  height: 50px;
+  cursor: pointer;
+  display: block;
 }
 
-.goal-progress {
-  padding: 0.5rem 0;
+.button:hover {
+  background-color: var(--accent-color, #ffc107);
 }
 
-.text-muted {
-  font-size: 0.9rem;
+.button:active {
+  transform: scale(0.98);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .container {
+    height: 400px;
+    padding: 0 1.5rem;
+  }
+  h2 {
+    font-size: 2.5rem;
+  }
+  h3 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    height: 300px;
+    padding: 0 1rem;
+    margin-bottom: 3rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.6rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .hero-content {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    height: 250px;
+    padding: 0 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+}
+
+.chart-title {
+  text-align: center;
+  margin-bottom: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  font-weight: bold;
 }
