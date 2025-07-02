@@ -76,8 +76,8 @@
                         <div class="card">
                                 <h3>¿Cómo te sientes hoy?</h3>
 
-                                <label>Estado de ánimo:</label>
-                                <select>
+                                <label  class="my-3">Estado de ánimo:</label>
+                            <select class="form-select" aria-label="Default select example">
                                     <option value="feliz">😊 Feliz</option>
                                     <option value="tranquilo">😌 Tranquilo/a</option>
                                     <option value="estresado">😣 Estresado/a</option>
@@ -87,27 +87,43 @@
                                     <option value="apatia">😶 Apático/a</option>
                                 </select>
 
-                                <label>Nivel de energía (1-5):</label>
-                                <input type="range" min="1" max="5" />
+                                <label  class="my-3">Nivel de energía (1-5):</label>
+                                <input type="range" class="form-range" id="customRange1">
 
-                                <label>¿Quieres añadir algo más?</label>
-                                <textarea placeholder="Ej: Me cuesta concentrarme hoy..."></textarea>
+
+                                <label class="my-3">¿Quieres añadir algo más?</label>
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                                        style="height: 100px"></textarea>
+                                    <label for="floatingTextarea2">Me cuesta concentrarme hoy</label>
+                                </div>
                         </div>
-
                         <div class="card">
-                            <h3>¿Cómo te sentiste al realizar esta tarea?</h3>
+                                <h3>¿Cómo te sientes hoy?</h3>
 
-                            <select>
+                                <label  class="my-3">Estado de ánimo:</label>
+                            <select class="form-select" aria-label="Default select example">
                             <option value="facil">👍 Fue fácil</option>
                             <option value="bien">🙂 Me sentí bien</option>
                             <option value="agotado">😫 Me agotó</option>
                             <option value="frustrado">😤 Me frustró</option>
                             <option value="evite">🚫 No pude hacerla</option>
-                            </select>
+                                    <option value="motivado">💪 Motivado/a</option>
+                                    <option value="apatia">😶 Apático/a</option>
+                                </select>
 
-                            <label>¿Qué te ayudó o te bloqueó?</label>
-                            <textarea placeholder="Ej: Pude concentrarme porque usé auriculares..."></textarea>
+                           
+
+                                <label class="my-3">¿Qué te ayudó o te bloqueó?
+</label>
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                                        style="height: 100px"></textarea>
+                                    <label for="floatingTextarea2">"Ej: Pude concentrarme porque usé auriculares..."</label>
+                                </div>
                         </div>
+
+                      
                     </section>
                 </div>
             </div>
