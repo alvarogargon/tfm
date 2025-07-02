@@ -64,7 +64,7 @@ export class ProfileComponent {
   showAddActivityModal = signal(false);
   selectedGoal = signal<IProfileGoal | null>(null);
   selectedRoutine = signal<IRoutine | null>(null);
-  user = signal<IUser | undefined>(undefined);
+  user = signal<IUser | null>(null);
   interests = signal<IProfileInterest[]>([]);
   goals = signal<IProfileGoal[]>([]);
   routines = signal<IRoutine[]>([]);
@@ -83,11 +83,12 @@ export class ProfileComponent {
   guideUserService = inject(GuideUserService);
   categoryService = inject(CategoryService);
   activityService = inject(ActivityService);
-  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  //@ViewChild('fileInput') fileInput: ElementRef | undefined;
 
   async ngOnInit() {
     await this.loadProfileData();
   }
+
 
   async loadProfileData() {
     try {
@@ -188,9 +189,15 @@ export class ProfileComponent {
     await this.loadUserData(userId);
   }
 
-  onAvatarClick() {
-    this.fileInput.nativeElement.click();
-  }
+  /*onAvatarClick(): void {
+    // Add a null check before accessing nativeElement
+    if (this.fileInput) {
+      this.fileInput.nativeElement.click();
+    } else {
+      console.error('File input element is not available.');
+      // Optionally, you could show a toast or a message to the user here
+    }
+  }*/
 
   async onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -419,5 +426,17 @@ export class ProfileComponent {
       console.error('Error generando PDF:', error);
       toast.error('Error al generar el PDF.');
     }
+  }
+
+    getImageSource(): string {
+    const currentUser = this.user();
+    if (currentUser && currentUser.image) {
+      if (currentUser.image.startsWith('http://') || currentUser.image.startsWith('https://')) {
+        return currentUser.image;
+      } else {
+        return `http://localhost:3000${currentUser.image}`;
+      }
+    }
+    return 'https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c668b3120d3d26467b06330c.jpg';
   }
 }
