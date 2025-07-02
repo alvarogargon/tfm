@@ -3,183 +3,201 @@
         <div class="edit-profile-body">
             <form [formGroup]="settingsProfileForm" (ngSubmit)="onSubmit()">
 
-                <!-- Username -->
-                <!-- <div class="inputs d-flex flex-column align-items-start">
-                    <div class="input-wrapper">
-                        <span class="icon icon-left">
-                            <svg 
-                            height="12" 
-                            viewBox="0 0 24 24" 
-                            fill="none" 
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM6 8a6 6 0 1 1 12 0A6 6 0 0 1 6 8zm2 10a3 3 0 0 0-3 3 1 1 0 1 1-2 0 5 5 0 0 1 5-5h8a5 5 0 0 1 5 5 1 1 0 1 1-2 0 3 3 0 0 0-3-3H8z" fill="#0D0D0D"/>
-                            </svg>
-                        </span>
-                        <input type="text" class="input" formControlName="username" placeholder="">
-                        <label class="label">NOMBRE DE USUARIO</label>
-                    </div>
-                    <p class="error">
-                        {{ checkControl('username', 'required') ? 'Campo obligatorio' : (checkControl('username', 'minlength') ? 'La longitud mínimas es 5 caracteres' : '\u00A0') }}
-                    </p>
-                </div> -->
+                <!-- Main inputs section with profile picture -->
+                <div class="main-inputs-section">
+                    <!-- Left side: Name inputs -->
+                    <div class="inputs-left">
+                        <!-- First Name and Last Name -->
+                        <div class="inputs d-flex flex-column align-items-start">
+                            <div class="name-inputs-row">
+                                <div class="input-wrapper name-input-first">
+                                    <span class="icon icon-left">
+                                        <svg 
+                                        height="15" 
+                                        viewBox="0 0 32 32" 
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g data-name="7. Id Card" id="_7._Id_Card">
+                                        <path class="cls-1" d="M29,9H24a1,1,0,0,0,0,2h5a1,1,0,0,1,1,1V28a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1h8a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V3a2,2,0,0,0-2-2H13a2,2,0,0,0-2,2V9H3a3,3,0,0,0-3,3V28a3,3,0,0,0,3,3H29a3,3,0,0,0,3-3V12A3,3,0,0,0,29,9ZM13,3h6v8H13Z"/>
+                                        <path class="cls-1" d="M4,26a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1,5,5,0,0,0-2.207-4.145,4,4,0,1,0-5.586,0A5,5,0,0,0,4,26Zm3-7a2,2,0,1,1,2,2A2,2,0,0,1,7,19Zm2,4a3.006,3.006,0,0,1,2.829,2H6.171A3.006,3.006,0,0,1,9,23Z"/>
+                                        <path class="cls-2" d="M25,25H19a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z"/>
+                                        <path class="cls-2" d="M27,21H19a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
+                                        <path class="cls-2" d="M27,17H19a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
+                                        <path class="cls-2" d="M16.02,9a1,1,0,0,1-.01-2h.01a1,1,0,0,1,0,2Z"/>
+                                        </g>
+                                        </svg>
+                                    </span>
+                                    <input type="text" class="input" formControlName="firstName" placeholder="">
+                                    <label class="label">NOMBRE</label>
+                                </div>
+                                <div class="input-wrapper name-input-last">
+                                    <span class="icon icon-left">
+                                        <svg 
+                                        height="15" 
+                                        viewBox="0 0 32 32" 
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g data-name="7. Id Card" id="_7._Id_Card">
+                                        <path class="cls-1" d="M29,9H24a1,1,0,0,0,0,2h5a1,1,0,0,1,1,1V28a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1h8a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V3a2,2,0,0,0-2-2H13a2,2,0,0,0-2,2V9H3a3,3,0,0,0-3,3V28a3,3,0,0,0,3,3H29a3,3,0,0,0,3-3V12A3,3,0,0,0,29,9ZM13,3h6v8H13Z"/>
+                                        <path class="cls-1" d="M4,26a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1,5,5,0,0,0-2.207-4.145,4,4,0,1,0-5.586,0A5,5,0,0,0,4,26Zm3-7a2,2,0,1,1,2,2A2,2,0,0,1,7,19Zm2,4a3.006,3.006,0,0,1,2.829,2H6.171A3.006,3.006,0,0,1,9,23Z"/>
+                                        <path class="cls-2" d="M25,25H19a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z"/>
+                                        <path class="cls-2" d="M27,21H19a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
+                                        <path class="cls-2" d="M27,17H19a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
+                                        <path class="cls-2" d="M16.02,9a1,1,0,0,1-.01-2h.01a1,1,0,0,1,0,2Z"/>
+                                        </g>
+                                        </svg>
+                                    </span>
+                                    <input type="text" class="input" formControlName="lastName" placeholder="">
+                                    <label class="label">APELLIDOS</label>
+                                </div>
+                            </div>
+                            <div class="name-errors">
+                                <p class="error">
+                                    {{ checkControl('firstName', 'required') ? 'Campo obligatorio' : (checkControl('firstName', 'minlength') ? 'La longitud mínimas es 3 caracteres' : '\u00A0') }}
+                                </p>
+                                <p class="error">
+                                    {{ checkControl('lastName', 'required') ? 'Campo obligatorio' : (checkControl('lastName', 'minlength') ? 'La longitud mínimas es 4 caracteres' : '\u00A0') }}
+                                </p>
+                            </div>
+                        </div>
 
-                <!-- Email -->
-                <!-- <div class="inputs d-flex flex-column align-items-start">
-                    <div class="input-wrapper">
-                        <span class="icon icon-left">
-                            <svg
-                            height="12"
-                            viewBox="0 0 32 32"
-                            width="12"
-                            xmlns="http://www.w3.org/2000/svg"
-                            >
-                            <g id="Layer_3" data-name="Layer 3">
-                                <path
-                                d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z"
-                                ></path>
-                            </g>
-                            </svg>
-                        </span>
-                        <input type="text" class="input" formControlName="email" placeholder="" autocomplete="email">
-                        <label class="label">EMAIL</label>
-                    </div>
-                    <p class="error">
-                        {{ checkControl('email', 'required') ? 'Campo obligatorio' : (checkControl('email', 'pattern') ? 'Por favor, introduzca un correo electrónico válido' : '\u00A0') }}
-                    </p>
-                </div> -->
+                        <!-- Phone Number -->
+                        <div class="inputs d-flex flex-column align-items-start">
+                            <div class="input-wrapper">
+                                <span class="icon icon-left">
+                                    <svg 
+                                    fill="#000000" 
+                                    height="12" 
+                                    viewBox="0 0 16 16" 
+                                    id="telephone-16px" 
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path id="Path_27" data-name="Path 27" d="M35.5,16A15.517,15.517,0,0,1,20,.5a.5.5,0,0,1,.5-.5h2.845a1.849,1.849,0,0,1,1.317.546l1.962,1.961a1.5,1.5,0,0,1,0,2.122L25.2,6.048A11.907,11.907,0,0,0,29.952,10.8l1.419-1.42a1.5,1.5,0,0,1,2.121,0l1.962,1.962A1.852,1.852,0,0,1,36,12.656V15.5A.5.5,0,0,1,35.5,16ZM21.009,1A14.52,14.52,0,0,0,35,14.992V12.656a.859.859,0,0,0-.253-.611l-1.962-1.962a.5.5,0,0,0-.707,0L30.4,11.763a.5.5,0,0,1-.578.093A12.893,12.893,0,0,1,24.145,6.18a.5.5,0,0,1,.092-.579l1.68-1.679a.5.5,0,0,0,0-.708L23.955,1.253A.858.858,0,0,0,23.345,1Z" transform="translate(-20)"/>
+                                    </svg>
+                                </span>
+                                <input type="text" class="input" formControlName="numTel" placeholder="">
+                                <label class="label">NÚMERO DE TELÉFONO</label>
+                            </div>
+                            <p class="error">
+                                {{ checkControl('numTel', 'required') ? 'Campo obligatorio' : (checkControl('numTel', 'pattern') ? 'Por favor, introduzca un número de teléfono válido' : '\u00A0') }}
+                            </p>
+                        </div>
 
-                <!-- First Name -->
-                <div class="inputs d-flex flex-column align-items-start">
-                    <div class="input-wrapper">
-                        <span class="icon icon-left">
-                            <svg 
-                            height="15" 
-                            viewBox="0 0 32 32" 
-                            xmlns="http://www.w3.org/2000/svg">
-                            <g data-name="7. Id Card" id="_7._Id_Card">
-                            <path class="cls-1" d="M29,9H24a1,1,0,0,0,0,2h5a1,1,0,0,1,1,1V28a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1h8a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V3a2,2,0,0,0-2-2H13a2,2,0,0,0-2,2V9H3a3,3,0,0,0-3,3V28a3,3,0,0,0,3,3H29a3,3,0,0,0,3-3V12A3,3,0,0,0,29,9ZM13,3h6v8H13Z"/>
-                            <path class="cls-1" d="M4,26a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1,5,5,0,0,0-2.207-4.145,4,4,0,1,0-5.586,0A5,5,0,0,0,4,26Zm3-7a2,2,0,1,1,2,2A2,2,0,0,1,7,19Zm2,4a3.006,3.006,0,0,1,2.829,2H6.171A3.006,3.006,0,0,1,9,23Z"/>
-                            <path class="cls-2" d="M25,25H19a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z"/>
-                            <path class="cls-2" d="M27,21H19a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
-                            <path class="cls-2" d="M27,17H19a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
-                            <path class="cls-2" d="M16.02,9a1,1,0,0,1-.01-2h.01a1,1,0,0,1,0,2Z"/>
-                            </g>
-                            </svg>
-                        </span>
-                        <input type="text" class="input" formControlName="firstName" placeholder="">
-                        <label class="label">NOMBRE</label>
+                        <!-- Gender -->
+                        <div class="inputs d-flex flex-column align-items-start">
+                            <div class="input-wrapper">
+                                <span class="icon icon-left">
+                                    <svg fill="#000000" 
+                                    height="12" 
+                                    viewBox="0 0 256 256" 
+                                    id="Flat" 
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M215.96008,23.20947c-.01117-.11377-.03271-.22412-.04858-.33642-.02069-.146-.038-.29248-.06671-.4375-.026-.13086-.0622-.2583-.09461-.38721-.03106-.124-.05829-.24854-.09546-.37158-.03839-.12647-.08593-.24854-.13037-.37256-.04382-.12256-.08429-.24609-.13427-.3667-.04779-.11523-.104-.22559-.157-.33838-.05835-.124-.11358-.249-.17865-.3706-.05774-.10791-.12359-.21-.186-.31495-.07111-.11914-.13873-.24023-.21661-.35644-.07593-.11328-.16059-.22022-.242-.3291-.07464-.1001-.14429-.20264-.22424-.3003-.1521-.18505-.31384-.36181-.48175-.53271-.01654-.01709-.0304-.03564-.04712-.05225-.01935-.01953-.04077-.03515-.0603-.05468-.16852-.165-.34253-.32422-.525-.47413-.09424-.07763-.19366-.145-.29053-.21728-.1123-.084-.22229-.1709-.339-.249-.11236-.0752-.229-.14063-.34423-.20948-.109-.06494-.2157-.1333-.32807-.19384-.115-.06153-.23328-.11329-.35058-.16895-.11963-.05664-.23749-.11621-.3603-.167-.11077-.0459-.22387-.08252-.33618-.123-.13421-.04883-.267-.09961-.40442-.1416-.10833-.03223-.2185-.05615-.32788-.084-.14325-.03663-.28515-.07666-.43145-.10547-.12085-.02393-.24286-.03711-.36451-.05567-.13653-.02051-.27142-.04541-.41009-.05908-.20184-.01953-.40436-.02588-.60693-.03076C208.11768,16.00781,208.05981,16,208,16H168a8,8,0,0,0,0,16h20.686L164.25226,56.43359A67.97439,67.97439,0,1,0,112,175.51367V196H88a8,8,0,0,0,0,16h24v20a8,8,0,0,0,16,0V212h24a8,8,0,0,0,0-16H128V175.51367A67.9301,67.9301,0,0,0,175.09692,68.2168L200,43.314V64a8,8,0,0,0,16,0V24.00244C216.00006,23.73779,215.98608,23.47314,215.96008,23.20947ZM120,160a52,52,0,1,1,52-52A52.059,52.059,0,0,1,120,160Z"/>
+                                    </svg>
+                                </span>
+                                <select class="input" formControlName="gender">
+                                    <option value="" disabled selected>SELECCIONA TU GÉNERO</option>
+                                    <option value="Mujer">Mujer</option>
+                                    <option value="Hombre">Hombre</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                                <label class="label">GÉNERO</label>
+                            </div>
+                            <p class="error">
+                                {{ checkControl('gender', 'required') ? 'Campo obligatorio' : '\u00A0' }}
+                            </p>
+                        </div>
                     </div>
-                    <p class="error">
-                        {{ checkControl('firstName', 'required') ? 'Campo obligatorio' : (checkControl('firstName', 'minlength') ? 'La longitud mínimas es 3 caracteres' : '\u00A0') }}
-                    </p>
-                </div>
 
-                <!-- Last Name -->
-                <div class="inputs d-flex flex-column align-items-start">
-                    <div class="input-wrapper">
-                        <span class="icon icon-left">
-                            <svg 
-                            height="15" 
-                            viewBox="0 0 32 32" 
-                            xmlns="http://www.w3.org/2000/svg">
-                            <g data-name="7. Id Card" id="_7._Id_Card">
-                            <path class="cls-1" d="M29,9H24a1,1,0,0,0,0,2h5a1,1,0,0,1,1,1V28a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1h8a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V3a2,2,0,0,0-2-2H13a2,2,0,0,0-2,2V9H3a3,3,0,0,0-3,3V28a3,3,0,0,0,3,3H29a3,3,0,0,0,3-3V12A3,3,0,0,0,29,9ZM13,3h6v8H13Z"/>
-                            <path class="cls-1" d="M4,26a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1,5,5,0,0,0-2.207-4.145,4,4,0,1,0-5.586,0A5,5,0,0,0,4,26Zm3-7a2,2,0,1,1,2,2A2,2,0,0,1,7,19Zm2,4a3.006,3.006,0,0,1,2.829,2H6.171A3.006,3.006,0,0,1,9,23Z"/>
-                            <path class="cls-2" d="M25,25H19a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z"/>
-                            <path class="cls-2" d="M27,21H19a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
-                            <path class="cls-2" d="M27,17H19a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
-                            <path class="cls-2" d="M16.02,9a1,1,0,0,1-.01-2h.01a1,1,0,0,1,0,2Z"/>
-                            </g>
-                            </svg>
-                        </span>
-                        <input type="text" class="input" formControlName="lastName" placeholder="">
-                        <label class="label">APELLIDOS</label>
+                    <!-- Right side: Profile picture -->
+                    <div class="profile-picture-section">
+                        <div class="profile-picture-wrapper">
+                            <div class="profile-avatar-wrapper position-relative">
+                                <img [src]="getImageSource()"
+                                    alt="Imagen de perfil"
+                                    class="profile-avatar"
+                                    (click)="fileInput.click()" 
+                                    style="cursor: pointer;">
+                                <input
+                                    type="file"
+                                    #fileInput
+                                    style="display: none;"
+                                    accept="image/png, image/jpeg, image/jpg"
+                                    (change)="onFileSelected($event)"
+                                    aria-label="Seleccionar imagen de perfil">
+                                <button class="editBtn" (click)="fileInput.click()" title="Cambiar imagen de perfil">
+                                    <svg height="1em" viewBox="0 0 512 512">
+                                        <path
+                                            d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"
+                                        ></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="profile-picture-hint">Haz clic en la imagen para cambiarla</p>
+                        </div>
                     </div>
-                    <p class="error">
-                        {{ checkControl('lastName', 'required') ? 'Campo obligatorio' : (checkControl('lastName', 'minlength') ? 'La longitud mínimas es 4 caracteres' : '\u00A0') }}
-                    </p>
-                </div>
-
-                <!-- Age -->
-                <!-- <div class="inputs d-flex flex-column align-items-start">
-                    <div class="input-wrapper">
-                        <span class="icon icon-left">
-                            <svg 
-                            height="12" 
-                            viewBox="0 0 15 15"
-                                fill="none" 
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3.5 0V5M11.5 0V5M1.5 2.5H13.5C14.0523 2.5 14.5 2.94772 14.5 3.5V13.5C14.5 14.0523 14.0523 14.5 13.5 14.5H1.5C0.947716 14.5 0.5 14.0523 0.5 13.5V3.5C0.5 2.94772 0.947715 2.5 1.5 2.5Z" stroke="#000000"/>
-                            </svg>
-                        </span>
-                        <input type="number" class="input" formControlName="age" placeholder="">
-                        <label class="label">EDAD</label>
-                    </div>
-                    <p class="error">
-                        {{ checkControl('age', 'required') ? 'Campo obligatorio' : (checkControl('age', 'min') ? 'La edad mínima es de 18 años' : (checkControl('age', 'max') ? 'La edad máxima es de 65 años' : '\u00A0')) }}
-                    </p>
-                </div> -->
-
-                <!-- Phone Number -->
-                <div class="inputs d-flex flex-column align-items-start">
-                    <div class="input-wrapper">
-                        <span class="icon icon-left">
-                            <svg 
-                            fill="#000000" 
-                            height="12" 
-                            viewBox="0 0 16 16" 
-                            id="telephone-16px" 
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path id="Path_27" data-name="Path 27" d="M35.5,16A15.517,15.517,0,0,1,20,.5a.5.5,0,0,1,.5-.5h2.845a1.849,1.849,0,0,1,1.317.546l1.962,1.961a1.5,1.5,0,0,1,0,2.122L25.2,6.048A11.907,11.907,0,0,0,29.952,10.8l1.419-1.42a1.5,1.5,0,0,1,2.121,0l1.962,1.962A1.852,1.852,0,0,1,36,12.656V15.5A.5.5,0,0,1,35.5,16ZM21.009,1A14.52,14.52,0,0,0,35,14.992V12.656a.859.859,0,0,0-.253-.611l-1.962-1.962a.5.5,0,0,0-.707,0L30.4,11.763a.5.5,0,0,1-.578.093A12.893,12.893,0,0,1,24.145,6.18a.5.5,0,0,1,.092-.579l1.68-1.679a.5.5,0,0,0,0-.708L23.955,1.253A.858.858,0,0,0,23.345,1Z" transform="translate(-20)"/>
-                            </svg>
-                        </span>
-                        <input type="text" class="input" formControlName="numTel" placeholder="">
-                        <label class="label">NÚMERO DE TELÉFONO</label>
-                    </div>
-                    <p class="error">
-                        {{ checkControl('numTel', 'required') ? 'Campo obligatorio' : (checkControl('numTel', 'pattern') ? 'Por favor, introduzca un número de teléfono válido' : '\u00A0') }}
-                    </p>
-                </div>
-
-                <!-- Gender -->
-                <div class="inputs d-flex flex-column align-items-start">
-                    <div class="input-wrapper">
-                        <span class="icon icon-left">
-                            <svg fill="#000000" 
-                            height="12" 
-                            viewBox="0 0 256 256" 
-                            id="Flat" 
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M215.96008,23.20947c-.01117-.11377-.03271-.22412-.04858-.33642-.02069-.146-.038-.29248-.06671-.4375-.026-.13086-.0622-.2583-.09461-.38721-.03106-.124-.05829-.24854-.09546-.37158-.03839-.12647-.08593-.24854-.13037-.37256-.04382-.12256-.08429-.24609-.13427-.3667-.04779-.11523-.104-.22559-.157-.33838-.05835-.124-.11358-.249-.17865-.3706-.05774-.10791-.12359-.21-.186-.31495-.07111-.11914-.13873-.24023-.21661-.35644-.07593-.11328-.16059-.22022-.242-.3291-.07464-.1001-.14429-.20264-.22424-.3003-.1521-.18505-.31384-.36181-.48175-.53271-.01654-.01709-.0304-.03564-.04712-.05225-.01935-.01953-.04077-.03515-.0603-.05468-.16852-.165-.34253-.32422-.525-.47413-.09424-.07763-.19366-.145-.29053-.21728-.1123-.084-.22229-.1709-.339-.249-.11236-.0752-.229-.14063-.34423-.20948-.109-.06494-.2157-.1333-.32807-.19384-.115-.06153-.23328-.11329-.35058-.16895-.11963-.05664-.23749-.11621-.3603-.167-.11077-.0459-.22387-.08252-.33618-.123-.13421-.04883-.267-.09961-.40442-.1416-.10833-.03223-.2185-.05615-.32788-.084-.14325-.03663-.28515-.07666-.43145-.10547-.12085-.02393-.24286-.03711-.36451-.05567-.13653-.02051-.27142-.04541-.41009-.05908-.20184-.01953-.40436-.02588-.60693-.03076C208.11768,16.00781,208.05981,16,208,16H168a8,8,0,0,0,0,16h20.686L164.25226,56.43359A67.97439,67.97439,0,1,0,112,175.51367V196H88a8,8,0,0,0,0,16h24v20a8,8,0,0,0,16,0V212h24a8,8,0,0,0,0-16H128V175.51367A67.9301,67.9301,0,0,0,175.09692,68.2168L200,43.314V64a8,8,0,0,0,16,0V24.00244C216.00006,23.73779,215.98608,23.47314,215.96008,23.20947ZM120,160a52,52,0,1,1,52-52A52.059,52.059,0,0,1,120,160Z"/>
-                            </svg>
-                        </span>
-                        <select class="input" formControlName="gender">
-                            <option value="" disabled selected>SELECCIONA TU GÉNERO</option>
-                            <option value="Mujer">Mujer</option>
-                            <option value="Hombre">Hombre</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-                        <label class="label">GÉNERO</label>
-                    </div>
-                    <p class="error">
-                        {{ checkControl('gender', 'required') ? 'Campo obligatorio' : '\u00A0' }}
-                    </p>
                 </div>
 
                 <!-- Availability (solo para guías) -->
-                <div class="inputs d-flex flex-column align-items-start">
-                    @if (user?.role === 'guide') {
-                        <div class="input-wrapper">
-                        <span class="icon icon-left">
-                            <svg height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm1-13h-2v6h4v-4h-2V7z" fill="#0D0D0D"/>
-                            </svg>
-                        </span>
-                        <input type="text" class="input" formControlName="availability" placeholder="">
-                        <label class="label">Disponibilidad</label>
+                @if (user?.role === 'guide') {
+                    <div class="inputs d-flex flex-column align-items-start">
+                        <div class="availability-wrapper">
+                            <h4 class="availability-title">Disponibilidad de trabajo</h4>
+                            
+                            <!-- Days Selection -->
+                            <div class="days-selection">
+                                <label class="section-label">Días disponibles:</label>
+                                <div class="days-grid">
+                                    @for (day of daysOfWeek; track day.value) {
+                                        <div class="day-checkbox">
+                                            <input 
+                                                type="checkbox" 
+                                                [id]="'day-' + day.value"
+                                                [value]="day.value"
+                                                (change)="onDayChange($event)"
+                                                [checked]="selectedDays.includes(day.value)">
+                                            <label [for]="'day-' + day.value" class="day-label">{{ day.label }}</label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Time Range Selection -->
+                            <div class="time-selection">
+                                <label class="section-label">Horario de trabajo:</label>
+                                <div class="time-inputs">
+                                    <div class="time-input-group">
+                                        <label for="start-time">Desde:</label>
+                                        <select id="start-time" class="time-select" formControlName="startTime">
+                                            @for (time of timeOptions; track time.value) {
+                                                <option [value]="time.value">{{ time.label }}</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="time-input-group">
+                                        <label for="end-time">Hasta:</label>
+                                        <select id="end-time" class="time-select" formControlName="endTime">
+                                            @for (time of timeOptions; track time.value) {
+                                                <option [value]="time.value">{{ time.label }}</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Selected availability preview -->
+                            @if (selectedDays.length > 0) {
+                                <div class="availability-preview">
+                                    <label class="section-label">Resumen de disponibilidad:</label>
+                                    <div class="preview-content">
+                                        <p><strong>Días:</strong> {{  getSelectedDaysText() }}</p>
+                                        <p><strong>Horario:</strong> {{  getTimeRangeText() }}</p>
+                                    </div>
+                                </div>
+                            }
                         </div>
-                    }
-                </div>
+                        <p class="error">
+                            {{ selectedDays.length === 0 ? 'Selecciona al menos un día' : '\u00A0' }}
+                        </p>
+                    </div>
+                }
 
                 <button class="button-submit" type="submit" [disabled]="settingsProfileForm.invalid" [attr.aria-disabled]="settingsProfileForm.invalid">Actualizar perfil</button>
             </form>

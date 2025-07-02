@@ -30,4 +30,16 @@ export class SettingsComponent {
           toast.error('Error al cargar los datos del perfil.');
     }
   }
+
+  getImageSource(): string {
+    const currentUser = this.user();
+    if (currentUser && currentUser.image) {
+      if (currentUser.image.startsWith('http://') || currentUser.image.startsWith('https://')) {
+        return currentUser.image;
+      } else {
+        return `http://localhost:3000${currentUser.image}`;
+      }
+    }
+    return 'https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c668b3120d3d26467b06330c.jpg';
+  }
 }

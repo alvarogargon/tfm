@@ -1,5 +1,5 @@
 .sidebar {
-    max-width: 500px;
+    max-width: 100%;
 }
 
 .profile-avatar {
@@ -11,12 +11,18 @@
   display: block;
 }
 
+.profile-avatar-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
 .profile-avatar-wrapper h3 {
   font-size: 0.9rem;
 }
 
 .username {
     color: gray;
+    font-weight: normal;
 }
 
 .options-list {
@@ -24,7 +30,10 @@
     display: flex;
     flex-direction: column;
     font-size: 0.8rem;
-    width: 200px;
+    width: 100%;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .options-list .link.active {
@@ -37,10 +46,19 @@
 .options-list a {
     margin: 0.4rem 0;
     padding: 0.6rem;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.options-list a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
 }
 
 svg {
     margin-right: 8px;
+    flex-shrink: 0;
 }
 
 .link {
@@ -56,4 +74,97 @@ svg {
 .dashboard {
   flex: 1;
   width: 100%;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .settings-container {
+        padding: 1rem 0 !important;
+    }
+    
+    .sidebar {
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .profile-avatar-wrapper h3 {
+        font-size: 0.8rem;
+    }
+    
+    .options-list {
+        margin-top: 1rem;
+        font-size: 0.75rem;
+        max-width: 100%;
+    }
+    
+    .options-list a {
+        padding: 0.8rem;
+        margin: 0.2rem 0;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+    }
+    
+    .options-list .link.active {
+        background-color: var(--background-color, #007bff);
+        border-color: var(--background-color, #007bff);
+    }
+    
+    .dashboard {
+        padding: 0;
+    }
+}
+
+@media (max-width: 992px) {
+    .profile-avatar-wrapper h3 {
+        font-size: 0.85rem;
+    }
+    
+    .username {
+        font-size: 0.8rem;
+    }
+    
+    .options-list {
+        font-size: 0.8rem;
+    }
+    
+    .options-list a {
+        padding: 0.9rem;
+    }
+    
+    svg {
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .profile-avatar-wrapper h3 {
+        font-size: 0.75rem;
+        line-height: 1.2;
+    }
+    
+    .username {
+        display: block;
+        margin-top: 0.25rem;
+        font-size: 0.7rem;
+    }
+    
+    .options-list {
+        font-size: 0.7rem;
+    }
+    
+    .options-list a {
+        padding: 1rem;
+        text-align: left;
+    }
+    
+    svg {
+        margin-right: 12px;
+    }
 }
