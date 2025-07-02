@@ -14,6 +14,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { FormsModule } from '@angular/forms';
 import listplugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
+import esLocale from '@fullcalendar/core/locales/es';
 
 
 @Component({
@@ -21,7 +22,7 @@ import interactionPlugin from '@fullcalendar/interaction';
   standalone: true,
   imports: [CommonModule, FullCalendarModule, FormsModule],
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.css']
+  styleUrls: ['./calendar.component.css'],
 })
 export class CalendarComponent {
   private routineService = inject(RoutineService);
@@ -41,7 +42,7 @@ export class CalendarComponent {
   // Datos para el formulario
   availableRoutines: IRoutine[] = [];
   availableCategories: ICategory[] = [];
-  
+
   // Objeto para la nueva actividad - simplificado
   newActivity: any = {
     title: '',
@@ -54,24 +55,39 @@ export class CalendarComponent {
     icon: '',
     day_of_week: null,
     datetime_start: null,
-    datetime_end: null
+    datetime_end: null,
   };
 
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listplugin],
     initialView: 'dayGridMonth',
     headerToolbar: {
-      left: 'prev,next today',
+      left: 'prev,next, today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
     },
+    locale: esLocale,
     events: [],
     eventClick: this.handleEventClick.bind(this),
     dateClick: this.dateClicked.bind(this),
     selectable: true,
     editable: true,
-    eventDrop: this.handleEventDrop.bind(this), // Manejar el arrastre de eventos
-   };
+    eventDrop: this.handleEventDrop.bind(this),
+    dayMaxEventRows: 4,
+    moreLinkContent: function (arg) {
+      return `Ver ${arg.num} más`;
+    },
+eventContent: function (arg) {
+  const fullTitle = arg.event.title;
+  const shortTitle = fullTitle.length > 15
+    ? fullTitle.slice(0, 15) + '...'
+    : fullTitle;
+
+  return {
+    html: `<div class="fc-event-short" title="${fullTitle}">${shortTitle}</div>`,
+  };
+}
+  };
 
   async ngOnInit() {
     await this.loadRoutines();
@@ -92,9 +108,9 @@ export class CalendarComponent {
 
   private transformRoutinesToEvents(routines: IRoutine[]): EventInput[] {
     const events: EventInput[] = [];
-    
-    routines.forEach(routine => {
-      routine.activities.forEach(activity => {
+
+    routines.forEach((routine) => {
+      routine.activities.forEach((activity) => {
         // Solo incluir eventos con fechas válidas
         if (activity.datetime_start) {
           events.push({
@@ -104,8 +120,8 @@ export class CalendarComponent {
             end: activity.datetime_end || undefined,
             allDay: !activity.start_time,
             extendedProps: {
-              routine_id: activity.routine_id
-            }
+              routine_id: activity.routine_id,
+            },
           });
         }
       });
@@ -117,7 +133,9 @@ export class CalendarComponent {
   async handleEventClick(arg: any) {
     const activityId = parseInt(arg.event.id);
     try {
-      this.selectedActivity = await this.activityService.getActivityById(activityId);
+      this.selectedActivity = await this.activityService.getActivityById(
+        activityId
+      );
       this.showActivityInfoModal = true;
     } catch (error) {
       console.error('Error al cargar información de la actividad:', error);
@@ -165,7 +183,7 @@ export class CalendarComponent {
       icon: '',
       day_of_week: null,
       datetime_start: null,
-      datetime_end: null
+      datetime_end: null,
     };
     this.isAllDay = false;
     this.selectedDateStr = '';
@@ -173,13 +191,13 @@ export class CalendarComponent {
 
   async submitActivity() {
     if (this.isSubmitting) return;
-    
+
     this.isSubmitting = true;
-    
+
     try {
       // Preparar los datos de la actividad
       const activityData = { ...this.newActivity };
-      
+
       // Configurar las fechas y horas
       if (this.selectedDateStr) {
         if (this.isAllDay) {
@@ -195,7 +213,7 @@ export class CalendarComponent {
           } else {
             activityData.datetime_start = `${this.selectedDateStr}T00:00:00`;
           }
-          
+
           if (activityData.end_time) {
             activityData.datetime_end = `${this.selectedDateStr}T${activityData.end_time}:00`;
           } else {
@@ -206,15 +224,14 @@ export class CalendarComponent {
 
       // Crear la actividad
       await this.activityService.createActivity(activityData);
-      
+
       toast.success('Actividad creada exitosamente');
-      
+
       // Recargar el calendario
       await this.loadRoutines();
-      
+
       // Cerrar el modal
       this.closeModal();
-      
     } catch (error) {
       console.error('Error al crear actividad:', error);
       toast.error('Error al crear la actividad');
@@ -225,27 +242,27 @@ export class CalendarComponent {
 
   dateClicked(arg: any) {
     toast.info(`Fecha seleccionada: ${arg.dateStr}`);
-    
+
     // Configurar la fecha seleccionada
     this.selectedDate = arg.date;
     this.selectedDateStr = arg.dateStr;
-    
+
     // Asegurar que el objeto newActivity está inicializado
     this.resetForm();
-    
+
     // Mostrar el formulario
     this.showAddActivityForm = true;
   }
 
   formatDate(dateString: string | null): string {
     if (!dateString) return 'No especificada';
-    
+
     try {
       const date = new Date(dateString);
       return date.toLocaleDateString('es-ES', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
       });
     } catch {
       return 'Fecha inválida';
@@ -254,7 +271,7 @@ export class CalendarComponent {
 
   formatTime(timeString: string | null): string {
     if (!timeString) return 'No especificada';
-    
+
     try {
       if (timeString.includes(':') && timeString.length <= 8) {
         const [hours, minutes] = timeString.split(':');
@@ -262,15 +279,15 @@ export class CalendarComponent {
         date.setHours(parseInt(hours), parseInt(minutes));
         return date.toLocaleTimeString('es-ES', {
           hour: '2-digit',
-          minute: '2-digit'
+          minute: '2-digit',
         });
       }
-      
+
       // Si es datetime completo
       const date = new Date(timeString);
       return date.toLocaleTimeString('es-ES', {
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       });
     } catch {
       return 'Hora inválida';
@@ -279,15 +296,19 @@ export class CalendarComponent {
 
   getRoutineName(): string {
     if (!this.selectedActivity) return 'No especificada';
-    
-    const routine = this.availableRoutines.find(r => r.routine_id === this.selectedActivity!.routine_id);
+
+    const routine = this.availableRoutines.find(
+      (r) => r.routine_id === this.selectedActivity!.routine_id
+    );
     return routine ? routine.name : 'Rutina no encontrada';
   }
 
   getCategoryName(): string {
     if (!this.selectedActivity?.category_id) return 'Sin categoría';
-    
-    const category = this.availableCategories.find(c => c.category_id === this.selectedActivity!.category_id);
+
+    const category = this.availableCategories.find(
+      (c) => c.category_id === this.selectedActivity!.category_id
+    );
     return category ? category.name : 'Categoría no encontrada';
   }
 
@@ -299,7 +320,7 @@ export class CalendarComponent {
 
   confirmDeleteActivity() {
     if (!this.selectedActivity) return;
-    
+
     this.showDeleteConfirmModal = false;
     this.executeDelete();
   }
@@ -314,14 +335,15 @@ export class CalendarComponent {
     this.isDeleting = true;
 
     try {
-      await this.activityService.deleteActivity(this.selectedActivity.activity_id);
-      
+      await this.activityService.deleteActivity(
+        this.selectedActivity.activity_id
+      );
+
       toast.success('Actividad eliminada exitosamente');
-      
+
       await this.loadRoutines();
-      
+
       this.closeInfoModal();
-      
     } catch (error) {
       console.error('Error al eliminar actividad:', error);
       toast.error('Error al eliminar la actividad');
@@ -330,8 +352,7 @@ export class CalendarComponent {
     }
   }
 
-  checkModalClick(event: Event) {
-  }
+  checkModalClick(event: Event) {}
 
   async handleEventDrop(arg: any) {
     const activityId = parseInt(arg.event.id);
@@ -340,7 +361,7 @@ export class CalendarComponent {
 
     try {
       const activity = await this.activityService.getActivityById(activityId);
-      
+
       if (!activity) {
         toast.error('No se pudo encontrar la actividad');
         arg.revert(); // Revertir el cambio
@@ -369,15 +390,14 @@ export class CalendarComponent {
       }
 
       await this.activityService.updateActivity(activityId, updatedActivity);
-      
+
       toast.success(`Actividad movida ${daysDiff} día(s)`);
-      
+
       await this.loadRoutines();
-      
     } catch (error) {
       console.error('Error al actualizar la actividad:', error);
       toast.error('Error al mover la actividad');
-      arg.revert(); 
+      arg.revert();
     }
   }
 }

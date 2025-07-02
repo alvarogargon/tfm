@@ -62,13 +62,7 @@ export class TeamService {
       avatar: 'teamImages/oscar.png',
       category: 'backend'
     },
-      {
-      id: 9,
-      name: 'Flávia Das Graças',
-      description: 'Backend Developer.',
-      avatar: 'teamImages/flavia.png',
-      category: 'backend'
-    },
+
       {
       id: 10,
       name: 'Lucas Percivale',

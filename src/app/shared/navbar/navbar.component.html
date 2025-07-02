@@ -4,7 +4,7 @@
       <!-- Dashboard/Profile Navbar -->
       <div class="d-flex gap-4">
         <a class="nav-item nav-link" [routerLink]="['/dashboard']">Dashboard</a>
-        <a class="nav-item nav-link" [routerLink]="['/dashboard/calendar']">Calendar</a>
+        <a class="nav-item nav-link" [routerLink]="['/dashboard/calendar']">Calendario</a>
       </div>
       <a class="navbar-brand mx-auto" [routerLink]="['/home']" style="font-size:1.5rem; display: flex; align-items: center;">
         <span style="font-weight:bold;">LOGO</span>
@@ -52,7 +52,9 @@
     } @else {
       <!-- Public Navbar -->
       <a class="navbar-brand" [routerLink]="['/home']" style="font-size:1.5rem;">
-        <span style="font-weight:bold;">LOGO</span>
+        <figure class="logo">
+            <img class="img-fluid"  src="./images/logogo.png" style="width:75px;height:75px;border-radius:50%;"alt="">
+        </figure>
       </a>
       <div>
         <a class="profile-circle" [routerLink]="['/login']" title="Perfil">
