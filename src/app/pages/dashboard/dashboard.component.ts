@@ -1,23 +1,23 @@
-import { Component, AfterViewInit, OnDestroy, inject } from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { GoalService } from '../../services/goal.service';
 import { RoutineService } from '../../services/routine.service';
 import { ActivityService } from '../../services/activity.service';
-import { signal } from '@angular/core';
 import { IProfileGoal } from '../../interfaces/iprofile-goal.interface';
 import { IRoutine } from '../../interfaces/iroutine.interface';
 import { IActivity } from '../../interfaces/iactivity.interface';
-
+import { ChartComponent } from '../../chart/chart.component';
 declare var VANTA: any;
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
+  imports: [ChartComponent],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements AfterViewInit, OnDestroy {
-  private vantaEffect: any;
+export class DashboardComponent {
+  private router = inject(Router);
   private goalService = inject(GoalService);
   private routineService = inject(RoutineService);
   private activityService = inject(ActivityService);
@@ -25,60 +25,55 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   goals = signal<IProfileGoal[]>([]);
   routines = signal<IRoutine[]>([]);
   activities = signal<IActivity[]>([]);
-  completedGoalsCount = signal(0);
-  activeRoutinesCount = signal(0);
-  weeklyActivityHours = signal(0);
 
-  async ngAfterViewInit() {
-    this.vantaEffect = VANTA.FOG({
-      el: '#vanta-bg-dashboard',
-      mouseControls: true,
-      touchControls: true,
-      gyroControls: false,
-      minHeight: 200.00,
-      minWidth: 200.00,
-      highlightColor: 0xdbedff,
-      midtoneColor: 0x3434dc,
-      lowlightColor: 0x4646a2,
-      baseColor: 0xffffff,
-      blurFactor: 0.20,
-      speed: 0.10,
-      zoom: 0.10
-    });
-    await this.loadDashboardData();
+  chartLabels = ['Completados', 'Pendientes'];
+
+  get chartData() {
+    const completed = this.completedGoalsCount();
+    const total = this.goals().length;
+    const pending = total - completed;
+    return [completed, pending];
   }
 
-  async loadDashboardData() {
+  completedGoalsCount = computed(() =>
+    this.goals().filter(g => g.status === 'completed').length
+  );
+
+  activeRoutinesCount = computed(() =>
+    this.routines().filter(r => !this.isExpired(r.end_time)).length
+  );
+
+  activitiesCount = computed(() => this.activities().length);
+
+  async ngOnInit() {
+    await this.loadData();
+  }
+
+  private async loadData() {
     try {
-      const goals = await this.goalService.getGoals(null); // Pasar null para usuario autenticado
-      const routines = await this.routineService.getRoutines(null); // Pasar null para usuario autenticado
-      const activities = await this.activityService.getActivities();
+      const [goals, routines, activities] = await Promise.all([
+        this.goalService.getGoals(null),      // usuario autenticado
+        this.routineService.getRoutines(null),
+        this.activityService.getActivities()
+      ]);
 
       this.goals.set(goals);
       this.routines.set(routines);
       this.activities.set(activities);
-
-      this.completedGoalsCount.set(goals.filter(goal => goal.status === 'completed').length);
-      this.activeRoutinesCount.set(routines.filter(routine => !routine.is_template).length);
-
-      const totalHours = activities.reduce((sum, activity) => {
-        if (activity.datetime_start && activity.datetime_end) {
-          const start = new Date(activity.datetime_start);
-          const end = new Date(activity.datetime_end);
-          const hours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
-          return sum + hours;
-        }
-        return sum;
-      }, 0);
-      this.weeklyActivityHours.set(Math.round(totalHours));
     } catch (error) {
-      console.error('Error loading dashboard data:', error);
+      console.error('Error al cargar datos del dashboard:', error);
     }
   }
 
-  ngOnDestroy(): void {
-    if (this.vantaEffect) {
-      this.vantaEffect.destroy();
-    }
+  private isExpired(endTime: string | null): boolean {
+    if (!endTime) return false;
+    const endDate = new Date(endTime);
+    const now = new Date();
+    return endDate.getTime() < now.getTime();
+  }
+
+  // Método para navegar al perfil al pulsar el botón
+  goToProfile() {
+    this.router.navigate(['/profile']);
   }
 }

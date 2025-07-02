@@ -27,6 +27,8 @@ import { IActivity } from '../../interfaces/iactivity.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DateFormatPipe } from '../../pipes/date-format.pipe';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-profile',
@@ -392,6 +394,30 @@ export class ProfileComponent {
       } catch (error) {
         console.error('Error al cargar relaciones guía-usuario:', error);
       }
+    }
+  }
+  
+ async generatePDF() {
+    try {
+      const element = document.getElementById('profile-content');
+      if (!element) {
+        console.error('Elemento para PDF no encontrado');
+        toast.error('No se encontró el contenido para exportar.');
+        return;
+      }
+
+      const canvas = await html2canvas(element, { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('perfil.pdf');
+    } catch (error) {
+      console.error('Error generando PDF:', error);
+      toast.error('Error al generar el PDF.');
     }
   }
 }
