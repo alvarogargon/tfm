@@ -3,37 +3,37 @@
     <h3>Añadir Objetivo</h3>
     <form [formGroup]="goalForm" (ngSubmit)="onSubmit()">
       <div class="input-wrapper">
+        <label class="form-label">Nombre</label>
         <input type="text" class="input" formControlName="name" placeholder="Nombre del objetivo">
-        <label class="label">Nombre</label>
       </div>
       <div class="input-wrapper">
+        <label class="form-label">Tipo</label>
         <input type="text" class="input" formControlName="goal_type" placeholder="Tipo de objetivo">
-        <label class="label">Tipo</label>
       </div>
       <div class="input-wrapper">
+        <label class="form-label">Descripción</label>
         <textarea class="input" formControlName="description" placeholder="Descripción"></textarea>
-        <label class="label">Descripción</label>
       </div>
       <div class="input-wrapper">
+        <label class="form-label">Horas Semanales</label>
         <input type="number" class="input" formControlName="target_hours_weekly" placeholder="Horas semanales">
-        <label class="label">Horas Semanales</label>
       </div>
       <div class="input-wrapper">
+        <label class="form-label">Estado</label>
         <select class="input" formControlName="status">
           <option value="active">Activo</option>
           <option value="completed">Completado</option>
           <option value="paused">Pausado</option>
           <option value="cancelled">Cancelado</option>
         </select>
-        <label class="label">Estado</label>
       </div>
       <div class="input-wrapper">
+        <label class="form-label">Fecha Límite</label>
         <input type="date" class="input" formControlName="deadline">
-        <label class="label">Fecha Límite</label>
       </div>
       <div class="input-wrapper">
-        <input type="checkbox" class="input-checkbox" formControlName="need_reminder" id="need_reminder" />
-        <label class="label-checkbox" for="need_reminder">Avisame</label>
+        <input type="checkbox" class="form-check-input" formControlName="need_reminder" id="need_reminder" />
+        <label class="form-check-label" for="need_reminder">&nbsp;Avisame</label>
       </div>
       
       <div class="modal-footer">
