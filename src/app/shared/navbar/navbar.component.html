@@ -6,7 +6,14 @@
         <a class="nav-item nav-link" [routerLink]="['/dashboard/calendar']">Calendario</a>
       </div>
       <a class="navbar-brand mx-auto" [routerLink]="['/home']" style="font-size:1.5rem; display: flex; align-items: center;">
+<<<<<<< Updated upstream
         <img class="logo-image" src="./images/logogo_copy.png" alt="Logo">
+=======
+        <span style="font-weight:bold;"></span>
+                <figure class="logo">
+            <img class="img-fluid"  src="./images/logo-neuroplanner-tipografia.svg" style="width:200px;"alt="">
+        </figure>
+>>>>>>> Stashed changes
       </a>
       <div class="d-flex gap-4 align-items-center">
         <a class="profile-circle" title="Perfil" (click)="toggleMenu($event)">
@@ -45,8 +52,16 @@
         </a>
       </div>
     } @else {
+<<<<<<< Updated upstream
       <a class="navbar-brand" [routerLink]="['/home']">
         <img class="logo-image" src="./images/logogo_copy.png" alt="Logo">
+=======
+      <!-- Public Navbar -->
+      <a class="navbar-brand" [routerLink]="['/home']" style="font-size:1.5rem;">
+        <figure class="logo">
+            <img class="img-fluid"  src="./images/logo-neuroplanner.svg" style="width:200px;"alt="">
+        </figure>
+>>>>>>> Stashed changes
       </a>
       <div>
         <a class="profile-circle" [routerLink]="['/login']" title="Perfil">
