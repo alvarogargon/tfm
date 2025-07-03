@@ -180,6 +180,10 @@ export class ProfileSettingsComponent {
       }
 
       toast.success('Perfil actualizado con éxito.');
+      
+      setTimeout(() => {
+        window.location.reload();
+      }, 800);
     } catch (error) {
       console.error('Error al actualizar el perfil:', error);
       toast.error('Error al actualizar el perfil.');
@@ -201,6 +205,10 @@ export class ProfileSettingsComponent {
         const updatedUser = await this.userService.updateProfile(formData);
         this.user = updatedUser;
         toast.success('Imagen de perfil actualizada con éxito.');
+        
+        setTimeout(() => {
+          window.location.reload();
+        }, 800);
       } catch (error) {
         console.error('Error al actualizar la imagen de perfil:', error);
         toast.error('Error al actualizar la imagen de perfil.');

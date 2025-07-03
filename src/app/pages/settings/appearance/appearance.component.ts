@@ -79,5 +79,35 @@ export class AppearanceComponent {
       toast.error('Error al actualizar el perfil.');
     }
   }
+
+  async resetToDefault() {
+    const defaultColors = {
+      primary: '#007bff',
+      secondary: '#6c757d',
+      accent: '#0056b3',
+      background: '#ffffff'
+    };
+
+    this.editAppearanceForm.patchValue({
+      primaryColor: defaultColors.primary,
+      secondaryColor: defaultColors.secondary,
+      accentColor: defaultColors.accent,
+      backgroundColor: defaultColors.background
+    });
+
+    this.setThemeColors(defaultColors);
+
+    const formData = new FormData();
+    formData.append('color_palette', JSON.stringify(defaultColors));
+
+    try {
+      const updatedUser = await this.userService.updateProfile(formData);
+      this.user = updatedUser;
+      toast.success('Tema restablecido a los valores por defecto.');
+    } catch (error) {
+      console.error('Error al restablecer el tema:', error);
+      toast.error('Error al restablecer el tema.');
+    }
+  }
 }
 

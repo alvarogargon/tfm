@@ -1,24 +1,84 @@
 <section>
-    <div class="color-selection">
+    <div class="appearance-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">Personaliza tu Tema</h2>
+            <p class="panel-subtitle">Elige los colores que reflejen tu estilo personal</p>
+        </div>
+        
         <form [formGroup]="editAppearanceForm" (ngSubmit)="onSubmit()">
-            <div class="input-wrapper">
-                <input type="color" class="input" formControlName="primaryColor" aria-label="Color primario">
-                <label class="label">Color primario</label>
-            </div>
-            <div class="input-wrapper">
-                <input type="color" class="input" formControlName="secondaryColor" aria-label="Color secundario">
-                <label class="label">Color secundario</label>
-            </div>
-            <div class="input-wrapper">
-                <input type="color" class="input" formControlName="accentColor" aria-label="Color de acento">
-                <label class="label">Color de acento</label>
-            </div>
-            <div class="input-wrapper">
-                <input type="color" class="input" formControlName="backgroundColor" aria-label="Color de fondo">
-                <label class="label">Color de fondo</label>
+            <div class="color-grid">
+                <div class="color-input-card">
+                    <div class="color-info">
+                        <input type="color" class="color-input" formControlName="primaryColor" aria-label="Color primario">
+                        <label class="color-label">Color Primario</label>
+                        <p class="color-description">Color principal de la interfaz</p>
+                    </div>
+                </div>
+                
+                <div class="color-input-card">
+                    <div class="color-info">
+                        <input type="color" class="color-input" formControlName="secondaryColor" aria-label="Color secundario">
+                        <label class="color-label">Color Secundario</label>
+                        <p class="color-description">Color de apoyo y elementos complementarios</p>
+                    </div>
+                </div>
+                
+                <div class="color-input-card">
+                    <div class="color-info">
+                        <input type="color" class="color-input" formControlName="accentColor" aria-label="Color de acento">
+                        <label class="color-label">Color de Acento</label>
+                        <p class="color-description">Color para destacar elementos importantes</p>
+                    </div>
+                </div>
+                
+                <div class="color-input-card">
+                    <div class="color-info">
+                        <input type="color" class="color-input" formControlName="backgroundColor" aria-label="Color de fondo">
+                        <label class="color-label">Color de Fondo</label>
+                        <p class="color-description">Color de fondo principal</p>
+                    </div>
+                </div>
             </div>
             
-            <button class="button-submit" type="submit" [disabled]="editAppearanceForm.invalid" [attr.aria-disabled]="editAppearanceForm.invalid">Guardar</button>
+            <div class="theme-preview-section">
+                <h3 class="section-title">Vista Previa del Tema</h3>
+                <div class="theme-preview">
+                    <div class="preview-element preview-primary">
+                        <div class="preview-icon"></div>
+                        <span class="preview-text">Elemento Principal</span>
+                    </div>
+                    <div class="preview-element preview-secondary">
+                        <div class="preview-icon"></div>
+                        <span class="preview-text">Elemento Secundario</span>
+                    </div>
+                    <div class="preview-element preview-accent">
+                        <div class="preview-icon"></div>
+                        <span class="preview-text">Elemento de Acento</span>
+                    </div>
+                    <div class="preview-element preview-background">
+                        <div class="preview-icon"></div>
+                        <span class="preview-text">Fondo de la Aplicación</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" type="submit" [disabled]="editAppearanceForm.invalid" [attr.aria-disabled]="editAppearanceForm.invalid">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <polyline points="17,21 17,13 7,13 7,21"/>
+                        <polyline points="7,3 7,8 15,8"/>
+                    </svg>
+                    Guardar Tema
+                </button>
+                <button type="button" class="btn btn-secondary" (click)="resetToDefault()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="1 4 1 10 7 10"/>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                    </svg>
+                    Restablecer
+                </button>
+            </div>
         </form>
     </div>
 </section>
