@@ -6,7 +6,7 @@
         <a class="nav-item nav-link" [routerLink]="['/dashboard/calendar']">Calendario</a>
       </div>
       <a class="navbar-brand mx-auto" [routerLink]="['/home']" style="font-size:1.5rem; display: flex; align-items: center;">
-        <span style="font-weight:bold;">LOGO</span>
+        <img class="logo-image" src="./images/logogo_copy.png" alt="Logo">
       </a>
       <div class="d-flex gap-4 align-items-center">
         <a class="profile-circle" title="Perfil" (click)="toggleMenu($event)">
@@ -45,14 +45,12 @@
         </a>
       </div>
     } @else {
-      <a class="navbar-brand" [routerLink]="['/home']" style="font-size:1.5rem;">
-        <figure class="logo">
-            <img class="img-fluid"  src="./images/logogo.png" style="width:75px;height:75px;border-radius:50%;"alt="">
-        </figure>
+      <a class="navbar-brand" [routerLink]="['/home']">
+        <img class="logo-image" src="./images/logogo_copy.png" alt="Logo">
       </a>
       <div>
         <a class="profile-circle" [routerLink]="['/login']" title="Perfil">
-          <img src="https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg" alt="Perfil" style="width:30px;height:30px;border-radius:50%;">
+          <img src="https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg" alt="Perfil">
         </a>
       </div>
     }
