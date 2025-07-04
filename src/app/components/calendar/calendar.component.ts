@@ -400,4 +400,22 @@ eventContent: function (arg) {
       arg.revert();
     }
   }
+
+  copyLocationLinkToClipboard() {
+  if (!this.selectedActivity?.location) {
+    toast.error('No hay ubicación para copiar.');
+    return;
+  }
+
+  // Construir el link de Google Maps con la ubicación (escapando caracteres)
+  const encodedLocation = encodeURIComponent(this.selectedActivity.location);
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedLocation}`;
+
+  // Copiar al portapapeles
+  navigator.clipboard.writeText(mapsUrl).then(() => {
+    toast.success('Enlace de ubicación copiado al portapapeles');
+  }).catch(() => {
+    toast.error('Error al copiar el enlace al portapapeles');
+  });
+}
 }

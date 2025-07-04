@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { IActivity } from '../interfaces/iactivity.interface';
 import { toast } from 'ngx-sonner';
 
@@ -163,4 +163,15 @@ export class ActivityService {
       throw new Error('Error deleting activity.');
     }
   }
+
+  search(query: string): Observable<any[]> {
+  return this.httpClient.get<any[]>('https://nominatim.openstreetmap.org/search', {
+    params: {
+      q: query,
+      format: 'json',
+      addressdetails: '1',
+      limit: '5'
+    }
+  });
+}
 }

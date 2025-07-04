@@ -368,6 +368,20 @@ input[type="checkbox"] {
   font-size: 1rem;
 }
 
+.inline-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  gap: 8px;
+}
+
+.inline-content span {
+  flex-grow: 1;      
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
 .description-text {
   white-space: pre-wrap;
   line-height: 1.5;

@@ -255,8 +255,18 @@
           </div>
 
           <div class="info-item" *ngIf="selectedActivity.location">
-            <label> Ubicación:</label>
-            <span>{{ selectedActivity.location }}</span>
+            <label>Ubicación:</label>
+            <div class="inline-content">
+              <span>{{ selectedActivity.location }}</span>
+              <button 
+                type="button" 
+                class="btn btn-link btn-sm" 
+                (click)="copyLocationLinkToClipboard()" 
+                title="Ver en Google Maps"
+              >
+                🗺️
+              </button>
+            </div>
           </div>
 
           <div class="info-item">

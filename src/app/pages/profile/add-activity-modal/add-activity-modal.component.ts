@@ -5,7 +5,10 @@ import { CategoryService } from '../../../services/category.service';
 import { IActivity } from '../../../interfaces/iactivity.interface';
 import { ICategory } from '../../../interfaces/icategory.interface';
 import { CommonModule } from '@angular/common';
-import { toast } from 'ngx-sonner';
+import { toast } from 'ngx-sonner'; 
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-add-activity-modal',
@@ -21,6 +24,8 @@ export class AddActivityModalComponent {
   activityService = inject(ActivityService);
   categoryService = inject(CategoryService);
   categories = signal<ICategory[]>([]);
+  searchResults: any[] = [];
+  searchTerm = new Subject<string>();
 
   constructor(private fb: FormBuilder) {
     this.activityForm = this.fb.group({
@@ -33,9 +38,25 @@ export class AddActivityModalComponent {
       category_id: [null, Validators.required],
       routine_id: [0, Validators.required]
     });
+
   }
 
   async ngOnInit() {
+
+    this.searchTerm.pipe(
+    debounceTime(300), // Espera 300ms después de la última tecla
+    distinctUntilChanged(), // Solo continua si el término cambió
+    switchMap(term => {
+      if (term.length < 2) {
+        this.searchResults = [];
+        return [];
+      }
+      return this.activityService.search(term);
+    })
+    ).subscribe(results => {
+      this.searchResults = results || [];
+    });
+
     try {
       const token = localStorage.getItem('token');
       console.log('Token encontrado:', token ? 'Sí' : 'No');
@@ -91,4 +112,18 @@ export class AddActivityModalComponent {
       toast.error(error.message || 'Error al crear la actividad.');
     }
   }
+
+  onSearchLocation() {
+    const query = this.activityForm.get('location')?.value || '';
+    this.searchTerm.next(query);
+  }
+
+  selectLocation(location: any) {
+    this.activityForm.patchValue({
+      location: location.display_name
+    });
+    this.searchResults = [];
+    console.log(this.activityForm)
+  }
+
 }

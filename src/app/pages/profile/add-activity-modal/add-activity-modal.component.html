@@ -39,9 +39,19 @@
           <span class="error-text">La fecha de fin es obligatoria</span>
         }
       </div>
-      <div class="input-wrapper">
-        <input type="text" class="input" formControlName="location" placeholder="Ubicación">
+      <div class="input-wrapper location-wrapper">
+        <input type="text" class="input" formControlName="location" placeholder="Ubicación" (input)="onSearchLocation()" autocomplete="off"/>
         <label class="label">Ubicación</label>
+
+        @if (searchResults.length > 0) {
+          <ul class="search-results-dropdown">
+            @for (r of searchResults; track r.place_id) {
+              <li (click)="selectLocation(r)">
+                {{ r.display_name }}
+              </li>
+            }
+          </ul>
+        }
       </div>
       <div class="input-wrapper">
         <input type="text" class="input" formControlName="icon" placeholder="Ícono (ej. book.png)">
