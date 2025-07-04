@@ -3,16 +3,16 @@
     <h3>Añadir Interés</h3>
     <form [formGroup]="interestForm" (ngSubmit)="onSubmit()">
       <div class="input-wrapper">
+        <label class="form-label">Interés</label>
         <input type="text" class="input" formControlName="interest_name" placeholder="Nombre del interés">
-        <label class="label">Interés</label>
       </div>
       <div class="input-wrapper">
+        <label class="form-label">Prioridad</label>
         <select class="input" formControlName="priority">
           <option value="low">Baja</option>
           <option value="medium">Media</option>
           <option value="high">Alta</option>
         </select>
-        <label class="label">Prioridad</label>
       </div>
       <div class="modal-footer">
         <button type="submit" class="button-submit">Guardar</button>

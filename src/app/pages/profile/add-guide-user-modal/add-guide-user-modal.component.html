@@ -3,6 +3,7 @@
     <h3>Asignar Usuario a Guía</h3>
     <form [formGroup]="guideUserForm" (ngSubmit)="onSubmit()">
       <div class="input-wrapper">
+        <label class="form-label">ID de la Guía (Auto-rellenado)</label>
         <input 
           type="hidden" 
           class="input" 
@@ -11,7 +12,6 @@
           readonly
           [class.error]="guideId?.invalid && guideId?.touched"
           [attr.aria-describedby]="guideId?.invalid && guideId?.touched ? 'guideId-error' : null">
-        <label class="label">ID de la Guía (Auto-rellenado)</label>
         
         @if (guideId?.invalid && guideId?.touched) {
           <div id="guideId-error" class="error-message">
@@ -27,6 +27,7 @@
 
       <div class="input-wrapper">
         <!-- Cambiar input por select -->
+        <label class="form-label">Usuario a Asignar</label>
         <select 
           class="input"
           formControlName="userId"
@@ -47,7 +48,6 @@
             }
           }
         </select>
-        <label class="label">Usuario a Asignar</label>
         
         @if (userId?.invalid && userId?.touched) {
           <div id="userId-error" class="error-message">

@@ -3,37 +3,37 @@
     <h3>Copiar Rutina desde Plantilla</h3>
     <form (ngSubmit)="onCopy()">
       <div class="input-wrapper">
+        <label class="form-label">Plantilla</label>
         <select class="input" [(ngModel)]="selectedTemplateId" name="template" (change)="onTemplateSelected()">
           <option value="" disabled selected>Selecciona una plantilla</option>
           @for (routine of publicRoutines; track routine.routine_id) {
             <option [value]="routine.routine_id">{{ routine.name }}</option>
           }
         </select>
-        <label class="label">Plantilla</label>
       </div>
       
       <div class="input-wrapper">
+        <label class="form-label">Descripción</label>
         <textarea class="input" [(ngModel)]="selectedTemplateDescription" name="description" readonly placeholder="Descripción"></textarea>
-        <label class="label">Descripción</label>
       </div>
       
       <div class="input-wrapper">
+        <label class="form-label">Hora de Inicio</label>
         <input type="datetime-local" class="input" [(ngModel)]="startTime" name="start_time" placeholder="Hora de inicio">
-        <label class="label">Hora de Inicio</label>
       </div>
       
       <div class="input-wrapper">
+        <label class="form-label">Hora de Fin</label>
         <input type="datetime-local" class="input" [(ngModel)]="endTime" name="end_time" placeholder="Hora de fin">
-        <label class="label">Hora de Fin</label>
       </div>
       
       <div class="input-wrapper">
+        <label class="form-label">Frecuencia</label>
         <select class="input" [(ngModel)]="dailyRoutine" name="daily_routine">
           <option value="Daily">Diaria</option>
           <option value="Weekly">Semanal</option>
           <option value="Monthly">Mensual</option>
         </select>
-        <label class="label">Frecuencia</label>
       </div>
       
       <div class="modal-footer">
