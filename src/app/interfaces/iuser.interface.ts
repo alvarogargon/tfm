@@ -14,7 +14,7 @@ export interface IUserRegister {
   age: number;
   num_tel: number | string; 
   gender: string;
-  image: string;
+  image?: string;
   role: string;
 }
 

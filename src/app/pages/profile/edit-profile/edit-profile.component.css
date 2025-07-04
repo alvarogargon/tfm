@@ -52,7 +52,7 @@ input.ng-valid.ng-touched {
     border-bottom: 1px solid green;
 }
 
-.label {
+.form-label{
     position: absolute;
     left: 1.5rem;
     top: 0.3rem;
@@ -75,8 +75,8 @@ input.ng-valid.ng-touched {
     border-bottom: 1px solid #302F2F;
 }
 
-.input:focus + .label,
-.input:not(:placeholder-shown) + .label {
+.input:focus + .form-label,
+.input:not(:placeholder-shown) + .form-label {
     transform: translate(0px, -25px);
     font-size: 0.7rem;
     transition: all 0.3s ease-in-out;

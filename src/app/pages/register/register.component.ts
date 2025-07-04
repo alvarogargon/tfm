@@ -111,10 +111,6 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
       gender: new FormControl("", [
         Validators.required
       ]),
-      image: new FormControl("", [
-        Validators.required,
-        Validators.minLength(5)
-      ]),
       role: new FormControl("", [
         Validators.required
       ]),
@@ -122,11 +118,23 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
   }
 
   async registerData() {
-    const credentials: IUserRegister = { ...this.registerForm.value, num_tel: this.rawPhoneNumber };
+    const formData = { ...this.registerForm.value, num_tel: this.rawPhoneNumber };
+    const credentials: IUserRegister = {
+      ...formData,
+      image: 'https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg'
+    };
     try {
-      const res = await this.authService.register(credentials)
-      toast.success(res.message);
-      this.router.navigate(['/dashboard'])
+      const registerRes = await this.authService.register(credentials);
+      toast.success(registerRes.message);
+      
+      // Automatically log in the user after successful registration
+      const loginCredentials = {
+        email: credentials.email,
+        password: credentials.password
+      };
+      
+      await this.authService.login(loginCredentials);
+      this.router.navigate(['/dashboard']);
     } catch (error) {
       toast.error((error as Error).message);
     }
@@ -174,13 +182,12 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
       this.currentStep--;
     }
   }
-
-  // Helper to check if all controls in the current step are valid
+  
   isStepValid(step: number): boolean {
     let controls: string[] = [];
     if (step === 1) controls = ['username', 'email', 'password', 'repitepassword'];
     if (step === 2) controls = ['first_name', 'last_name', 'age', 'num_tel'];
-    if (step === 3) controls = ['gender', 'image', 'role'];
+    if (step === 3) controls = ['gender', 'role'];
     const allControlsValid = controls.every(name => this.registerForm.get(name)?.valid);
     if (step === 1) {
       return allControlsValid && !this.registerForm.hasError('passwordMismatch');

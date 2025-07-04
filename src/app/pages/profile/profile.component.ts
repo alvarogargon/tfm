@@ -437,6 +437,6 @@ export class ProfileComponent {
         return `http://localhost:3000${currentUser.image}`;
       }
     }
-    return 'https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c668b3120d3d26467b06330c.jpg';
+    return 'https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg';
   }
 }

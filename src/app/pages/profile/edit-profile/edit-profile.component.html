@@ -20,8 +20,8 @@
                 </g>
                 </svg>
             </span>
-            <label class="form-label">NOMBRE</label>
             <input type="text" class="input" formControlName="firstName" placeholder="">
+            <label class="form-label">NOMBRE</label>
         </div>
         <p class="error">
             {{ checkControl('firstName', 'required') ? 'Campo obligatorio' : (checkControl('firstName', 'minlength') ? 'La longitud mínimas es 3 caracteres' : '\u00A0') }}
@@ -46,8 +46,8 @@
                 </g>
                 </svg>
             </span>
-            <label class="form-label">APELLIDOS</label>
             <input type="text" class="input" formControlName="lastName" placeholder="" aria-label="APELLIDOS">
+            <label class="form-label">APELLIDOS</label>
         </div>
         <p class="error">
             {{ checkControl('lastName', 'required') ? 'Campo obligatorio' : (checkControl('lastName', 'minlength') ? 'La longitud mínimas es 4 caracteres' : '\u00A0') }}
