@@ -52,6 +52,7 @@ export class AuthService {
       const res = await lastValueFrom(this.httpClient.post<RegisterResponse>(`${this.endpoint}/register`, credentials));
       this.currentUser = res.user;
       localStorage.setItem('user', JSON.stringify(res.user));
+      // Note: No token is stored here, user needs to login after registration
       return res;
     } catch (error: any) {
       if (error.status === 409) {

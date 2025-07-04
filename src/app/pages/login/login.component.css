@@ -3,7 +3,7 @@
 }
 
 .card-body {
-    padding: 6rem 7rem 1rem 7rem;
+    padding: 6rem;
 
     @media (max-width: 1000px) {
         padding: 4rem 3rem;
@@ -11,7 +11,6 @@
 }
 
 .wrapper {
-    min-height: 400px;
     font-family: "Montserrat";
     align-items: center;
 }

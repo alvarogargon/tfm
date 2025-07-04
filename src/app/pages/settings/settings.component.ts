@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { IUser } from '../../interfaces/iuser.interface';
 import { toast } from 'ngx-sonner';
 import { UserService } from '../../services/user.service';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
@@ -11,6 +11,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   styleUrl: './settings.component.css'
 })
 export class SettingsComponent {
+  router = inject(Router);
   user = signal<IUser | undefined>(undefined);
   userService = inject(UserService);
 
@@ -31,6 +32,13 @@ export class SettingsComponent {
     }
   }
 
+  logout(event: MouseEvent) {
+    event.preventDefault();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.router.navigate(['/login']);
+  }
+
   getImageSource(): string {
     const currentUser = this.user();
     if (currentUser && currentUser.image) {
@@ -40,6 +48,6 @@ export class SettingsComponent {
         return `http://localhost:3000${currentUser.image}`;
       }
     }
-    return 'https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c668b3120d3d26467b06330c.jpg';
+    return 'https://i.pinimg.com/736x/2f/15/f2/2f15f2e8c688b3120d3d26467b06330c.jpg';
   }
 }
