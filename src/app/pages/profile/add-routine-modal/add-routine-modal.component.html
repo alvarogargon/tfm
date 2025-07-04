@@ -3,35 +3,36 @@
     <h3>Añadir Rutina</h3>
     <form [formGroup]="routineForm" (ngSubmit)="onSubmit()">
       <div class="input-wrapper">
+        <label class="form-label">Nombre</label>
         <input type="text" class="input" formControlName="name" placeholder="Nombre de la rutina">
-        <label class="label">Nombre</label>
       </div>
       <div class="input-wrapper">
+        <label class="form-label">Descripción</label>
         <textarea class="input" formControlName="description" placeholder="Descripción"></textarea>
-        <label class="label">Descripción</label>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" formControlName="is_template">
+        <label class="form-check-label">Plantilla</label>
       </div>
       <div class="input-wrapper">
-        <input type="checkbox" class="input" formControlName="is_template">
-        <label class="label">Plantilla</label>
-      </div>
-      <div class="input-wrapper">
+        <label class="form-label">Hora de Inicio</label>
         <input type="datetime-local" class="input" formControlName="start_time" placeholder="Hora de inicio">
-        <label class="label">Hora de Inicio</label>
       </div>
       <div class="input-wrapper">
+        <label class="form-label">Hora de Fin</label>
         <input type="datetime-local" class="input" formControlName="end_time" placeholder="Hora de fin">
-        <label class="label">Hora de Fin</label>
       </div>
       <div class="input-wrapper">
+        <label class="form-label">Frecuencia</label>
         <select class="input" formControlName="daily_routine">
           <option value="Daily">Diaria</option>
           <option value="Weekly">Semanal</option>
           <option value="Monthly">Mensual</option>
         </select>
-        <label class="label">Frecuencia</label>
       </div>
       @if (guideUserRelations.length > 0) {
         <div class="input-wrapper">
+          <label class="form-label">Usuario</label>
           <select class="input" formControlName="targetUserId">
             <option [ngValue]="null" disabled>Selecciona un usuario</option>
             @for (relation of guideUserRelations; track relation.guide_user_id) {
@@ -40,7 +41,6 @@
               </option>
             }
           </select>
-          <label class="label">Usuario</label>
         </div>
       }
       <div class="modal-footer">
