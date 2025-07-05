@@ -84,6 +84,16 @@
             <app-add-category-modal (close)="onModalClosed()"></app-add-category-modal>
           }
         </div>
+
+        <div class="profile"> 
+          <h4>Guias</h4>
+          @if(guides()){
+            @for(guide of guides(); track guide.first_name){
+              {{guide.first_name}}
+              {{guide.last_name}}
+            }
+          }
+        </div>
       </div>
 
       <div class="col-md-8 col-lg-9 main-content">
@@ -334,3 +344,10 @@
 <div class="text-center mt-4">
   <button class="button" (click)="generatePDF()">Descargar Perfil en PDF</button>
 </div>
+
+<script>
+  function log(value) {
+    console.log(value);
+    return '';
+  }
+</script>

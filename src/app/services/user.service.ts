@@ -4,6 +4,7 @@ import { lastValueFrom } from 'rxjs';
 import { IUser } from '../interfaces/iuser.interface';
 import { IProfileInterest } from '../interfaces/iprofile-interest.interface';
 import { toast } from 'ngx-sonner';
+import { IProfileGuide } from '../interfaces/iprofile-guide.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -140,5 +141,28 @@ export class UserService {
         { headers }
       )
     );
+  }
+
+  async getGuide(userId: number | null){
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No token found. Please log in.');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    const url = `${this.endpoint}/guide/${userId}`;
+
+    try{
+      const res = await lastValueFrom(this.httpClient.get<{ message: String, guides: IProfileGuide[]}>(url, {headers}));
+      console.log('Guias obtenidos:', res.guides)
+
+      return res.guides
+
+    }catch(error){
+      console.error('Error al obtener guias:', error);
+      toast.error('Error al obtener los guias.');
+      throw new Error('Error fetching guides.');
+    }
   }
 }

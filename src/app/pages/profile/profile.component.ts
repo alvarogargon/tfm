@@ -29,6 +29,7 @@ import { FormsModule } from '@angular/forms';
 import { DateFormatPipe } from '../../pipes/date-format.pipe';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { IProfileGuide } from '../../interfaces/iprofile-guide.interface';
 
 @Component({
   selector: 'app-profile',
@@ -65,6 +66,7 @@ export class ProfileComponent {
   selectedGoal = signal<IProfileGoal | null>(null);
   selectedRoutine = signal<IRoutine | null>(null);
   user = signal<IUser | null>(null);
+  guides = signal<IProfileGuide[] | null>(null);
   interests = signal<IProfileInterest[]>([]);
   goals = signal<IProfileGoal[]>([]);
   routines = signal<IRoutine[]>([]);
@@ -145,16 +147,18 @@ export class ProfileComponent {
 
   async loadUserData(userId: number | null) {
     try {
-      const [interests, goals, routines, activities] = await Promise.all([
+      const [interests, goals, routines, activities, guides] = await Promise.all([
         this.userService.getInterests(userId),
         this.goalService.getGoals(userId),
         this.routineService.getRoutines(userId),
-        this.activityService.getActivities()
+        this.activityService.getActivities(),
+        this.userService.getGuide(userId)
       ]);
       this.interests.set(interests);
       this.goals.set(goals);
       this.routines.set(routines);
       this.activities.set(activities);
+      this.guides.set(guides)
 
       this.markRoutinesFromTemplates();
     } catch (error) {
