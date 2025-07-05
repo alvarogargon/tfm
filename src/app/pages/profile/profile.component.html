@@ -85,6 +85,7 @@
           }
         </div>
 
+        @if (user()?.role != 'guide') {
         <div class="profile"> 
           <h4>Guias</h4>
           @if(guides()){
@@ -94,6 +95,7 @@
             }
           }
         </div>
+      }
       </div>
 
       <div class="col-md-8 col-lg-9 main-content">
