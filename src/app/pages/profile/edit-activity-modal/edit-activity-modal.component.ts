@@ -45,11 +45,8 @@ export class EditActivityModalComponent {
       return;
     }
 
-    console.log('Actividad recibida para editar:', this.activity);
-
     try {
       const token = localStorage.getItem('token');
-      console.log('Token encontrado:', token ? 'Sí' : 'No');
       if (!token) {
         toast.error('No se encontró el token de autenticación. Por favor, inicia sesión.');
         return;
@@ -57,7 +54,6 @@ export class EditActivityModalComponent {
 
       // Cargar categorías
       const categories = await this.categoryService.getCategories();
-      console.log('Categorías cargadas:', categories);
       this.categories.set(categories);
 
       // Validar routine_id
@@ -87,20 +83,7 @@ export class EditActivityModalComponent {
         category_id: this.activity.category_id || null,
         routine_id: this.activity.routine_id
       });
-
-      console.log('Formulario inicializado:', this.activityForm.value);
-      console.log('Estado del formulario:', this.activityForm.valid ? 'Válido' : 'Inválido');
       
-      if (!this.activityForm.valid) {
-        console.log('Errores del formulario:', {
-          title: this.activityForm.get('title')?.errors,
-          datetime_start: this.activityForm.get('datetime_start')?.errors,
-          datetime_end: this.activityForm.get('datetime_end')?.errors,
-          category_id: this.activityForm.get('category_id')?.errors,
-          routine_id: this.activityForm.get('routine_id')?.errors
-        });
-      }
-
       if (categories.length === 0) {
         toast.warning('No hay categorías disponibles. Por favor, crea una categoría primero.');
       }
@@ -113,13 +96,6 @@ export class EditActivityModalComponent {
   async onSubmit() {
     if (this.activityForm.invalid) {
       this.activityForm.markAllAsTouched();
-      console.log('Formulario inválido:', {
-        title: this.activityForm.get('title')?.errors,
-        datetime_start: this.activityForm.get('datetime_start')?.errors,
-        datetime_end: this.activityForm.get('datetime_end')?.errors,
-        category_id: this.activityForm.get('category_id')?.errors,
-        routine_id: this.activityForm.get('routine_id')?.errors
-      });
       toast.error('Por favor, completa todos los campos requeridos: título, fechas, categoría y rutina.');
       return;
     }
@@ -136,7 +112,6 @@ export class EditActivityModalComponent {
         end_time: null
       };
 
-      console.log('Enviando actividad al backend:', activity);
       await this.activityService.updateActivity(this.activity.activity_id, activity);
       toast.success('Actividad actualizada con éxito.');
       this.close.emit();

@@ -109,30 +109,42 @@ input.ng-valid.ng-touched {
 }
 
 .button-submit, .button-close {
-    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
     width: 100%;
     margin: 20px 0 10px 0;
-    background-color: var(--primary-color);
     border: none;
     color: white;
-    font-size: 0.75rem;
-    font-weight: 500;
-    border-radius: 10px;
-    height: 40px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    border-radius: 12px;
+    height: 48px;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     margin: 0 2rem;
+    background-color: var(--primary-color, #007bff);
+    transform: translateY(0);
 }
 
 .button-close {
-    background-color: var(--secondary-color);
-}
-
-.button-submit:active, .button-close:active {
-    transform: scale(0.98);
+    background-color: var(--secondary-color, #6c757d);
 }
 
 .button-submit:hover, .button-close:hover {
-    background-color: var(--accent-color, #ffc107);
+    transform: translateY(-3px) scale(1.02);
+}
+
+.button-submit:hover {
+    background-color: var(--primary-color, #007bff);
+    box-shadow: 0 8px 25px 0 color-mix(in srgb, var(--accent-color, #ffc107) 35%, transparent);
+}
+
+.button-close:hover {
+    background-color: var(--secondary-color, #6c757d);
+    box-shadow: 0 8px 25px 0 color-mix(in srgb, var(--accent-color, #ffc107) 35%, transparent);
+}
+
+.button-submit:active, .button-close:active {
+    transform: translateY(0) scale(0.98);
 }
 
 .edit-profile-panel {

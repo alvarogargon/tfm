@@ -23,7 +23,6 @@ export class RoutineService {
 
     try {
       const res = await lastValueFrom(this.httpClient.get<{ message: string, routines: any[] }>(url, { headers }));
-      console.log('Respuesta de getRoutines:', res); // Para depuración
       return res.routines.map(routine => ({
         routine_id: routine.routine_id,
         user_id: routine.user_id,
@@ -71,12 +70,6 @@ export class RoutineService {
 
     try {
       const res = await lastValueFrom(this.httpClient.get<{ message: string, routine: any }>(`${this.endpoint}/${id}`, { headers }));
-      console.log('Respuesta de getRoutineById:', res); // Para depuración
-      
-      // Verificar estructura de datos recibidos
-      if (res.routine && res.routine.activities) {
-        console.log('Actividades antes del mapeo:', res.routine.activities);
-      }
 
       const mappedRoutine = {
         routine_id: res.routine.routine_id,
@@ -90,7 +83,6 @@ export class RoutineService {
         end_time: res.routine.end_time,
         daily_routine: res.routine.daily_routine,
         activities: (res.routine.activities || []).map((activity: any) => {
-          console.log('Mapeando actividad:', activity); // Debug individual
           
           const mappedActivity = {
             activity_id: activity.activity_id,
@@ -111,12 +103,10 @@ export class RoutineService {
             category: activity.category || null
           };
           
-          console.log('Actividad mapeada:', mappedActivity); // Debug resultado
           return mappedActivity;
         })
       };
 
-      console.log('Rutina completamente mapeada:', mappedRoutine);
       return mappedRoutine;
     } catch (error: any) {
       console.error('Error al obtener rutina:', error);
@@ -233,7 +223,7 @@ export class RoutineService {
           { headers }
         )
       );
-      console.log('Respuesta cruda de la API para rutinas públicas:', res);
+
       return res.routines.map(routine => ({
         routine_id: routine.routine_id,
         user_id: routine.user_id,
@@ -286,7 +276,7 @@ export class RoutineService {
           { headers }
         )
       );
-      console.log('Respuesta cruda de getReceivedRoutinesByUser:', res);
+
       return res.received;
     } catch (error) {
       console.error('Error al obtener rutinas compartidas recibidas:', error);

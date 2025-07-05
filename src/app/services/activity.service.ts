@@ -21,7 +21,6 @@ export class ActivityService {
 
     try {
       const res = await lastValueFrom(this.httpClient.get<{ message: string, activities: IActivity[] }>(this.endpoint, { headers }));
-      console.log('Respuesta de getActivities:', res); // Añadido para depuración
       return res.activities;
     } catch (error: any) {
       console.error('Error al obtener actividades:', error);
@@ -40,7 +39,6 @@ export class ActivityService {
 
     try {
       const res = await lastValueFrom(this.httpClient.get<{ message: string, activity: IActivity }>(`${this.endpoint}/${id}`, { headers }));
-      console.log('Respuesta de getActivityById:', res); // Añadido para depuración
       return res.activity;
     } catch (error: any) {
       console.error('Error al obtener actividad:', error);
@@ -98,7 +96,6 @@ export class ActivityService {
 
     try {
       const res = await lastValueFrom(this.httpClient.post<{ message: string, activity: IActivity }>(this.endpoint, activity, { headers }));
-      console.log('Respuesta de createActivity:', res); // Añadido para depuración
       return res.activity;
     } catch (error: any) {
       console.error('Error al crear actividad:', error);
@@ -122,7 +119,6 @@ export class ActivityService {
 
     try {
       const res = await lastValueFrom(this.httpClient.put<{ message: string, activity: IActivity }>(`${this.endpoint}/${id}`, activity, { headers }));
-      console.log('Respuesta de updateActivity:', res); // Añadido para depuración
       return res.activity;
     } catch (error: any) {
       console.error('Error al actualizar actividad:', error);
@@ -146,9 +142,7 @@ export class ActivityService {
     });
 
     try {
-      console.log('Enviando solicitud DELETE para activity_id:', id); // Añadido para depuración
       const res = await lastValueFrom(this.httpClient.delete<{ message: string, activity_id: number }>(`${this.endpoint}/${id}`, { headers }));
-      console.log('Respuesta de deleteActivity:', res); // Añadido para depuración
     } catch (error: any) {
       console.error('Error al eliminar actividad:', error);
       if (error.status === 404) {

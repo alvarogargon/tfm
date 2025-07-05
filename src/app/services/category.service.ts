@@ -22,7 +22,6 @@ export class CategoryService {
           headers: { Authorization: `Bearer ${token}` }
         })
       );
-      console.log('Respuesta de categorías:', response);
       return response.categories;
     } catch (error: any) {
       console.error('Error al obtener categorías:', error);

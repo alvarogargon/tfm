@@ -12,7 +12,7 @@
           </button>
         </div>
       </div>
-      <p>{{ routine()?.description || 'Sin descripción' }}</p>
+      <p class="description">{{ routine()?.description || 'Sin descripción' }}</p>
       <p><strong>Tipo:</strong> {{ routine()?.daily_routine | titlecase }}</p>
       @if (routine()?.end_time) {
         <p><strong>Fecha de fin:</strong> {{ routine()?.end_time ? (routine()?.end_time | dateFormat) : 'Sin fecha de fin' }}</p>
@@ -59,7 +59,7 @@
                 </span>
               }
             </div>
-            <p class="card-text">{{ activity.description || 'Sin descripción' }}</p>
+            <p class="card-text description">{{ activity.description || 'Sin descripción' }}</p>
             <p><strong>Día:</strong> {{ activity.datetime_start ? (activity.datetime_start | dateFormat:'weekday') : 'No especificado' }}</p>
             <p><strong>Hora:</strong> {{ activity.datetime_start ? (activity.datetime_start | dateFormat:'time') : 'No especificada' }} - {{ activity.datetime_end ? (activity.datetime_end | dateFormat:'time') : 'No especificada' }}</p>
             <p><strong>Ubicación:</strong> {{ activity.location || 'No especificada' }}</p>

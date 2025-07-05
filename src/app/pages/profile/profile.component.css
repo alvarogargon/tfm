@@ -106,7 +106,6 @@
 }
 
 .button {
-  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
   width: 100%;
   max-width: 250px;
   margin: 20px 0 10px 0;
@@ -114,18 +113,27 @@
   border: none;
   color: white;
   font-size: 0.8rem;
-  font-weight: 500;
-  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  border-radius: 12px;
   height: 50px;
   cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
 }
 
 .button:hover {
-  background-color: var(--accent-color, #ffc107);
+  background-color: var(--primary-color, #007bff);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px 0 color-mix(in srgb, var(--accent-color, #ffc107) 35%, transparent);
 }
 
 .button:active {
-  transform: scale(0.98);
+  transform: translateY(0) scale(0.98);
+}
+
+.user-selection {
+  font-size: 0.9rem;
 }
 
 .section-header {
@@ -140,22 +148,28 @@
 }
 
 .icon-button {
-  background-color: var(--primary-color, #4682B4);
+  background-color: var(--primary-color, #007bff);
   color: white;
   border: none;
-  width: 28px;
-  height: 28px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0) scale(1);
 }
 
 .icon-button:hover {
-  background-color: var(--accent-color, #FFD700);
-  transform: scale(1.1);
+  background-color: var(--primary-color, #007bff);
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 8px 25px 0 color-mix(in srgb, var(--accent-color, #ffc107) 35%, transparent);
+}
+
+.icon-button:active {
+  transform: translateY(0) scale(0.95);
 }
 
 .icon-button svg {
@@ -186,6 +200,29 @@
   transform: scale(1.1);
 }
 
+.badge.bg-name {
+  background-color: #e4e4e4;
+}
+
+.badge.bg-low {
+  background-color: #C5FAD5 !important; /* Light green for low priority */
+  color: #155724 !important;
+}
+
+.badge.bg-medium {
+  background-color: #FFF3CD !important; /* Light yellow for medium priority */
+  color: #856404 !important;
+}
+
+.badge.bg-high {
+  background-color: #F8D7DA !important; /* Light red for high priority */
+  color: #721c24 !important;
+}
+
+.no-content {
+  font-size: 0.8rem;
+}
+
 .role {
   font-size: 0.9rem;
   font-weight: 700;
@@ -204,6 +241,10 @@
   margin-bottom: 2rem;
 }
 
+.stats-card {
+  height: 150px;
+}
+
 .card {
   background-color: var(--background-color, #ffffff);
   border: none;
@@ -214,11 +255,19 @@
 
 .activity-count {
   position: absolute;
-  bottom: 0.5rem;
-  right: 0.5rem;
-  font-size: 0.9rem;
+  bottom: 0.8rem;
+  right: 2.1rem;
+  font-size: 0.8rem;
   color: #6c757d;
-  font-weight: 500;
+  font-weight: 600;
+}
+
+.routine-description {
+  font-size: 0.8rem;
+}
+
+.goal-description {
+  font-size: 0.8rem;
 }
 
 .main-content {
@@ -229,16 +278,17 @@
 
 .progress-container {
   background-color: #e9ecef;
-  border-radius: 0.25rem;
   height: 20px;
   overflow: hidden;
   margin-bottom: 1rem;
+  border-radius: 2rem;
 }
 
 .progress-bar {
   background-color: var(--primary-color, #007bff);
   height: 100%;
   transition: width 0.3s ease-in-out;
+  border-radius: 2rem;
 }
 
 .status-container {
@@ -250,6 +300,7 @@
 
 .status-label {
   font-weight: 500;
+  font-size: 0.9rem;
 }
 
 .status-icon {
@@ -261,7 +312,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 .routine-status-container {
@@ -296,12 +347,61 @@
 .button-group {
   display: flex;
   gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.button-group button,
+.button-group .button {
+  flex: 1;
+  min-height: 45px;
+  background-color: var(--primary-color, #007bff);
+  border: none;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+}
+
+.button-group button:hover,
+.button-group .button:hover {
+  background-color: var(--primary-color, #007bff);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px 0 color-mix(in srgb, var(--accent-color, #ffc107) 35%, transparent);
+}
+
+.button-group button:active,
+.button-group .button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.buttons-routine {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.buttons-routine .icon-button {
+  flex-shrink: 0;
+}
+
+.name-surname {
+  color: #929292;
 }
 
 .form-select {
   border-radius: 0.5rem;
   padding: 0.75rem;
-  font-size: 1rem;
+  font-size: 0.8rem;
+  border: none;
+}
+
+.form-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
 }
 
 .from-template-icon {
@@ -311,10 +411,40 @@
   vertical-align: middle;
 }
 
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.5rem 2rem;
+}
+
 @media (max-width: 768px) {
   .button-group {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
+  }
+
+  .button-group button,
+  .button-group .button {
+    width: 100% !important;
+    max-width: none !important;
+    font-size: 0.8rem;
+    height: 50px;
+  }
+
+  .buttons-routine {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .buttons-routine .icon-button {
+    width: 40px;
+    height: 40px;
   }
 
   .routine-header {
@@ -327,9 +457,32 @@
   }
 
   .activity-count {
-    position: static;
-    margin-top: 0.5rem;
+    margin-top: 1rem;
     text-align: right;
+  }
+
+  .email {
+      font-size: 0.9rem;
+    }
+
+  .username {
+    font-size: 1.8rem;
+  }
+
+  .card-body {
+    justify-content: center;
+  }
+
+  .delete-rel {
+    width: 100% !important;
+    max-width: none !important;
+    height: 50px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .button-group button {
+    font-size: 0.65rem;
   }
 }
 
@@ -342,5 +495,9 @@
 @media (max-width: 1200px) {
   .email {
     font-size: 0.75rem;
+  }
+
+  .username {
+    font-size: 1.2rem;
   }
 }

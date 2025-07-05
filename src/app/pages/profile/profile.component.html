@@ -29,7 +29,7 @@
                 {{ user()?.role === 'guide' ? 'Guía' : 'Usuario' }}
               </span>
             </div>
-            <h2 class="mb-1">{{ user()?.username || 'Nombre de Usuario' }}</h2>
+            <h2 class="mb-1 username">{{ user()?.username || 'Nombre de Usuario' }}</h2>
             <p class="text-muted mb-0 email">{{ user()?.email || 'usuario@email.com' }}</p>
             <button class="button btn-sm mb-3" (click)="showEditForm.set(true)">Editar Perfil</button>
             
@@ -43,11 +43,11 @@
               <ul class="list-unstyled mb-0 highlights">
                 @for (interest of interests(); track interest.interest_id) {
                   <li>
-                    <span class="badge bg-secondary me-1" [attr.aria-label]="'Interés: ' + interest.interest_name">{{ interest.interest_name }}</span>
+                    <span class="badge bg-name me-1" [attr.aria-label]="'Interés: ' + interest.interest_name">{{ interest.interest_name }}</span>
                     <span class="badge"
-                          [class.bg-success]="interest.priority === 'low'"
-                          [class.bg-warning]="interest.priority === 'medium'"
-                          [class.bg-danger]="interest.priority === 'high'"
+                          [class.bg-low]="interest.priority === 'low'"
+                          [class.bg-medium]="interest.priority === 'medium'"
+                          [class.bg-high]="interest.priority === 'high'"
                           [attr.aria-label]="'Prioridad: ' + interest.priority">
                       {{ interest.priority | titlecase }}
                     </span>
@@ -70,7 +70,7 @@
                     <span class="badge" [style.backgroundColor]="category.color || '#6c757d'">{{ category.name }}</span>
                   </li>
                 } @empty {
-                  <li>No hay categorías registradas.</li>
+                  <li class="no-content">No hay categorías registradas.</li>
                 }
               </ul>
             }
@@ -92,11 +92,11 @@
             <div class="section-header">
               <h4>Seleccionar Usuario</h4>
             </div>
-            <select class="form-select" [(ngModel)]="selectedUserId" (change)="onUserSelected()" aria-label="Seleccionar usuario asignado">
+            <select class="form-select user-selection" [(ngModel)]="selectedUserId" (change)="onUserSelected()" aria-label="Seleccionar usuario asignado">
               <option [ngValue]="null" disabled>Selecciona un usuario</option>
               @for (relation of guideUserRelations(); track relation.guide_user_id) {
                 <option [ngValue]="relation.user_id">
-                  {{ relation.guide_user_id === 0 ? 'Mi Perfil' : relation.user?.username }} (ID: {{ relation.user_id }})
+                  {{ relation.guide_user_id === 0 ? 'Mi Perfil' : relation.user?.username }} ({{ relation.user?.firstName }} {{ relation.user?.lastName}})
                 </option>
               }
             </select>
@@ -104,19 +104,19 @@
         }
 
         <div class="stats">
-          <div class="card shadow-sm">
+          <div class="card shadow-sm stats-card">
             <div class="card-body text-center">
               <h5 class="card-title mb-2">Rutinas activas</h5>
               <span class="display-6 fw-bold text-primary">{{ activeRoutinesCount() }}</span>
             </div>
           </div>
-          <div class="card shadow-sm">
+          <div class="card shadow-sm stats-card">
             <div class="card-body text-center">
               <h5 class="card-title mb-2">Objetivos completados</h5>
               <span class="display-6 fw-bold text-success">{{ completedGoalsCount() }}</span>
             </div>
           </div>
-          <div class="card shadow-sm">
+          <div class="card shadow-sm stats-card">
             <div class="card-body text-center">
               <h5 class="card-title mb-2">Actividades</h5>
               <span class="display-6 fw-bold text-secondary">{{ activitiesCount() }}</span>
@@ -135,17 +135,17 @@
             <ul class="list-unstyled mb-0 highlights">
               @for (interest of interests(); track interest.interest_id) {
                 <li>
-                  <span class="badge bg-secondary me-1" [attr.aria-label]="'Interés: ' + interest.interest_name">{{ interest.interest_name }}</span>
+                  <span class="badge bg-name me-1" [attr.aria-label]="'Interés: ' + interest.interest_name">{{ interest.interest_name }}</span>
                   <span class="badge"
-                        [class.bg-success]="interest.priority === 'low'"
-                        [class.bg-warning]="interest.priority === 'medium'"
-                        [class.bg-danger]="interest.priority === 'high'"
+                        [class.bg-low]="interest.priority === 'low'"
+                        [class.bg-medium]="interest.priority === 'medium'"
+                        [class.bg-high]="interest.priority === 'high'"
                         [attr.aria-label]="'Prioridad: ' + interest.priority">
                     {{ interest.priority | titlecase }}
                   </span>
                 </li>
               } @empty {
-                <li>No hay intereses registrados.</li>
+                <li class="no-content">No hay intereses registrados.</li>
               }
             </ul>
           </div>
@@ -162,7 +162,7 @@
             <div class="card shadow-sm mb-3">
               <div class="card-body">
                 <h5 class="card-title">{{ goal.name }}</h5>
-                <p class="card-text">{{ goal.description || 'Sin descripción' }}</p>
+                <p class="card-text goal-description">{{ goal.description || 'Sin descripción' }}</p>
                 <div class="progress-container" role="progressbar" [attr.aria-valuenow]="goal.progress" aria-valuemin="0" aria-valuemax="100" [attr.aria-label]="'Progreso del objetivo ' + goal.name + ': ' + goal.progress + '%'">
                   <div class="progress-bar" [style.width]="goal.progress + '%'"></div>
                 </div>
@@ -202,7 +202,7 @@
               </div>
             </div>
           } @empty {
-            <p>No hay objetivos registrados.</p>
+            <p class="no-content">No hay objetivos registrados.</p>
           }
           @if (showAddGoalModal()) {
             <app-add-goal-modal (close)="onModalClosed()"></app-add-goal-modal>
@@ -215,12 +215,14 @@
         <div>
           <div class="section-header">
             <h4>Rutinas</h4>
-            <button class="icon-button" (click)="openAddRoutineModal()" aria-label="Añadir Rutina">
-              <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-            </button>
-            <button class="icon-button" (click)="openSharedRoutinesModal()" aria-label="Copiar desde plantilla">
-              <svg viewBox="0 0 576 512"><path d="M384 160c-17.7 0-32-14.3-32-32s14.3-32 32-32H544c17.7 0 32 14.3 32 32V288c0 17.7-14.3 32-32 32s-32-14.3-32-32V205.3L342.6 374.6c-12.5 12.5-32.8 12.5-45.3 0L192 269.3 54.6 406.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160c12.5-12.5 32.8-12.5 45.3 0L320 306.7 466.7 160H384z"/></svg>
-            </button>
+            <div class="buttons-routine d-flex">
+              <button class="icon-button" (click)="openAddRoutineModal()" aria-label="Añadir Rutina">
+                <svg viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+              </button>
+              <button class="icon-button" (click)="openSharedRoutinesModal()" aria-label="Copiar desde plantilla">
+                <svg viewBox="0 0 576 512"><path d="M384 160c-17.7 0-32-14.3-32-32s14.3-32 32-32H544c17.7 0 32 14.3 32 32V288c0 17.7-14.3 32-32 32s-32-14.3-32-32V205.3L342.6 374.6c-12.5 12.5-32.8 12.5-45.3 0L192 269.3 54.6 406.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160c12.5-12.5 32.8-12.5 45.3 0L320 306.7 466.7 160H384z"/></svg>
+              </button>
+            </div>
           </div>
           @for (routine of routines(); track routine.routine_id) {
             <div class="card shadow-sm mb-3">
@@ -260,7 +262,7 @@
                     }
                   </div>
                 </div>
-                <p class="card-text">{{ routine.description || 'Sin descripción' }}</p>
+                <p class="card-text routine-description">{{ routine.description || 'Sin descripción' }}</p>
                 <div class="activity-count">Actividades: {{ routine.activities.length || 0 }}</div>
                 <div class="button-group">
                   <button class="button" [routerLink]="['/routines', routine.routine_id]" aria-label="Ver detalles de la rutina">Ver Detalles</button>
@@ -271,7 +273,7 @@
               </div>
             </div>
           } @empty {
-            <p>No hay rutinas registradas.</p>
+            <p class="no-content">No hay rutinas registradas.</p>
           }
           @if (showAddRoutineModal()) {
             <app-add-routine-modal 
@@ -307,13 +309,13 @@
               @if (relation.guide_user_id !== 0) {
                 <div class="card shadow-sm mb-3">
                   <div class="card-body">
-                    <h5 class="card-title">{{ relation.user?.username }} (ID: {{ relation.user_id }})</h5>
-                    <button class="button" (click)="deleteGuideUserRelation(relation.guide_user_id)">Eliminar Relación</button>
+                    <h5 class="card-title">{{ relation.user?.username }} <span class="name-surname">({{ relation.user?.firstName }} {{ relation.user?.lastName}})</span></h5>
+                    <button class="button delete-rel" (click)="deleteGuideUserRelation(relation.guide_user_id)">Eliminar Relación</button>
                   </div>
                 </div>
               }
             } @empty {
-              <p>No hay usuarios asignados.</p>
+              <p class="no-content">No hay usuarios asignados.</p>
             }
             @if (showAddGuideUserModal()) {
               <app-add-guide-user-modal 
