@@ -129,7 +129,7 @@ export class ProfileComponent {
         this.selectedUserId.set(user.user_id);
         await this.loadUserData(user.user_id);
       } else {
-        await this.loadUserData(null);
+        await this.loadUserData(user.user_id);
       }
 
       const categories = await this.categoryService.getCategories();
