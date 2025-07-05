@@ -151,6 +151,10 @@ export class UserService {
       'Authorization': `Bearer ${token}`
     });
 
+    if(!userId){
+      return []
+    }
+
     const url = `${this.endpoint}/guide/${userId}`;
 
     try{
