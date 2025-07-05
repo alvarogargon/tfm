@@ -17,7 +17,7 @@
 }
 
 .icon-button {
-  background-color: var(--primary-color, #4682B4);
+  background-color: var(--primary-color, #007bff);
   color: white;
   border: none;
   width: 36px;
@@ -27,12 +27,30 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0) scale(1);
 }
 
 .icon-button:hover {
-  background-color: var(--accent-color, #FFD700);
-  transform: scale(1.1);
+  background-color: var(--primary-color, #007bff);
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 8px 25px 0 color-mix(in srgb, var(--accent-color, #ffc107) 35%, transparent);
+}
+
+.icon-button:active {
+  transform: translateY(0) scale(0.95);
+}
+
+.form-select {
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 0.8rem;
+  border: none;
+}
+
+.form-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
 }
 
 .icon-button svg {
@@ -56,13 +74,21 @@
 }
 
 .card-title {
-  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.card-body p {
+  font-size: 0.8rem;
 }
 
 .badge {
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
+  color: #212121;
+  font-weight: 600;
+  transition: all 0.3s ease-in-out;
 }
 
 .button-group {
@@ -75,13 +101,23 @@
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  transform: translateY(0);
 }
 
 .button:hover {
-  background-color: var(--accent-color, #0056b3);
+  background-color: var(--primary-color, #007bff);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px 0 color-mix(in srgb, var(--accent-color, #ffc107) 35%, transparent);
+}
+
+.button:active {
+  transform: translateY(0) scale(0.98);
 }
 
 @media (max-width: 768px) {

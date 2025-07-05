@@ -59,17 +59,13 @@ export class AddActivityModalComponent {
 
     try {
       const token = localStorage.getItem('token');
-      console.log('Token encontrado:', token ? 'Sí' : 'No');
       if (!token) {
         toast.error('No se encontró el token de autenticación. Por favor, inicia sesión.');
         return;
       }
       const categories = await this.categoryService.getCategories();
-      console.log('Categorías cargadas:', categories);
       this.categories.set(categories);
       this.activityForm.patchValue({ routine_id: this.routineId });
-      console.log('Formulario inicializado:', this.activityForm.value);
-      console.log('Estado del formulario:', this.activityForm.valid ? 'Válido' : 'Inválido');
       if (categories.length === 0) {
         toast.warning('No hay categorías disponibles. Por favor, crea una categoría primero.');
       }
@@ -82,13 +78,6 @@ export class AddActivityModalComponent {
   async onSubmit() {
     if (this.activityForm.invalid) {
       this.activityForm.markAllAsTouched();
-      console.log('Formulario inválido:', {
-        title: this.activityForm.get('title')?.errors,
-        datetime_start: this.activityForm.get('datetime_start')?.errors,
-        datetime_end: this.activityForm.get('datetime_end')?.errors,
-        category_id: this.activityForm.get('category_id')?.errors,
-        routine_id: this.activityForm.get('routine_id')?.errors
-      });
       toast.error('Por favor, completa todos los campos requeridos: título, fechas y categoría.');
       return;
     }
@@ -103,7 +92,6 @@ export class AddActivityModalComponent {
         start_time: null,
         end_time: null
       };
-      console.log('Enviando actividad al backend:', activity);
       await this.activityService.createActivity(activity);
       toast.success('Actividad creada con éxito.');
       this.close.emit();
@@ -123,7 +111,6 @@ export class AddActivityModalComponent {
       location: location.display_name
     });
     this.searchResults = [];
-    console.log(this.activityForm)
   }
 
 }

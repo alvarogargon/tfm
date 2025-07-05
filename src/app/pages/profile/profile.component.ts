@@ -103,7 +103,6 @@ export class ProfileComponent {
 
       if (user.role === 'guide') {
         const relations = await this.guideUserService.getGuideUserRelations();
-        console.log('guideUserRelations:', relations);
         const guideRelation: IGuideUser = {
           guide_user_id: 0,
           guide_id: user.user_id,
@@ -136,7 +135,6 @@ export class ProfileComponent {
 
       const receivedRoutines = await this.routineService.getReceivedRoutinesByUser();
       this.receivedRoutines.set(receivedRoutines);
-      console.log('Rutinas compartidas recibidas:', receivedRoutines);
 
       this.markRoutinesFromTemplates();
     } catch (error) {
@@ -147,7 +145,6 @@ export class ProfileComponent {
 
   async loadUserData(userId: number | null) {
     try {
-      console.log('Cargando datos para userId:', userId);
       const [interests, goals, routines, activities] = await Promise.all([
         this.userService.getInterests(userId),
         this.goalService.getGoals(userId),
@@ -158,7 +155,6 @@ export class ProfileComponent {
       this.goals.set(goals);
       this.routines.set(routines);
       this.activities.set(activities);
-      console.log('Actividades cargadas:', activities);
 
       this.markRoutinesFromTemplates();
     } catch (error) {
@@ -175,12 +171,10 @@ export class ProfileComponent {
         from_template: receivedRoutineIds.has(routine.routine_id)
       }))
     );
-    console.log('Rutinas actualizadas con from_template:', this.routines());
   }
 
   async onUserSelected() {
     const userId = this.selectedUserId();
-    console.log('selectedUserId:', userId, typeof userId);
     if (userId === null || userId === undefined) {
       console.error('selectedUserId es null o undefined:', userId);
       toast.error('Por favor, selecciona un usuario válido.');
@@ -257,7 +251,6 @@ export class ProfileComponent {
       this.routines.update(routines => [...routines, { ...newRoutine, from_template: true }]);
       const receivedRoutines = await this.routineService.getReceivedRoutinesByUser();
       this.receivedRoutines.set(receivedRoutines);
-      console.log('Rutinas compartidas recibidas actualizadas:', receivedRoutines);
       this.markRoutinesFromTemplates();
       this.showSharedRoutinesModal.set(false);
       toast.success('Rutina añadida a tu perfil.');
@@ -361,7 +354,6 @@ export class ProfileComponent {
     try {
       await this.loadGuideUserRelations();
       this.showAddGuideUserModal.set(false);
-      console.log('Relaciones guía-usuario actualizadas');
     } catch (error) {
       console.error('Error al recargar las relaciones:', error);
       toast.error('Error al actualizar la lista de usuarios asignados.');
